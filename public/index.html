@@ -3,160 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RoboLapCon 2026 — Invitation Registration</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>RoboLapCon 2026 — Live Robotic & 3D Laparoscopic Surgery Conference</title>
+<meta name="description" content="RoboLapCon 2026 — 6 Live Surgeries. One Day. Ahmedabad. A Health1 Initiative.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+:root{--navy:#1B2A4A;--navy-deep:#0f1f3a;--teal:#00A99D;--teal-light:#66E0D3;--red:#E31E24;--yellow:#FDB913;--text:#e2e8f0;--muted:#8AABC4;--subtle:#5B7BA5;--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.06)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit','Segoe UI',sans-serif;background:#1B2A4A;color:#e2e8f0;-webkit-font-smoothing:antialiased}
-.nav{position:sticky;top:0;z-index:50;background:rgba(27,42,74,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);padding:8px 24px;display:flex;align-items:center;justify-content:space-between}
-.btn-teal{padding:8px 20px;border-radius:8px;border:none;background:#00A99D;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif}
-.btn-teal-lg{padding:14px 40px;border-radius:10px;border:none;background:linear-gradient(135deg,#00A99D,#088F84);color:#fff;font-weight:700;font-size:16px;cursor:pointer;font-family:'Outfit',sans-serif;box-shadow:0 4px 24px rgba(0,169,157,0.2)}
-.hero{padding:48px 24px 40px;background:linear-gradient(180deg,#1B2A4A,#0f1f3a);text-align:center;position:relative;overflow:hidden}
-.grid-bg{position:absolute;inset:0;opacity:0.03;background-image:linear-gradient(#00A99D 1px,transparent 1px),linear-gradient(90deg,#00A99D 1px,transparent 1px);background-size:40px 40px}
-.hero-inner{position:relative;max-width:700px;margin:0 auto}
-.pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.03);border-radius:20px;padding:6px 16px;border:1px solid rgba(255,255,255,0.07);margin-bottom:20px}
-.pulse-dot{width:8px;height:8px;border-radius:50%;background:#E31E24;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.hero h1{font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.15;margin:0 0 16px;letter-spacing:-1px}
-.gradient-text{background:linear-gradient(90deg,#00A99D,#66E0D3);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.tags{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px}
-.tag{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:13px}
-.section{padding:44px 24px;max-width:700px;margin:0 auto}
-.section h2{font-size:24px;font-weight:700;text-align:center;margin-bottom:6px}
-.section .sub{font-size:14px;color:#5B7BA5;text-align:center;margin-bottom:24px}
-.surgery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.surgery-card{background:linear-gradient(135deg,#1B2A4A,#263B5E);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(0,169,157,0.13)}
-.surgery-num{width:36px;height:36px;border-radius:50%;background:#00A99D;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
-.surgery-label{font-size:11px;font-weight:600;color:#66E0D3;text-transform:uppercase;letter-spacing:1px}
-.surgery-title{font-size:14px;color:#e2e8f0;margin-top:2px}
-.expect{padding:40px 24px;background:#0f1f3a}
-.expect-inner{max-width:700px;margin:0 auto}
-.expect-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.expect-card{background:rgba(255,255,255,0.025);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,0.03)}
-.expect-icon{font-size:28px;margin-bottom:10px}
-.expect-title{font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:6px}
-.expect-desc{font-size:12px;color:#94a3b8;line-height:1.5}
-.form-section{padding:48px 24px}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit','Segoe UI',sans-serif;background:var(--navy);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--teal);text-decoration:none}
+section{position:relative}
+
+/* Animations */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;transition:background 0.3s}
+.nav.scrolled{background:rgba(27,42,74,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.06)}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{color:var(--red)}
+.nav-logo small{color:var(--yellow);font-size:10px;font-weight:600;margin-left:4px}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:var(--muted);font-size:13px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.btn{padding:10px 24px;border-radius:8px;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#088F84;transform:translateY(-1px)}
+.btn-teal-lg{background:linear-gradient(135deg,var(--teal),#088F84);color:#fff;padding:16px 44px;border-radius:12px;font-size:16px;box-shadow:0 8px 32px rgba(0,169,157,0.25)}
+.btn-teal-lg:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,169,157,0.35)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;opacity:0.03;background-image:linear-gradient(var(--teal) 1px,transparent 1px),linear-gradient(90deg,var(--teal) 1px,transparent 1px);background-size:40px 40px}
+.hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,169,157,0.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hero-inner{position:relative;max-width:800px}
+.hero h1{font-size:clamp(32px,6vw,52px);font-weight:900;line-height:1.1;margin:0 0 20px;letter-spacing:-2px}
+.hero p{font-size:17px;color:var(--muted);line-height:1.7;max-width:560px;margin:0 auto 32px}
+
+/* Countdown */
+.countdown{display:flex;justify-content:center;gap:16px;margin:32px 0}
+.cd-unit{text-align:center}
+.cd-num{font-size:36px;font-weight:800;color:var(--teal);line-height:1;display:block;background:rgba(0,169,157,0.08);border:1px solid rgba(0,169,157,0.2);border-radius:10px;padding:12px 18px;min-width:70px}
+.cd-label{font-size:10px;color:var(--subtle);text-transform:uppercase;letter-spacing:1.5px;margin-top:6px;display:block}
+
+/* Pills */
+.pill-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:32px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:8px 16px;font-size:13px;color:var(--muted);font-weight:500}
+.pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ── SECTIONS ── */
+.sec{padding:80px 24px}
+.sec-alt{background:var(--navy-deep)}
+.sec-inner{max-width:900px;margin:0 auto}
+.sec-title{font-size:28px;font-weight:800;text-align:center;margin-bottom:8px;letter-spacing:-0.5px}
+.sec-sub{font-size:14px;color:var(--subtle);text-align:center;margin-bottom:40px}
+
+/* ── SURGERIES ── */
+.surg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.surg-card{background:linear-gradient(135deg,#162240,#1E3050);border:1px solid rgba(0,169,157,0.12);border-radius:12px;padding:18px;display:flex;align-items:center;gap:14px;transition:transform 0.2s,border-color 0.2s}
+.surg-card:hover{transform:translateY(-2px);border-color:rgba(0,169,157,0.3)}
+.surg-num{width:40px;height:40px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.surg-label{font-size:10px;font-weight:600;color:var(--teal-light);text-transform:uppercase;letter-spacing:1px}
+.surg-name{font-size:14px;color:var(--text);margin-top:2px}
+
+/* ── SCHEDULE ── */
+.timeline{position:relative;padding-left:40px}
+.timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--teal),var(--red))}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-dot{position:absolute;left:-33px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--teal);background:var(--navy)}
+.tl-item.live .tl-dot{background:var(--red);border-color:var(--red);box-shadow:0 0 12px rgba(227,30,36,0.4)}
+.tl-time{font-size:12px;font-weight:600;color:var(--teal);letter-spacing:0.5px;margin-bottom:3px}
+.tl-title{font-size:15px;font-weight:700;color:var(--text)}
+.tl-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.tl-live-badge{display:inline-block;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;letter-spacing:0.5px;vertical-align:middle}
+
+/* ── HIGHLIGHTS ── */
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.hl-card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:24px;transition:transform 0.2s,border-color 0.2s;position:relative;overflow:hidden}
+.hl-card:hover{transform:translateY(-3px);border-color:rgba(0,169,157,0.2)}
+.hl-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--teal);border-radius:14px 0 0 14px;opacity:0;transition:opacity 0.2s}
+.hl-card:hover::before{opacity:1}
+.hl-icon{font-size:32px;margin-bottom:12px}
+.hl-title{font-size:15px;font-weight:700;margin-bottom:6px}
+.hl-desc{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* ── FACULTY ── */
+.faculty-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.faculty-card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:20px;text-align:center;transition:transform 0.2s}
+.faculty-card:hover{transform:translateY(-3px)}
+.faculty-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#088F84);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff}
+.faculty-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.faculty-role{font-size:11px;color:var(--subtle)}
+
+/* ── SPONSORS ── */
+.sponsor-row{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin-bottom:24px}
+.sponsor-slot{background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:10px;padding:16px 28px;font-size:12px;color:var(--subtle);display:flex;align-items:center;justify-content:center;min-width:140px;min-height:60px}
+.sponsor-tier{font-size:11px;font-weight:600;color:var(--yellow);text-transform:uppercase;letter-spacing:2px;text-align:center;margin-bottom:12px}
+
+/* ── FAQ ── */
+.faq-item{border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0}
+.faq-q{font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q::after{content:'+';font-size:20px;color:var(--teal);flex-shrink:0;margin-left:12px;transition:transform 0.2s}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{font-size:13px;color:var(--muted);line-height:1.6;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease}
+.faq-item.open .faq-a{max-height:200px;padding-top:10px}
+
+/* ── FORM ── */
+.form-section{padding:80px 24px;background:var(--navy)}
 .form-wrap{max-width:560px;margin:0 auto}
-.form-box{background:#0f172a;border-radius:16px;padding:32px;border:1px solid rgba(255,255,255,0.04)}
+.form-box{background:var(--navy-deep);border-radius:16px;padding:36px;border:1px solid var(--card-border)}
 .form-grid{display:grid;gap:18px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label.lbl{font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block}
-.input{width:100%;padding:12px 16px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-size:14px;outline:none;font-family:'Outfit',sans-serif}
-.input:focus{border-color:#00A99D;box-shadow:0 0 0 2px rgba(0,169,157,0.13)}
-.input-invite{border-color:#FDB913;background:#1a1a0f;font-size:18px;letter-spacing:3px;text-align:center;font-weight:700;text-transform:uppercase}
-.input-invite:focus{border-color:#FDB913;box-shadow:0 0 0 2px rgba(253,185,19,0.15)}
+label.lbl{font-size:11px;font-weight:600;color:var(--subtle);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block}
+.input{width:100%;padding:12px 16px;border-radius:8px;border:1px solid #2a3a5a;background:rgba(15,23,42,0.6);color:var(--text);font-size:14px;outline:none;font-family:'Outfit',sans-serif;transition:border-color 0.2s}
+.input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,169,157,0.1)}
+.input-invite{border-color:var(--yellow);background:rgba(253,185,19,0.04);font-size:18px;letter-spacing:3px;text-align:center;font-weight:700;text-transform:uppercase;padding:14px}
+.input-invite:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(253,185,19,0.1)}
 .input-invite::placeholder{letter-spacing:1px;font-size:13px;font-weight:400;text-transform:none}
 select.input{cursor:pointer;appearance:auto}
-select.input option{background:#0f172a;color:#e2e8f0}
-::placeholder{color:#475569}
-.diet-btns{display:flex;gap:10px;flex-wrap:wrap}
-.diet-btn{padding:8px 16px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#94a3b8;font-size:13px;cursor:pointer;font-weight:500;font-family:'Outfit',sans-serif}
-.diet-btn.active{border-color:#00A99D;background:#00A99D;color:#fff}
-.invite-note{display:flex;align-items:center;gap:8px;background:rgba(253,185,19,0.06);border:1px solid rgba(253,185,19,0.15);border-radius:8px;padding:10px 14px;margin-bottom:4px}
-.invite-note span{font-size:12px;color:#FDB913;line-height:1.4}
-footer{padding:32px 24px;border-top:1px solid rgba(255,255,255,0.03);text-align:center}
-.success{min-height:100vh;background:linear-gradient(180deg,#1B2A4A,#0f172a,#1B2A4A);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
-.success-box{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #334155;text-align:left;margin-top:24px}
+select.input option{background:var(--navy-deep);color:var(--text)}
+::placeholder{color:#4a5a7a}
+.diet-btns{display:flex;gap:8px;flex-wrap:wrap}
+.diet-btn{padding:8px 16px;border-radius:8px;border:1px solid #2a3a5a;background:transparent;color:var(--subtle);font-size:13px;cursor:pointer;font-weight:500;font-family:'Outfit',sans-serif;transition:all 0.2s}
+.diet-btn.active{border-color:var(--teal);background:var(--teal);color:#fff}
+.invite-note{display:flex;align-items:flex-start;gap:8px;background:rgba(253,185,19,0.04);border:1px solid rgba(253,185,19,0.12);border-radius:8px;padding:10px 14px}
+.invite-note span{font-size:12px;color:var(--yellow);line-height:1.4}
+
+/* ── FOOTER ── */
+footer{padding:40px 24px;border-top:1px solid var(--card-border);text-align:center}
+footer .f-brand{font-size:16px;font-weight:700;margin-bottom:4px}
+footer .f-brand span{color:var(--red)}
+footer .f-sub{font-size:11px;color:var(--subtle);margin-top:4px}
+footer .f-copy{font-size:10px;color:#3E5A80;margin-top:16px}
+
+/* ── SUCCESS ── */
+.success{min-height:100vh;background:linear-gradient(180deg,var(--navy),var(--navy-deep),var(--navy));display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+.success-box{background:rgba(255,255,255,0.03);border-radius:12px;padding:24px;border:1px solid #334155;text-align:left;margin-top:24px}
 .hidden{display:none}
-@media(max-width:600px){.form-row{grid-template-columns:1fr}.surgery-grid{grid-template-columns:1fr}}
+
+@media(max-width:700px){
+  .nav-links a:not(.btn){display:none}
+  .form-row{grid-template-columns:1fr}
+  .countdown{gap:8px}
+  .cd-num{font-size:26px;padding:10px 12px;min-width:55px}
+  .timeline{padding-left:32px}
+  .tl-dot{left:-25px}
+  .faculty-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
 
 <div id="main-page">
-<nav class="nav">
-  <svg viewBox="0 0 140 30" width="120" height="26" xmlns="http://www.w3.org/2000/svg">
-    <text x="0" y="22" font-family="'Segoe UI',sans-serif" font-size="18" font-weight="800"><tspan fill="#e2e8f0">RoboLap</tspan><tspan fill="#E31E24">Con</tspan></text>
-    <text x="118" y="22" font-family="'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="#FDB913">26</text>
-  </svg>
-  <button class="btn-teal" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register Now</button>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-logo">RoboLap<span>Con</span><small>26</small></div>
+  <div class="nav-links">
+    <a href="#surgeries">Surgeries</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#faculty">Faculty</a>
+    <a href="#faq">FAQ</a>
+    <button class="btn btn-teal" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register Now</button>
+  </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-  <div class="grid-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
   <div class="hero-inner">
-    <svg viewBox="0 0 320 200" width="260" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:12px">
-      <g transform="translate(160,80)">
-        <polygon points="0,-55 48,-28 48,28 0,55 -48,28 -48,-28" fill="none" stroke="#00A99D" stroke-width="1.6"/>
-        <polygon points="0,-37 32,-19 32,19 0,37 -32,19 -32,-19" fill="none" stroke="#00A99D" stroke-width="0.4" opacity="0.2"/>
-        <circle cx="0" cy="-55" r="6" fill="#00A99D"/><circle cx="0" cy="-55" r="2.5" fill="#66E0D3"/>
-        <circle cx="48" cy="-28" r="4.5" fill="#00A99D"/><circle cx="48" cy="-28" r="1.5" fill="#66E0D3"/>
-        <circle cx="48" cy="-28" r="8" fill="none" stroke="#00A99D" stroke-width="0.7" opacity="0.4"/>
-        <circle cx="-48" cy="-28" r="4.5" fill="#00A99D"/><circle cx="-48" cy="-28" r="1.5" fill="#66E0D3"/>
-        <circle cx="-48" cy="-28" r="8" fill="none" stroke="#00A99D" stroke-width="0.7" opacity="0.4"/>
-        <circle cx="48" cy="28" r="3.5" fill="#E31E24"/><circle cx="-48" cy="28" r="3.5" fill="#E31E24"/><circle cx="0" cy="55" r="3.5" fill="#E31E24"/>
-        <circle cx="0" cy="0" r="13" fill="none" stroke="#00A99D" stroke-width="0.8" opacity="0.3"/>
-        <line x1="-20" y1="0" x2="-7" y2="0" stroke="#00A99D" stroke-width="1.2"/><line x1="7" y1="0" x2="20" y2="0" stroke="#00A99D" stroke-width="1.2"/>
-        <line x1="0" y1="-20" x2="0" y2="-7" stroke="#00A99D" stroke-width="1.2"/><line x1="0" y1="7" x2="0" y2="20" stroke="#00A99D" stroke-width="1.2"/>
-        <path d="M-4,-4 L0,-1 L4,-4" fill="none" stroke="#FDB913" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M-4,4 L0,1 L4,4" fill="none" stroke="#FDB913" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="0" cy="0" r="1.2" fill="#FDB913"/>
-      </g>
-      <text x="160" y="158" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="28" font-weight="800" letter-spacing="-0.5"><tspan fill="#fff">RoboLap</tspan><tspan fill="#E31E24">Con</tspan></text>
-      <text x="160" y="177" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="11" font-weight="600" letter-spacing="4" fill="#FDB913">2 0 2 6</text>
-      <text x="160" y="194" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="8" fill="#8AABC4">Live Robotic &amp; 3D Laparoscopic Surgery Conference</text>
+    <svg viewBox="0 0 120 110" width="80" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:20px">
+      <g transform="translate(60,48)"><polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" fill="none" stroke="#00A99D" stroke-width="1.4"/><polygon points="0,-28 24,-14 24,14 0,28 -24,14 -24,-14" fill="none" stroke="#00A99D" stroke-width="0.4" opacity="0.2"/><circle cx="0" cy="-42" r="5" fill="#00A99D"/><circle cx="0" cy="-42" r="2" fill="#66E0D3"/><circle cx="36" cy="-21" r="4" fill="#00A99D"/><circle cx="36" cy="-21" r="1.5" fill="#66E0D3"/><circle cx="36" cy="-21" r="7" fill="none" stroke="#00A99D" stroke-width="0.6" opacity="0.4"/><circle cx="-36" cy="-21" r="4" fill="#00A99D"/><circle cx="-36" cy="-21" r="1.5" fill="#66E0D3"/><circle cx="-36" cy="-21" r="7" fill="none" stroke="#00A99D" stroke-width="0.6" opacity="0.4"/><circle cx="36" cy="21" r="3" fill="#E31E24"/><circle cx="-36" cy="21" r="3" fill="#E31E24"/><circle cx="0" cy="42" r="3" fill="#E31E24"/><circle cx="0" cy="0" r="11" fill="none" stroke="#00A99D" stroke-width="0.8" opacity="0.3"/><line x1="-16" y1="0" x2="-6" y2="0" stroke="#00A99D" stroke-width="1"/><line x1="6" y1="0" x2="16" y2="0" stroke="#00A99D" stroke-width="1"/><line x1="0" y1="-16" x2="0" y2="-6" stroke="#00A99D" stroke-width="1"/><line x1="0" y1="6" x2="0" y2="16" stroke="#00A99D" stroke-width="1"/><path d="M-3.5,-3.5 L0,-1 L3.5,-3.5" fill="none" stroke="#FDB913" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M-3.5,3.5 L0,1 L3.5,3.5" fill="none" stroke="#FDB913" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0" cy="0" r="1" fill="#FDB913"/></g>
     </svg>
-    <div style="font-size:8px;color:#8AABC4;font-style:italic;margin-bottom:20px">A Health1 Initiative</div>
-    <div class="pill">
-      <span class="pulse-dot"></span>
-      <span style="font-size:12px;color:#94a3b8;font-weight:500">6 Live Surgeries — 4 Robotic + 2 Advanced 3D Laparoscopic</span>
+    <div style="font-size:13px;color:var(--yellow);font-weight:600;letter-spacing:4px;margin-bottom:12px">31 MAY 2026 • AHMEDABAD</div>
+    <h1><span style="color:var(--text)">RoboLap</span><span style="color:var(--red)">Con</span> <span style="color:var(--yellow)">2026</span></h1>
+    <p style="font-size:14px;color:var(--muted);margin:-12px auto 8px;font-style:italic">A Health1 Initiative</p>
+    <p>Live Robotic & 3D Laparoscopic Surgery Conference — 6 live surgeries streamed in real-time from the operating theatre to you.</p>
+
+    <div class="pill-row">
+      <div class="pill"><span class="pulse-dot"></span> 6 Live Surgeries</div>
+      <div class="pill">🎓 CME Accredited</div>
+      <div class="pill">🔒 Invite Only</div>
+      <div class="pill">🎯 Hands-On Dry Lab</div>
     </div>
-    <h1><span style="color:#e2e8f0">Witness the Future of</span><br><span class="gradient-text">Precision Surgery</span><span style="color:#e2e8f0"> — Live.</span></h1>
-    <p style="font-size:15px;color:#94a3b8;line-height:1.7;max-width:520px;margin:0 auto 24px">A full-day conference featuring live robotic and 3D laparoscopic surgeries streamed from the operating theatre to you in real-time.</p>
-    <div class="tags">
-      <div class="tag"><span>📅</span><span style="color:#cbd5e1;font-weight:500">31 May 2026</span></div>
-      <div class="tag"><span>📍</span><span style="color:#cbd5e1;font-weight:500">Ahmedabad</span></div>
-      <div class="tag"><span>🎓</span><span style="color:#cbd5e1;font-weight:500">CME Accredited</span></div>
-      <div class="tag"><span>🔒</span><span style="color:#cbd5e1;font-weight:500">Invite Only</span></div>
+
+    <div class="countdown" id="countdown">
+      <div class="cd-unit"><span class="cd-num" id="cd-d">--</span><span class="cd-label">Days</span></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Hours</span></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-m">--</span><span class="cd-label">Minutes</span></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Seconds</span></div>
     </div>
-    <button class="btn-teal-lg" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register with Invite Code</button>
+
+    <button class="btn btn-teal-lg" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register with Invite Code</button>
   </div>
 </section>
 
-<section class="section">
-  <h2>6 Live Surgeries</h2>
-  <p class="sub">Streamed in real-time from the operating theatre</p>
-  <div class="surgery-grid">
-    <div class="surgery-card"><div class="surgery-num">1</div><div><div class="surgery-label">Robotic</div><div class="surgery-title">Robotic General Surgery</div></div></div>
-    <div class="surgery-card"><div class="surgery-num">2</div><div><div class="surgery-label">Robotic</div><div class="surgery-title">Robotic General Surgery</div></div></div>
-    <div class="surgery-card"><div class="surgery-num">3</div><div><div class="surgery-label">Robotic</div><div class="surgery-title">Robotic Gynecology</div></div></div>
-    <div class="surgery-card"><div class="surgery-num">4</div><div><div class="surgery-label">Robotic</div><div class="surgery-title">Robotic Urosurgery</div></div></div>
-    <div class="surgery-card"><div class="surgery-num">5</div><div><div class="surgery-label">3D Laparoscopic</div><div class="surgery-title">Advanced General Surgery</div></div></div>
-    <div class="surgery-card"><div class="surgery-num">6</div><div><div class="surgery-label">3D Laparoscopic</div><div class="surgery-title">Advanced General Surgery</div></div></div>
+<!-- SURGERIES -->
+<section class="sec sec-alt" id="surgeries">
+  <div class="sec-inner reveal">
+    <div class="sec-title">6 Live Surgeries</div>
+    <div class="sec-sub">4 Robotic + 2 Advanced 3D Laparoscopic — streamed in HD from the OT</div>
+    <div class="surg-grid">
+      <div class="surg-card"><div class="surg-num">1</div><div><div class="surg-label">Robotic</div><div class="surg-name">Robotic General Surgery</div></div></div>
+      <div class="surg-card"><div class="surg-num">2</div><div><div class="surg-label">Robotic</div><div class="surg-name">Robotic General Surgery</div></div></div>
+      <div class="surg-card"><div class="surg-num">3</div><div><div class="surg-label">Robotic</div><div class="surg-name">Robotic Gynecology</div></div></div>
+      <div class="surg-card"><div class="surg-num">4</div><div><div class="surg-label">Robotic</div><div class="surg-name">Robotic Urosurgery</div></div></div>
+      <div class="surg-card"><div class="surg-num">5</div><div><div class="surg-label">3D Laparoscopic</div><div class="surg-name">Advanced General Surgery</div></div></div>
+      <div class="surg-card"><div class="surg-num">6</div><div><div class="surg-label">3D Laparoscopic</div><div class="surg-name">Advanced General Surgery</div></div></div>
+    </div>
+    <p style="font-size:11px;color:#475569;text-align:center;margin-top:14px">* Specific procedures to be announced. Case selection based on clinical suitability.</p>
   </div>
-  <p style="font-size:11px;color:#475569;text-align:center;margin-top:10px">* Specific procedures to be announced.</p>
 </section>
 
-<section class="expect">
-  <div class="expect-inner">
-    <h2 style="font-size:24px;font-weight:700;text-align:center;margin-bottom:24px;color:#e2e8f0">What to Expect</h2>
-    <div class="expect-grid">
-      <div class="expect-card"><div class="expect-icon">🔴</div><div class="expect-title">Live Surgery Streaming</div><div class="expect-desc">HD real-time feed from OT with expert commentary and Q&A</div></div>
-      <div class="expect-card"><div class="expect-icon">🎯</div><div class="expect-title">Hands-On Dry Lab</div><div class="expect-desc">Try the robotic console simulation yourself</div></div>
-      <div class="expect-card"><div class="expect-icon">💬</div><div class="expect-title">Interactive Q&A</div><div class="expect-desc">Ask the operating surgeon questions during live cases</div></div>
-      <div class="expect-card"><div class="expect-icon">📊</div><div class="expect-title">Expert Panels</div><div class="expect-desc">Debates, case discussions, tips & tricks from leading surgeons</div></div>
-      <div class="expect-card"><div class="expect-icon">🎓</div><div class="expect-title">CME Accredited</div><div class="expect-desc">Earn 6–8 CME credit hours recognised by Gujarat Medical Council</div></div>
-      <div class="expect-card"><div class="expect-icon">🤝</div><div class="expect-title">Networking</div><div class="expect-desc">Connect with 200 surgeons from across the region</div></div>
+<!-- SCHEDULE -->
+<section class="sec" id="schedule">
+  <div class="sec-inner reveal">
+    <div class="sec-title">Schedule</div>
+    <div class="sec-sub">Full-day programme — Sunday, 31 May 2026</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">7:30 – 8:30 AM</div><div class="tl-title">Registration & Breakfast</div><div class="tl-desc">Collect your badge and delegate kit, networking over breakfast</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">8:30 – 8:45 AM</div><div class="tl-title">Inaugural Ceremony</div><div class="tl-desc">Welcome address and lamp lighting</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">8:45 – 9:15 AM</div><div class="tl-title">Keynote: The Robotic Surgery Revolution</div><div class="tl-desc">State of robotic & advanced laparoscopic surgery in India</div></div>
+      <div class="tl-item live"><div class="tl-dot"></div><div class="tl-time">9:15 – 10:45 AM</div><div class="tl-title">Live Surgery Block 1 <span class="tl-live-badge">LIVE</span></div><div class="tl-desc">Robotic General Surgery #1 + Robotic General Surgery #2 with faculty commentary</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:45 – 11:15 AM</div><div class="tl-title">Tea Break & Hands-On Dry Lab</div><div class="tl-desc">Try the robotic console simulation + sponsor exhibits</div></div>
+      <div class="tl-item live"><div class="tl-dot"></div><div class="tl-time">11:15 – 12:15 PM</div><div class="tl-title">Live Surgery Block 2 <span class="tl-live-badge">LIVE</span></div><div class="tl-desc">Robotic Gynecology + 3D Lap Advanced General Surgery with live Q&A</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:15 – 12:45 PM</div><div class="tl-title">Panel: Robotics vs 3D Lap — When & Why?</div><div class="tl-desc">Moderated debate with operating faculty</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:45 – 1:45 PM</div><div class="tl-title">Lunch & Networking</div></div>
+      <div class="tl-item live"><div class="tl-dot"></div><div class="tl-time">1:45 – 3:15 PM</div><div class="tl-title">Live Surgery Block 3 <span class="tl-live-badge">LIVE</span></div><div class="tl-desc">Robotic Urosurgery + 3D Lap Advanced General Surgery with live Q&A</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">3:15 – 3:45 PM</div><div class="tl-title">High Tea & Dry Lab Rotations</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">3:45 – 4:30 PM</div><div class="tl-title">Video Grand Rounds & Tips</div><div class="tl-desc">Best edited cases, complication management, port placement masterclass</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">4:30 – 5:00 PM</div><div class="tl-title">Valedictory & Awards</div><div class="tl-desc">Certificates, best question award, vote of thanks</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">5:00 – 5:30 PM</div><div class="tl-title">Networking & Departure</div></div>
     </div>
   </div>
 </section>
 
-<section class="form-section" id="reg-form">
-  <div class="form-wrap">
-    <h2 style="font-size:24px;font-weight:700;text-align:center;margin-bottom:6px">Register with Your Invite Code</h2>
-    <p style="font-size:13px;color:#5B7BA5;text-align:center;margin-bottom:28px">By invitation only • Limited to 200 delegates</p>
+<!-- HIGHLIGHTS -->
+<section class="sec sec-alt">
+  <div class="sec-inner reveal">
+    <div class="sec-title">What to Expect</div>
+    <div class="sec-sub">More than a conference — an immersive surgical experience</div>
+    <div class="hl-grid">
+      <div class="hl-card"><div class="hl-icon">🔴</div><div class="hl-title">Live Surgery Streaming</div><div class="hl-desc">HD real-time feed from the OT with expert commentary, telestration annotation, and live audience Q&A with the operating surgeon.</div></div>
+      <div class="hl-card"><div class="hl-icon">🎯</div><div class="hl-title">Hands-On Dry Lab</div><div class="hl-desc">Get on the robotic console yourself. Guided simulation sessions with trained faculty during tea breaks.</div></div>
+      <div class="hl-card"><div class="hl-icon">💬</div><div class="hl-title">Interactive Q&A</div><div class="hl-desc">Two-way audio with the operating surgeon. Ask questions in real-time during live cases via venue moderators.</div></div>
+      <div class="hl-card"><div class="hl-icon">📊</div><div class="hl-title">Expert Panels</div><div class="hl-desc">Moderated debates — robotics vs 3D lap, case selection, learning curve, cost-benefit analysis from experienced adopters.</div></div>
+      <div class="hl-card"><div class="hl-icon">🎓</div><div class="hl-title">CME Accredited</div><div class="hl-desc">Earn 6–8 CME credit hours recognised by Gujarat Medical Council. Certificates issued on the same day.</div></div>
+      <div class="hl-card"><div class="hl-icon">🤝</div><div class="hl-title">Networking</div><div class="hl-desc">Connect with 200 surgeons from across Western India. Breakfast, lunch, and high tea — all included.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FACULTY -->
+<section class="sec" id="faculty">
+  <div class="sec-inner reveal">
+    <div class="sec-title">Faculty</div>
+    <div class="sec-sub">Distinguished surgeons leading live cases and expert sessions</div>
+    <div class="faculty-grid">
+      <div class="faculty-card"><div class="faculty-avatar">F1</div><div class="faculty-name">To be announced</div><div class="faculty-role">Operating Surgeon — Robotic</div></div>
+      <div class="faculty-card"><div class="faculty-avatar">F2</div><div class="faculty-name">To be announced</div><div class="faculty-role">Operating Surgeon — Robotic</div></div>
+      <div class="faculty-card"><div class="faculty-avatar">F3</div><div class="faculty-name">To be announced</div><div class="faculty-role">Operating Surgeon — 3D Lap</div></div>
+      <div class="faculty-card"><div class="faculty-avatar">F4</div><div class="faculty-name">To be announced</div><div class="faculty-role">Moderator & Commentator</div></div>
+      <div class="faculty-card"><div class="faculty-avatar">F5</div><div class="faculty-name">To be announced</div><div class="faculty-role">Keynote Speaker</div></div>
+    </div>
+    <p style="font-size:12px;color:var(--subtle);text-align:center;margin-top:20px">Faculty announcements coming soon. Follow our updates.</p>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section class="sec sec-alt" id="sponsors">
+  <div class="sec-inner reveal">
+    <div class="sec-title">Our Partners</div>
+    <div class="sec-sub">RoboLapCon 2026 is supported by leading names in surgical technology</div>
+    <div class="sponsor-tier">Title Sponsor</div>
+    <div class="sponsor-row"><div class="sponsor-slot" style="min-width:200px;min-height:70px">Your brand here</div></div>
+    <div class="sponsor-tier" style="margin-top:20px">Gold Sponsors</div>
+    <div class="sponsor-row"><div class="sponsor-slot">Your brand here</div><div class="sponsor-slot">Your brand here</div></div>
+    <div class="sponsor-tier" style="margin-top:20px">Silver Sponsors</div>
+    <div class="sponsor-row"><div class="sponsor-slot">Your brand here</div><div class="sponsor-slot">Your brand here</div><div class="sponsor-slot">Your brand here</div></div>
+    <p style="font-size:12px;color:var(--subtle);text-align:center;margin-top:24px">Interested in sponsoring? <a href="mailto:robolapcon@health1.in">Contact us</a></p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="sec-inner reveal" style="max-width:700px">
+    <div class="sec-title">Frequently Asked Questions</div>
+    <div class="sec-sub"></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How do I get an invite code?</div><div class="faq-a">Invite codes are distributed through the Health1 team, referring surgeons, and our institutional partners. Contact us at robolapcon@health1.in if you don't have one.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there a registration fee?</div><div class="faq-a">RoboLapCon 2026 is a sponsored, invite-only conference. There is no registration fee for invited delegates.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How are the live surgeries streamed?</div><div class="faq-a">Surgeries are performed at Health1 Shilaj Hospital and streamed via HD cameras with professional audio to the conference venue nearby. Faculty commentators provide real-time annotations.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I get CME credits?</div><div class="faq-a">Yes. We are applying for 6–8 CME credit hours through the Gujarat Medical Council. Certificates will be issued on the same day.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I try the robotic console?</div><div class="faq-a">Yes. Hands-on dry lab stations will be available during tea breaks. Each delegate gets a 5-minute guided session on the simulator.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is included for delegates?</div><div class="faq-a">Delegate kit, conference badge, breakfast, lunch, high tea, all sessions, dry lab access, CME certificate, and networking opportunities — all included.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Where is the venue?</div><div class="faq-a">The conference venue will be a premium banquet hall near Health1 Shilaj Hospital, Ahmedabad. Exact address will be shared with registered delegates via WhatsApp.</div></div>
+  </div>
+</section>
+
+<!-- REGISTRATION -->
+<section class="form-section" id="register">
+  <div class="form-wrap reveal">
+    <div class="sec-title">Register with Your Invite Code</div>
+    <div class="sec-sub">By invitation only • Limited to 200 delegates</div>
     <div class="form-box">
       <div class="form-grid">
-        <!-- Invite Code FIRST — prominent -->
         <div>
-          <label class="lbl" style="color:#FDB913">Invite Code *</label>
+          <label class="lbl" style="color:var(--yellow)">Invite Code *</label>
           <input class="input input-invite" id="f-invite" placeholder="Enter your invite code" maxlength="12">
         </div>
-        <div class="invite-note">
-          <span>🔒</span>
-          <span>Your invite code was shared with you by the referring surgeon or Health1 team. Contact us if you don't have one.</span>
-        </div>
+        <div class="invite-note"><span>🔒</span><span>Your invite code was shared by the referring surgeon or Health1 team. Contact us if you don't have one.</span></div>
         <div><label class="lbl">Full name *</label><input class="input" id="f-name" placeholder="Dr. "></div>
         <div class="form-row">
           <div><label class="lbl">Phone *</label><input class="input" id="f-phone" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')"></div>
@@ -164,55 +323,39 @@ footer{padding:32px 24px;border-top:1px solid rgba(255,255,255,0.03);text-align:
         </div>
         <div><label class="lbl">Hospital / Institution</label><input class="input" id="f-hospital" placeholder="Where do you practice?"></div>
         <div class="form-row">
-          <div><label class="lbl">Speciality *</label>
-            <select class="input" id="f-speciality">
-              <option value="">Select...</option>
-              <option>General Surgery</option><option>Surgical Gastroenterology</option><option>Urology</option>
-              <option>Gynecology / Obstetrics</option><option>Surgical Oncology</option><option>Colorectal Surgery</option>
-              <option>Bariatric Surgery</option><option>Pediatric Surgery</option><option>Thoracic Surgery</option><option>Other</option>
-            </select>
-          </div>
+          <div><label class="lbl">Speciality *</label><select class="input" id="f-speciality"><option value="">Select...</option><option>General Surgery</option><option>Surgical Gastroenterology</option><option>Urology</option><option>Gynecology / Obstetrics</option><option>Surgical Oncology</option><option>Colorectal Surgery</option><option>Bariatric Surgery</option><option>Pediatric Surgery</option><option>Thoracic Surgery</option><option>Other</option></select></div>
           <div><label class="lbl">City</label><input class="input" id="f-city" placeholder="Your city"></div>
         </div>
         <div class="form-row">
           <div><label class="lbl">MCR number</label><input class="input" id="f-mcr" placeholder="For CME certificate"></div>
-          <div><label class="lbl">Years of experience</label>
-            <select class="input" id="f-exp">
-              <option value="">Select...</option><option>0–5 years</option><option>5–10 years</option><option>10–20 years</option><option>20+ years</option>
-            </select>
-          </div>
+          <div><label class="lbl">Years of experience</label><select class="input" id="f-exp"><option value="">Select...</option><option>0–5 years</option><option>5–10 years</option><option>10–20 years</option><option>20+ years</option></select></div>
         </div>
-        <div>
-          <label class="lbl">Dietary preference</label>
-          <div class="diet-btns">
-            <button class="diet-btn active" onclick="pickDiet(this)">No restrictions</button>
-            <button class="diet-btn" onclick="pickDiet(this)">Jain</button>
-            <button class="diet-btn" onclick="pickDiet(this)">Vegan</button>
-            <button class="diet-btn" onclick="pickDiet(this)">Other</button>
-          </div>
-        </div>
-        <button class="btn-teal-lg" style="width:100%;margin-top:8px" onclick="submitForm()">Confirm Registration</button>
+        <div><label class="lbl">Dietary preference</label><div class="diet-btns"><button class="diet-btn active" onclick="pickDiet(this)">No restrictions</button><button class="diet-btn" onclick="pickDiet(this)">Jain</button><button class="diet-btn" onclick="pickDiet(this)">Vegan</button><button class="diet-btn" onclick="pickDiet(this)">Other</button></div></div>
+        <button class="btn btn-teal-lg" style="width:100%;margin-top:4px" onclick="submitForm()">Confirm Registration</button>
         <p style="font-size:11px;color:#475569;text-align:center">By registering, you agree to receive event updates via WhatsApp and email.</p>
       </div>
     </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <div style="font-size:14px;font-weight:600;margin-bottom:4px"><span style="color:#e2e8f0">RoboLap</span><span style="color:#E31E24">Con</span> <span style="color:#FDB913;font-size:11px">2026</span></div>
-  <div style="font-size:11px;color:#5B7BA5;margin-top:4px">Health1 Super Speciality Hospital, Shilaj, Ahmedabad</div>
-  <div style="font-size:10px;color:#3E5A80;margin-top:12px">© 2026 H1N1 Super Speciality Hospitals Pvt. Ltd.</div>
+  <div class="f-brand">RoboLap<span>Con</span> <span style="color:var(--yellow);font-size:12px">2026</span></div>
+  <div class="f-sub">Live Robotic & 3D Laparoscopic Surgery Conference</div>
+  <div class="f-sub" style="margin-top:2px">Health1 Super Speciality Hospital, Shilaj, Ahmedabad</div>
+  <div class="f-copy">© 2026 H1N1 Super Speciality Hospitals Pvt. Ltd. All rights reserved.</div>
 </footer>
 </div>
 
+<!-- SUCCESS -->
 <div id="success-page" class="hidden">
   <div class="success">
     <div style="max-width:500px">
       <div style="font-size:64px;margin-bottom:16px">✅</div>
-      <h1 style="font-size:28px;font-weight:700;color:#e2e8f0;margin:0 0 12px">Registration Confirmed</h1>
-      <p style="font-size:16px;color:#94a3b8;line-height:1.6;margin:0 0 24px">Thank you, <span id="conf-name" style="color:#66E0D3;font-weight:600"></span>. Your seat has been reserved. Confirmation via WhatsApp and email shortly.</p>
+      <h1 style="font-size:28px;font-weight:700;margin:0 0 12px">Registration Confirmed</h1>
+      <p style="font-size:16px;color:var(--muted);line-height:1.6;margin:0 0 24px">Thank you, <span id="conf-name" style="color:var(--teal-light);font-weight:600"></span>. Your seat has been reserved. Confirmation via WhatsApp and email shortly.</p>
       <div class="success-box">
-        <div style="font-size:14px;color:#e2e8f0;line-height:2.2">📅 Sunday, 31 May 2026<br>📍 Ahmedabad (venue details via WhatsApp)<br>⏰ 7:30 AM – 5:30 PM<br>🎓 CME Credits Applicable</div>
+        <div style="font-size:14px;line-height:2.2">📅 Sunday, 31 May 2026<br>📍 Ahmedabad (venue details via WhatsApp)<br>⏰ 7:30 AM – 5:30 PM<br>🎓 CME Credits Applicable</div>
       </div>
     </div>
   </div>
@@ -220,12 +363,36 @@ footer{padding:32px 24px;border-top:1px solid rgba(255,255,255,0.03);text-align:
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const SUPABASE_URL='https://gswmbggizvcsfeqgsyrt.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdzd21iZ2dpenZjc2ZlcWdzeXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NDY3OTksImV4cCI6MjA5MTMyMjc5OX0.mM2nsw6vPPp-6APsYT2QuovnZId7VWixBLvCZkjVorQ';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const sb=window.supabase.createClient('https://gswmbggizvcsfeqgsyrt.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdzd21iZ2dpenZjc2ZlcWdzeXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NDY3OTksImV4cCI6MjA5MTMyMjc5OX0.mM2nsw6vPPp-6APsYT2QuovnZId7VWixBLvCZkjVorQ');
 
+// Countdown
+function updateCountdown(){
+  const target=new Date('2026-05-31T07:30:00+05:30');
+  const now=new Date();
+  const diff=target-now;
+  if(diff<=0){document.getElementById('countdown').innerHTML='<div style="font-size:18px;color:var(--teal);font-weight:700">The conference is live!</div>';return}
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  document.getElementById('cd-d').textContent=d;
+  document.getElementById('cd-h').textContent=h;
+  document.getElementById('cd-m').textContent=m;
+  document.getElementById('cd-s').textContent=s;
+}
+updateCountdown();setInterval(updateCountdown,1000);
+
+// Scroll reveal
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// Nav scroll
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
+
+// Diet buttons
 function pickDiet(btn){document.querySelectorAll('.diet-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
 
+// Submit
 async function submitForm(){
   const invite=document.getElementById('f-invite').value.trim();
   const name=document.getElementById('f-name').value.trim();
@@ -237,48 +404,16 @@ async function submitForm(){
   const mcr=document.getElementById('f-mcr').value.trim();
   const exp=document.getElementById('f-exp').value;
   const diet=document.querySelector('.diet-btn.active')?.textContent||'No restrictions';
-
-  if(!invite){alert('Please enter your Invite Code.');document.getElementById('f-invite').focus();return;}
-  if(!name||!phone||!email||!spec){alert('Please fill all required fields: Name, Phone, Email, and Speciality.');return;}
-  if(!/^\d{10}$/.test(phone)){alert('Please enter a valid 10-digit phone number.');return;}
-
-  const btn=document.querySelector('.btn-teal-lg[onclick]');
-  const origText=btn.textContent;
-  btn.textContent='Registering...';btn.disabled=true;btn.style.opacity='0.7';
-
+  if(!invite){alert('Please enter your Invite Code.');document.getElementById('f-invite').focus();return}
+  if(!name||!phone||!email||!spec){alert('Please fill all required fields: Name, Phone, Email, and Speciality.');return}
+  if(!/^\d{10}$/.test(phone)){alert('Please enter a valid 10-digit phone number.');return}
+  const btn=event.target;btn.textContent='Registering...';btn.disabled=true;btn.style.opacity='0.6';
   try{
-    const{data,error}=await sb.rpc('rlc_register',{
-      p_invite_code:invite,
-      p_name:name,
-      p_phone:phone,
-      p_email:email,
-      p_hospital:hospital||null,
-      p_speciality:spec,
-      p_city:city||null,
-      p_mcr_number:mcr||null,
-      p_experience:exp||null,
-      p_dietary:diet
-    });
-
-    if(error){
-      alert('Something went wrong. Please try again.');
-      btn.textContent=origText;btn.disabled=false;btn.style.opacity='1';
-      return;
-    }
-
-    if(data&&data.success){
-      document.getElementById('conf-name').textContent='Dr. '+name;
-      document.getElementById('main-page').classList.add('hidden');
-      document.getElementById('success-page').classList.remove('hidden');
-      window.scrollTo(0,0);
-    }else{
-      alert(data?.error||'Registration failed. Please try again.');
-      btn.textContent=origText;btn.disabled=false;btn.style.opacity='1';
-    }
-  }catch(e){
-    alert('Network error. Please check your connection and try again.');
-    btn.textContent=origText;btn.disabled=false;btn.style.opacity='1';
-  }
+    const{data,error}=await sb.rpc('rlc_register',{p_invite_code:invite,p_name:name,p_phone:phone,p_email:email,p_hospital:hospital||null,p_speciality:spec,p_city:city||null,p_mcr_number:mcr||null,p_experience:exp||null,p_dietary:diet});
+    if(error){alert('Something went wrong. Please try again.');btn.textContent='Confirm Registration';btn.disabled=false;btn.style.opacity='1';return}
+    if(data&&data.success){document.getElementById('conf-name').textContent='Dr. '+name;document.getElementById('main-page').classList.add('hidden');document.getElementById('success-page').classList.remove('hidden');window.scrollTo(0,0)}
+    else{alert(data?.error||'Registration failed. Please try again.');btn.textContent='Confirm Registration';btn.disabled=false;btn.style.opacity='1'}
+  }catch(e){alert('Network error. Please check your connection.');btn.textContent='Confirm Registration';btn.disabled=false;btn.style.opacity='1'}
 }
 </script>
 </body>
