@@ -5,6 +5,7 @@ interface SendTemplateParams {
   destination: string;
   templateParams: string[];
   userName?: string;
+  mediaUrl?: string;
 }
 
 export async function sendAisensyTemplate({
@@ -12,22 +13,27 @@ export async function sendAisensyTemplate({
   destination,
   templateParams,
   userName,
+  mediaUrl,
 }: SendTemplateParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
+    const body: Record<string, any> = {
+      apiKey: process.env.AISENSY_API_KEY,
+      campaignName,
+      destination: destination.replace(/^\+/, ''),
+      userName: userName || 'RoboLapCon',
+      templateParams,
+      source: 'robolapcon-website',
+      buttons: [],
+    };
+    if (mediaUrl) {
+      body.mediaUrl = mediaUrl;
+    }
     const res = await fetch(`${AISENSY_API_BASE}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        apiKey: process.env.AISENSY_API_KEY,
-        campaignName,
-        destination: destination.replace(/^\+/, ''),
-        userName: userName || 'RoboLapCon',
-        templateParams,
-        source: 'robolapcon-website',
-        buttons: [],
-      }),
+      body: JSON.stringify(body),
     });
 
     if (!res.ok) {

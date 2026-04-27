@@ -10,9 +10,13 @@ import {
   CalendarDays,
   BarChart3,
   LogOut,
+  ScanLine,
+  UtensilsCrossed,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
+  { href: '/admin/checkin', label: 'Check-in', icon: ScanLine },
+  { href: '/admin/scan', label: 'Food / Gift', icon: UtensilsCrossed },
   { href: '/admin/delegates', label: 'Delegates', icon: Users },
   { href: '/admin/invite-codes', label: 'Invite Codes', icon: KeyRound },
   { href: '/admin/faculty', label: 'Faculty', icon: UserCircle },
