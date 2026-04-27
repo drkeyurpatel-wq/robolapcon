@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+@layer components {
+  .rlc-btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200;
+  }
+
+  .rlc-btn-primary {
+    @apply rlc-btn bg-rlc-accent text-white hover:bg-rlc-accent-light hover:shadow-lg hover:shadow-rlc-accent/25;
+  }
+
+  .rlc-btn-amber {
+    @apply rlc-btn bg-rlc-amber text-rlc-bg hover:brightness-110 hover:shadow-lg hover:shadow-rlc-amber/25;
+  }
+
+  .rlc-btn-outline {
+    @apply rlc-btn border border-rlc-border text-rlc-muted hover:border-rlc-accent hover:text-rlc-accent;
+  }
+
+  .rlc-card {
+    @apply bg-rlc-bg-card border border-rlc-border rounded-xl p-6;
+  }
+
+  .rlc-input {
+    @apply w-full bg-rlc-bg-light border border-rlc-border rounded-lg px-4 py-3 text-white placeholder:text-rlc-muted/60 focus:outline-none focus:border-rlc-accent focus:ring-1 focus:ring-rlc-accent transition-colors;
+  }
+
+  .rlc-label {
+    @apply block text-sm font-medium text-rlc-muted mb-1.5;
+  }
+
+  .rlc-select {
+    @apply rlc-input appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_12px_center] bg-no-repeat pr-10;
+  }
+
+  .rlc-gradient-text {
+    @apply bg-gradient-to-r from-rlc-accent to-rlc-amber bg-clip-text text-transparent;
+  }
+
+  .rlc-section-title {
+    @apply text-3xl md:text-4xl font-bold text-center mb-4;
+  }
+}
+
+/* Admin table styles */
+.admin-table {
+  @apply w-full text-sm;
+}
+.admin-table th {
+  @apply text-left text-rlc-muted font-medium px-4 py-3 border-b border-rlc-border bg-rlc-bg-light/50;
+}
+.admin-table td {
+  @apply px-4 py-3 border-b border-rlc-border/50;
+}
+.admin-table tr:hover td {
+  @apply bg-rlc-bg-light/30;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-400 { animation-delay: 400ms; }
+.animate-delay-500 { animation-delay: 500ms; }
