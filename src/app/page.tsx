@@ -15,7 +15,6 @@ import {
   ChevronRight,
   Bot,
 } from 'lucide-react';
-import type { Faculty, Track, Sponsor } from '@/types';
 
 const WHAT_TO_EXPECT = [
   {
@@ -51,29 +50,28 @@ const WHAT_TO_EXPECT = [
 ];
 
 export default function HomePage() {
-  const [faculty, setFaculty] = useState<Faculty[]>([]);
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  const [faculty, setFaculty] = useState<any[]>([]);
+  const [tracks, setTracks] = useState<any[]>([]);
+  const [sponsors, setSponsors] = useState<any[]>([]);
 
   useEffect(() => {
     const sb = createClient();
 
     sb.from('rlc_faculty')
       .select('*')
-      .eq('is_active', true)
+      .eq('active', true)
       .order('display_order')
       .then(({ data }) => setFaculty(data || []));
 
     sb.from('rlc_tracks')
       .select('*')
-      .eq('is_active', true)
+      .eq('active', true)
       .order('day_number')
-      .order('name')
+      .order('display_order')
       .then(({ data }) => setTracks(data || []));
 
     sb.from('rlc_sponsors_public')
       .select('*')
-      .order('display_order')
       .then(({ data }) => setSponsors(data || []));
   }, []);
 
@@ -182,15 +180,15 @@ export default function HomePage() {
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {day1Tracks.map((t) => (
                   <div
-                    key={t.id}
+                    key={t.code}
                     className="rlc-card hover:border-rlc-accent/50 transition-colors group"
                   >
                     <div
                       className="w-2 h-2 rounded-full mb-3"
-                      style={{ backgroundColor: t.color || '#00A99D' }}
+                      style={{ backgroundColor: '#00A99D' }}
                     />
                     <h4 className="font-semibold text-white group-hover:text-rlc-accent transition-colors">
-                      {t.name}
+                      {t.display_name}
                     </h4>
                     {t.description && (
                       <p className="text-sm text-rlc-muted mt-1">{t.description}</p>
@@ -210,15 +208,15 @@ export default function HomePage() {
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {day2Tracks.map((t) => (
                   <div
-                    key={t.id}
+                    key={t.code}
                     className="rlc-card hover:border-rlc-amber/50 transition-colors group"
                   >
                     <div
                       className="w-2 h-2 rounded-full mb-3"
-                      style={{ backgroundColor: t.color || '#FDB913' }}
+                      style={{ backgroundColor: '#FDB913' }}
                     />
                     <h4 className="font-semibold text-white group-hover:text-rlc-amber transition-colors">
-                      {t.name}
+                      {t.display_name}
                     </h4>
                     {t.description && (
                       <p className="text-sm text-rlc-muted mt-1">{t.description}</p>
@@ -301,7 +299,7 @@ export default function HomePage() {
                   {f.city && (
                     <p className="text-xs text-rlc-accent mt-0.5">{f.city}</p>
                   )}
-                  {f.is_keynote && (
+                  {f.is_featured && (
                     <span className="inline-block mt-2 px-2 py-0.5 text-[10px] font-semibold bg-rlc-amber/10 text-rlc-amber rounded-full">
                       KEYNOTE
                     </span>

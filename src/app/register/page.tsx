@@ -5,140 +5,118 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Bot, CheckCircle2, ArrowLeft, Loader2 } from 'lucide-react';
 
-const SPECIALITIES = [
-  'General Surgery',
-  'Gynaecology',
-  'Urology',
-  'Oncology',
-  'Bariatric Surgery',
-  'GI Surgery',
-  'Surgical Gastroenterology',
-  'Colorectal Surgery',
-  'Paediatric Surgery',
-  'Cardiothoracic Surgery',
-  'Neurosurgery',
-  'Orthopaedics',
-  'ENT',
-  'Other',
+const SPECIALTIES = [
+  { value: 'general_surgery', label: 'General Surgery' },
+  { value: 'surgical_gastroenterology', label: 'Surgical Gastroenterology' },
+  { value: 'urology', label: 'Urology' },
+  { value: 'gynecology_obstetrics', label: 'Gynecology & Obstetrics' },
+  { value: 'surgical_oncology', label: 'Surgical Oncology' },
+  { value: 'colorectal_surgery', label: 'Colorectal Surgery' },
+  { value: 'bariatric_surgery', label: 'Bariatric Surgery' },
+  { value: 'pediatric_surgery', label: 'Pediatric Surgery' },
+  { value: 'thoracic_surgery', label: 'Thoracic Surgery' },
+  { value: 'other', label: 'Other' },
 ];
 
-const INDIAN_STATES = [
-  'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa',
-  'Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala',
-  'Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland',
-  'Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura',
-  'Uttar Pradesh','Uttarakhand','West Bengal','Delhi','Jammu & Kashmir',
-  'Ladakh','Chandigarh','Puducherry','Other',
+const DAY1_TRACKS = [
+  { code: 'gyn', label: 'Robotic Gynecology' },
+  { code: 'uro', label: 'Robotic Urology' },
+  { code: 'onco', label: 'Surgical Oncology' },
+  { code: 'bariatric', label: 'Bariatric Surgery' },
 ];
 
-interface FormData {
-  full_name: string;
-  email: string;
-  phone: string;
-  city: string;
-  state: string;
-  speciality: string;
-  mci_number: string;
-  hospital_name: string;
-  designation: string;
-  dietary_preference: string;
-}
+const DAY2_TRACKS = [
+  { code: 'gen', label: 'General Surgery' },
+  { code: 'gi', label: 'GI Surgery' },
+];
+
+const EXPERIENCE_BANDS = [
+  { value: '0_5_years', label: '0-5 years' },
+  { value: '5_10_years', label: '5-10 years' },
+  { value: '10_20_years', label: '10-20 years' },
+  { value: '20_plus_years', label: '20+ years' },
+];
+
+const DIETARY_OPTIONS = [
+  { value: 'no_restrictions', label: 'No Restrictions' },
+  { value: 'jain', label: 'Jain' },
+  { value: 'vegan', label: 'Vegan' },
+  { value: 'other', label: 'Other' },
+];
 
 export default function RegisterPage() {
-  const [form, setForm] = useState<FormData>({
-    full_name: '',
-    email: '',
-    phone: '',
-    city: '',
-    state: 'Gujarat',
-    speciality: '',
-    mci_number: '',
-    hospital_name: '',
-    designation: '',
-    dietary_preference: 'veg',
+  const [form, setForm] = useState({
+    full_name: '', email: '', phone: '', city: '', hospital: '',
+    mcr_number: '', specialty: '', specialty_other: '',
+    years_of_experience: '', dietary: 'no_restrictions', dietary_other: '',
+    attend_day1: true, day1_tracks: [] as string[],
+    attend_day2: true, day2_tracks: [] as string[],
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [regNumber, setRegNumber] = useState('');
+  const [resultMsg, setResultMsg] = useState('');
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
     setError('');
+  };
+
+  const toggleTrack = (day: 'day1_tracks' | 'day2_tracks', code: string) => {
+    setForm((p) => ({
+      ...p,
+      [day]: p[day].includes(code) ? p[day].filter((c) => c !== code) : [...p[day], code],
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
-    // Validation
     if (!form.full_name.trim()) return setError('Full name is required.');
-    if (!form.email.trim() || !form.email.includes('@'))
-      return setError('Valid email is required.');
-    if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 10)
-      return setError('Valid phone number is required.');
-    if (!form.city.trim()) return setError('City is required.');
-    if (!form.speciality) return setError('Please select your speciality.');
+    if (!form.email.trim() || !form.email.includes('@')) return setError('Valid email is required.');
+    if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 10) return setError('Valid phone number is required.');
+    if (!form.specialty) return setError('Please select your specialty.');
+    if (form.specialty === 'other' && !form.specialty_other.trim()) return setError('Please specify your specialty.');
+
+    const dayAttendance: { day: number; tracks: string[] }[] = [];
+    if (form.attend_day1 && form.day1_tracks.length > 0) dayAttendance.push({ day: 1, tracks: form.day1_tracks });
+    if (form.attend_day2 && form.day2_tracks.length > 0) dayAttendance.push({ day: 2, tracks: form.day2_tracks });
+    if (dayAttendance.length === 0) return setError('Please select at least one day and track.');
 
     setLoading(true);
-
     try {
       const sb = createClient();
-      const { data, error: rpcError } = await sb.rpc(
-        'rlc_register_delegate_open',
-        {
-          p_full_name: form.full_name.trim(),
-          p_email: form.email.trim().toLowerCase(),
-          p_phone: form.phone.trim(),
-          p_city: form.city.trim(),
-          p_state: form.state,
-          p_speciality: form.speciality,
-          p_mci_number: form.mci_number.trim() || null,
-          p_hospital_name: form.hospital_name.trim() || null,
-          p_designation: form.designation.trim() || null,
-          p_dietary_preference: form.dietary_preference || null,
-        }
-      );
+      const { data, error: rpcError } = await sb.rpc('rlc_register_delegate_open', {
+        p_full_name: form.full_name.trim(),
+        p_phone: form.phone.trim(),
+        p_email: form.email.trim().toLowerCase(),
+        p_specialty: form.specialty as any,
+        p_day_attendance: dayAttendance,
+        p_hospital: form.hospital.trim() || null,
+        p_city: form.city.trim() || null,
+        p_mcr_number: form.mcr_number.trim() || null,
+        p_specialty_other: form.specialty === 'other' ? form.specialty_other.trim() : null,
+        p_years_of_experience: form.years_of_experience || null,
+        p_dietary: form.dietary as any,
+        p_dietary_other: form.dietary === 'other' ? form.dietary_other.trim() : null,
+      });
 
-      if (rpcError) {
-        if (rpcError.message?.includes('already registered')) {
-          setError('This email or phone is already registered.');
-        } else {
-          setError(rpcError.message || 'Registration failed. Please try again.');
-        }
-        setLoading(false);
-        return;
+      if (rpcError) { setError(rpcError.message || 'Registration failed.'); setLoading(false); return; }
+
+      const result = data as any;
+      if (!result?.success) { setError(result?.message || 'Registration failed.'); setLoading(false); return; }
+
+      if (result.delegate_id) {
+        fetch('/api/aisensy/send-confirmation', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ delegate_id: result.delegate_id, full_name: form.full_name.trim(), phone: form.phone.trim() }),
+        }).catch(() => {});
       }
 
-      const delegateId = data;
-
-      // Fire AiSensy confirmation (non-blocking)
-      fetch('/api/aisensy/send-confirmation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          delegate_id: delegateId,
-          full_name: form.full_name.trim(),
-          phone: form.phone.trim(),
-        }),
-      }).catch(() => {});
-
-      // Get registration number
-      const { data: delegate } = await sb
-        .from('rlc_delegates')
-        .select('registration_number')
-        .eq('id', delegateId)
-        .single();
-
-      setRegNumber(delegate?.registration_number || delegateId);
+      setResultMsg(result.message || 'Registration confirmed!');
       setSuccess(true);
-    } catch {
-      setError('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    } catch { setError('Something went wrong. Please try again.'); }
+    finally { setLoading(false); }
   };
 
   if (success) {
@@ -149,20 +127,8 @@ export default function RegisterPage() {
             <CheckCircle2 className="w-10 h-10 text-rlc-accent" />
           </div>
           <h1 className="text-3xl font-bold mb-2">You&apos;re Registered!</h1>
-          <p className="text-rlc-muted mb-6">
-            Welcome to ROBOLAPCON 2026. Your registration number is:
-          </p>
-          <div className="inline-block px-6 py-3 bg-rlc-bg-card border border-rlc-accent/30 rounded-xl mb-6">
-            <span className="text-2xl font-bold text-rlc-accent font-mono">
-              {regNumber}
-            </span>
-          </div>
-          <p className="text-sm text-rlc-muted mb-8">
-            A confirmation message will be sent to your WhatsApp shortly.
-          </p>
-          <Link href="/" className="rlc-btn-outline">
-            <ArrowLeft className="w-4 h-4" /> Back to Home
-          </Link>
+          <p className="text-rlc-muted mb-8">{resultMsg}</p>
+          <Link href="/" className="rlc-btn-outline"><ArrowLeft className="w-4 h-4" /> Back to Home</Link>
         </div>
       </main>
     );
@@ -170,201 +136,116 @@ export default function RegisterPage() {
 
   return (
     <main className="min-h-screen py-12 px-4">
-      {/* Header */}
       <div className="max-w-lg mx-auto mb-8">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-rlc-muted hover:text-white transition-colors mb-6"
-        >
+        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-rlc-muted hover:text-white transition-colors mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to Home
         </Link>
         <div className="flex items-center gap-2 mb-2">
           <Bot className="w-6 h-6 text-rlc-accent" />
-          <span className="font-bold text-lg">
-            ROBOLAP<span className="text-rlc-accent">CON</span> 2026
-          </span>
+          <span className="font-bold text-lg">ROBOLAP<span className="text-rlc-accent">CON</span> 2026</span>
         </div>
         <h1 className="text-3xl font-bold mt-4">Register as Delegate</h1>
-        <p className="text-rlc-muted mt-1">
-          Fill in your details below to secure your spot.
-        </p>
+        <p className="text-rlc-muted mt-1">Fill in your details below to secure your spot.</p>
       </div>
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto space-y-5">
-        {/* Name */}
         <div>
-          <label className="rlc-label">
-            Full Name <span className="text-rlc-red">*</span>
-          </label>
-          <input
-            name="full_name"
-            value={form.full_name}
-            onChange={handleChange}
-            className="rlc-input"
-            placeholder="Dr. Full Name"
-          />
+          <label className="rlc-label">Full Name <span className="text-rlc-red">*</span></label>
+          <input name="full_name" value={form.full_name} onChange={handleChange} className="rlc-input" placeholder="Dr. Full Name" />
         </div>
 
-        {/* Email + Phone */}
         <div className="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label className="rlc-label">
-              Email <span className="text-rlc-red">*</span>
-            </label>
-            <input
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              className="rlc-input"
-              placeholder="doctor@example.com"
-            />
-          </div>
-          <div>
-            <label className="rlc-label">
-              Phone <span className="text-rlc-red">*</span>
-            </label>
-            <input
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              className="rlc-input"
-              placeholder="+91 98765 43210"
-            />
-          </div>
+          <div><label className="rlc-label">Email <span className="text-rlc-red">*</span></label>
+            <input name="email" type="email" value={form.email} onChange={handleChange} className="rlc-input" placeholder="doctor@example.com" /></div>
+          <div><label className="rlc-label">Phone <span className="text-rlc-red">*</span></label>
+            <input name="phone" value={form.phone} onChange={handleChange} className="rlc-input" placeholder="+91 98765 43210" /></div>
         </div>
 
-        {/* City + State */}
         <div className="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label className="rlc-label">
-              City <span className="text-rlc-red">*</span>
-            </label>
-            <input
-              name="city"
-              value={form.city}
-              onChange={handleChange}
-              className="rlc-input"
-              placeholder="Ahmedabad"
-            />
-          </div>
-          <div>
-            <label className="rlc-label">
-              State <span className="text-rlc-red">*</span>
-            </label>
-            <select
-              name="state"
-              value={form.state}
-              onChange={handleChange}
-              className="rlc-select"
-            >
-              {INDIAN_STATES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </div>
+          <div><label className="rlc-label">City</label>
+            <input name="city" value={form.city} onChange={handleChange} className="rlc-input" placeholder="Ahmedabad" /></div>
+          <div><label className="rlc-label">Hospital / Institution</label>
+            <input name="hospital" value={form.hospital} onChange={handleChange} className="rlc-input" placeholder="Optional" /></div>
         </div>
 
-        {/* Speciality */}
         <div>
-          <label className="rlc-label">
-            Speciality <span className="text-rlc-red">*</span>
-          </label>
-          <select
-            name="speciality"
-            value={form.speciality}
-            onChange={handleChange}
-            className="rlc-select"
-          >
-            <option value="">Select speciality</option>
-            {SPECIALITIES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
+          <label className="rlc-label">Specialty <span className="text-rlc-red">*</span></label>
+          <select name="specialty" value={form.specialty} onChange={handleChange} className="rlc-select">
+            <option value="">Select specialty</option>
+            {SPECIALTIES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
         </div>
-
-        {/* MCI + Hospital */}
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label className="rlc-label">MCI/NMC Number</label>
-            <input
-              name="mci_number"
-              value={form.mci_number}
-              onChange={handleChange}
-              className="rlc-input"
-              placeholder="Optional"
-            />
-          </div>
-          <div>
-            <label className="rlc-label">Hospital / Institution</label>
-            <input
-              name="hospital_name"
-              value={form.hospital_name}
-              onChange={handleChange}
-              className="rlc-input"
-              placeholder="Optional"
-            />
-          </div>
-        </div>
-
-        {/* Designation */}
-        <div>
-          <label className="rlc-label">Designation</label>
-          <input
-            name="designation"
-            value={form.designation}
-            onChange={handleChange}
-            className="rlc-input"
-            placeholder="e.g. Consultant, Resident, HOD"
-          />
-        </div>
-
-        {/* Dietary */}
-        <div>
-          <label className="rlc-label">Dietary Preference</label>
-          <select
-            name="dietary_preference"
-            value={form.dietary_preference}
-            onChange={handleChange}
-            className="rlc-select"
-          >
-            <option value="veg">Vegetarian</option>
-            <option value="non-veg">Non-Vegetarian</option>
-            <option value="jain">Jain</option>
-            <option value="vegan">Vegan</option>
-          </select>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div className="bg-rlc-red/10 border border-rlc-red/30 rounded-lg px-4 py-3 text-sm text-rlc-red">
-            {error}
-          </div>
+        {form.specialty === 'other' && (
+          <div><label className="rlc-label">Specify Specialty <span className="text-rlc-red">*</span></label>
+            <input name="specialty_other" value={form.specialty_other} onChange={handleChange} className="rlc-input" placeholder="Your specialty" /></div>
         )}
 
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rlc-btn-amber w-full text-base !py-3.5 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" /> Registering...
-            </>
-          ) : (
-            'Complete Registration'
-          )}
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div><label className="rlc-label">MCR Number</label>
+            <input name="mcr_number" value={form.mcr_number} onChange={handleChange} className="rlc-input" placeholder="Optional" /></div>
+          <div><label className="rlc-label">Experience</label>
+            <select name="years_of_experience" value={form.years_of_experience} onChange={handleChange} className="rlc-select">
+              <option value="">Select</option>
+              {EXPERIENCE_BANDS.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}
+            </select></div>
+        </div>
+
+        {/* Day & Track Selection */}
+        <div>
+          <label className="rlc-label">Day & Track Selection <span className="text-rlc-red">*</span></label>
+          <p className="text-xs text-rlc-muted mb-3">Pick the days and tracks you want to attend.</p>
+
+          <div className="rlc-card mb-3">
+            <label className="flex items-center gap-2 cursor-pointer mb-3">
+              <input type="checkbox" checked={form.attend_day1} onChange={(e) => setForm((p) => ({ ...p, attend_day1: e.target.checked, day1_tracks: e.target.checked ? p.day1_tracks : [] }))} className="w-4 h-4 rounded accent-rlc-accent" />
+              <span className="font-semibold text-sm">Day 1</span>
+              <span className="text-xs text-rlc-accent">Robotic & Specialty</span>
+            </label>
+            {form.attend_day1 && (
+              <div className="flex flex-wrap gap-2">
+                {DAY1_TRACKS.map((t) => {
+                  const sel = form.day1_tracks.includes(t.code);
+                  return <button key={t.code} type="button" onClick={() => toggleTrack('day1_tracks', t.code)} className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${sel ? 'bg-rlc-accent/20 border-rlc-accent text-rlc-accent' : 'border-rlc-border text-rlc-muted hover:border-rlc-accent/50'}`}>{t.label}</button>;
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="rlc-card">
+            <label className="flex items-center gap-2 cursor-pointer mb-3">
+              <input type="checkbox" checked={form.attend_day2} onChange={(e) => setForm((p) => ({ ...p, attend_day2: e.target.checked, day2_tracks: e.target.checked ? p.day2_tracks : [] }))} className="w-4 h-4 rounded accent-rlc-accent" />
+              <span className="font-semibold text-sm">Day 2</span>
+              <span className="text-xs text-rlc-amber">General & GI</span>
+            </label>
+            {form.attend_day2 && (
+              <div className="flex flex-wrap gap-2">
+                {DAY2_TRACKS.map((t) => {
+                  const sel = form.day2_tracks.includes(t.code);
+                  return <button key={t.code} type="button" onClick={() => toggleTrack('day2_tracks', t.code)} className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${sel ? 'bg-rlc-amber/20 border-rlc-amber text-rlc-amber' : 'border-rlc-border text-rlc-muted hover:border-rlc-amber/50'}`}>{t.label}</button>;
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <label className="rlc-label">Dietary Preference</label>
+          <select name="dietary" value={form.dietary} onChange={handleChange} className="rlc-select">
+            {DIETARY_OPTIONS.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
+          </select>
+        </div>
+        {form.dietary === 'other' && (
+          <div><label className="rlc-label">Specify Dietary Needs</label>
+            <input name="dietary_other" value={form.dietary_other} onChange={handleChange} className="rlc-input" placeholder="Your dietary requirements" /></div>
+        )}
+
+        {error && <div className="bg-rlc-red/10 border border-rlc-red/30 rounded-lg px-4 py-3 text-sm text-rlc-red">{error}</div>}
+
+        <button type="submit" disabled={loading} className="rlc-btn-amber w-full text-base !py-3.5 disabled:opacity-50 disabled:cursor-not-allowed">
+          {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Registering...</> : 'Complete Registration'}
         </button>
 
-        <p className="text-xs text-rlc-muted text-center">
-          By registering, you agree to receive conference updates via WhatsApp and email.
-        </p>
+        <p className="text-xs text-rlc-muted text-center">By registering, you agree to receive conference updates via WhatsApp and email.</p>
       </form>
     </main>
   );
