@@ -18,17 +18,8 @@ const SPECIALTIES = [
   { value: 'other', label: 'Other' },
 ];
 
-const DAY1_TRACKS = [
-  { code: 'gyn', label: 'Robotic Gynecology' },
-  { code: 'uro', label: 'Robotic Urology' },
-  { code: 'onco', label: 'Surgical Oncology' },
-  { code: 'bariatric', label: 'Bariatric Surgery' },
-];
-
-const DAY2_TRACKS = [
-  { code: 'gen', label: 'General Surgery' },
-  { code: 'gi', label: 'GI Surgery' },
-];
+const DAY1_ALL_TRACKS = ['gyn', 'uro', 'onco', 'bariatric'];
+const DAY2_ALL_TRACKS = ['gen', 'gi'];
 
 const EXPERIENCE_BANDS = [
   { value: '0_5_years', label: '0-5 years' },
@@ -49,8 +40,7 @@ export default function RegisterPage() {
     full_name: '', email: '', phone: '', city: '', hospital: '',
     mcr_number: '', specialty: '', specialty_other: '',
     years_of_experience: '', dietary: 'no_restrictions', dietary_other: '',
-    attend_day1: true, day1_tracks: [] as string[],
-    attend_day2: true, day2_tracks: [] as string[],
+    attend_day1: true, attend_day2: true,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -62,13 +52,6 @@ export default function RegisterPage() {
     setError('');
   };
 
-  const toggleTrack = (day: 'day1_tracks' | 'day2_tracks', code: string) => {
-    setForm((p) => ({
-      ...p,
-      [day]: p[day].includes(code) ? p[day].filter((c) => c !== code) : [...p[day], code],
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -77,11 +60,12 @@ export default function RegisterPage() {
     if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 10) return setError('Valid phone number is required.');
     if (!form.specialty) return setError('Please select your specialty.');
     if (form.specialty === 'other' && !form.specialty_other.trim()) return setError('Please specify your specialty.');
+    if (!form.attend_day1 && !form.attend_day2) return setError('Please select at least one day to attend.');
 
+    // Auto-include all tracks for selected days
     const dayAttendance: { day: number; tracks: string[] }[] = [];
-    if (form.attend_day1 && form.day1_tracks.length > 0) dayAttendance.push({ day: 1, tracks: form.day1_tracks });
-    if (form.attend_day2 && form.day2_tracks.length > 0) dayAttendance.push({ day: 2, tracks: form.day2_tracks });
-    if (dayAttendance.length === 0) return setError('Please select at least one day and track.');
+    if (form.attend_day1) dayAttendance.push({ day: 1, tracks: DAY1_ALL_TRACKS });
+    if (form.attend_day2) dayAttendance.push({ day: 2, tracks: DAY2_ALL_TRACKS });
 
     setLoading(true);
     try {
@@ -190,41 +174,24 @@ export default function RegisterPage() {
             </select></div>
         </div>
 
-        {/* Day & Track Selection */}
+        {/* Day Selection — simple checkboxes */}
         <div>
-          <label className="rlc-label">Day & Track Selection <span className="text-rlc-red">*</span></label>
-          <p className="text-xs text-rlc-muted mb-3">Pick the days and tracks you want to attend.</p>
-
-          <div className="rlc-card mb-3">
-            <label className="flex items-center gap-2 cursor-pointer mb-3">
-              <input type="checkbox" checked={form.attend_day1} onChange={(e) => setForm((p) => ({ ...p, attend_day1: e.target.checked, day1_tracks: e.target.checked ? p.day1_tracks : [] }))} className="w-4 h-4 rounded accent-rlc-accent" />
-              <span className="font-semibold text-sm">Day 1</span>
-              <span className="text-xs text-rlc-accent">Robotic & Specialty</span>
-            </label>
-            {form.attend_day1 && (
-              <div className="flex flex-wrap gap-2">
-                {DAY1_TRACKS.map((t) => {
-                  const sel = form.day1_tracks.includes(t.code);
-                  return <button key={t.code} type="button" onClick={() => toggleTrack('day1_tracks', t.code)} className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${sel ? 'bg-rlc-accent/20 border-rlc-accent text-rlc-accent' : 'border-rlc-border text-rlc-muted hover:border-rlc-accent/50'}`}>{t.label}</button>;
-                })}
+          <label className="rlc-label">Which days will you attend? <span className="text-rlc-red">*</span></label>
+          <div className="flex gap-4 mt-2">
+            <label className="flex-1 rlc-card !p-4 cursor-pointer flex items-center gap-3 hover:border-rlc-accent/50 transition-colors">
+              <input type="checkbox" checked={form.attend_day1} onChange={(e) => setForm((p) => ({ ...p, attend_day1: e.target.checked }))} className="w-5 h-5 rounded accent-rlc-accent shrink-0" />
+              <div>
+                <div className="font-semibold text-sm text-white">Day 1</div>
+                <div className="text-xs text-rlc-accent">Gynecology &middot; Urology &middot; Oncology &middot; Bariatric</div>
               </div>
-            )}
-          </div>
-
-          <div className="rlc-card">
-            <label className="flex items-center gap-2 cursor-pointer mb-3">
-              <input type="checkbox" checked={form.attend_day2} onChange={(e) => setForm((p) => ({ ...p, attend_day2: e.target.checked, day2_tracks: e.target.checked ? p.day2_tracks : [] }))} className="w-4 h-4 rounded accent-rlc-accent" />
-              <span className="font-semibold text-sm">Day 2</span>
-              <span className="text-xs text-rlc-amber">General & GI</span>
             </label>
-            {form.attend_day2 && (
-              <div className="flex flex-wrap gap-2">
-                {DAY2_TRACKS.map((t) => {
-                  const sel = form.day2_tracks.includes(t.code);
-                  return <button key={t.code} type="button" onClick={() => toggleTrack('day2_tracks', t.code)} className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${sel ? 'bg-rlc-amber/20 border-rlc-amber text-rlc-amber' : 'border-rlc-border text-rlc-muted hover:border-rlc-amber/50'}`}>{t.label}</button>;
-                })}
+            <label className="flex-1 rlc-card !p-4 cursor-pointer flex items-center gap-3 hover:border-rlc-amber/50 transition-colors">
+              <input type="checkbox" checked={form.attend_day2} onChange={(e) => setForm((p) => ({ ...p, attend_day2: e.target.checked }))} className="w-5 h-5 rounded accent-rlc-amber shrink-0" />
+              <div>
+                <div className="font-semibold text-sm text-white">Day 2</div>
+                <div className="text-xs text-rlc-amber">General Surgery &middot; GI Surgery</div>
               </div>
-            )}
+            </label>
           </div>
         </div>
 

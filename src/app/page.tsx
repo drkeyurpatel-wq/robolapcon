@@ -53,6 +53,7 @@ export default function HomePage() {
   const [faculty, setFaculty] = useState<any[]>([]);
   const [tracks, setTracks] = useState<any[]>([]);
   const [sponsors, setSponsors] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<any[]>([]);
 
   useEffect(() => {
     const sb = createClient();
@@ -73,10 +74,20 @@ export default function HomePage() {
     sb.from('rlc_sponsors_public')
       .select('*')
       .then(({ data }) => setSponsors(data || []));
+
+    sb.from('rlc_sessions')
+      .select('*')
+      .eq('visible', true)
+      .order('day_number')
+      .order('display_order')
+      .order('start_time')
+      .then(({ data }) => setSessions(data || []));
   }, []);
 
-  const day1Tracks = tracks.filter((t) => t.day_number === 1);
-  const day2Tracks = tracks.filter((t) => t.day_number === 2);
+  const day1Tracks = tracks.filter((t: any) => t.day_number === 1);
+  const day2Tracks = tracks.filter((t: any) => t.day_number === 2);
+  const day1Sessions = sessions.filter((s: any) => s.day_number === 1);
+  const day2Sessions = sessions.filter((s: any) => s.day_number === 2);
 
   return (
     <main className="min-h-screen">
@@ -92,6 +103,9 @@ export default function HomePage() {
           <div className="hidden md:flex items-center gap-6 text-sm text-rlc-muted">
             <a href="#tracks" className="hover:text-white transition-colors">
               Tracks
+            </a>
+            <a href="#schedule" className="hover:text-white transition-colors">
+              Schedule
             </a>
             <a href="#faculty" className="hover:text-white transition-colors">
               Faculty
@@ -230,6 +244,73 @@ export default function HomePage() {
           {tracks.length === 0 && (
             <p className="text-center text-rlc-muted py-8">
               Track information coming soon.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* SCHEDULE */}
+      <section id="schedule" className="py-20 px-4 sm:px-6 bg-rlc-bg-light/30">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="rlc-section-title">
+            Conference <span className="rlc-gradient-text">Schedule</span>
+          </h2>
+          <p className="text-center text-rlc-muted mb-12 max-w-xl mx-auto">
+            Full programme across two days of robotic and laparoscopic surgery.
+          </p>
+          {sessions.length > 0 ? (
+            <div className="space-y-10">
+              {[{ label: 'Day 1', color: 'rlc-accent', items: day1Sessions },
+                { label: 'Day 2', color: 'rlc-amber', items: day2Sessions }]
+                .filter((d) => d.items.length > 0)
+                .map((day) => (
+                <div key={day.label}>
+                  <h3 className={`text-sm font-semibold text-${day.color} uppercase tracking-widest mb-4`}>
+                    {day.label}
+                  </h3>
+                  <div className="space-y-2">
+                    {day.items.map((s: any) => (
+                      <div key={s.id} className="rlc-card !p-4 flex gap-4 items-start">
+                        <div className="w-20 shrink-0 text-right">
+                          {s.start_time && (
+                            <span className="text-sm font-mono text-rlc-muted">
+                              {s.start_time?.slice(0, 5)}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="font-semibold text-white text-sm">{s.title}</h4>
+                            {s.type && s.type !== 'break' && (
+                              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-rlc-bg-light text-rlc-muted uppercase">
+                                {s.type.replace(/_/g, ' ')}
+                              </span>
+                            )}
+                            {s.track_code && (
+                              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-rlc-accent/10 text-rlc-accent">
+                                {s.track_code.toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          {s.subtitle && <p className="text-xs text-rlc-muted mt-1">{s.subtitle}</p>}
+                          {s.procedure_name && (
+                            <p className="text-xs text-rlc-accent/80 mt-1">{s.procedure_name}{s.modality ? ` — ${s.modality}` : ''}</p>
+                          )}
+                        </div>
+                        {s.end_time && (
+                          <div className="text-xs text-rlc-muted shrink-0">
+                            {s.start_time?.slice(0, 5)} – {s.end_time?.slice(0, 5)}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-rlc-muted py-8">
+              Detailed schedule coming soon.
             </p>
           )}
         </div>
