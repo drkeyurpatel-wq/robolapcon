@@ -41,6 +41,7 @@ export default function RegisterPage() {
     mcr_number: '', specialty: '', specialty_other: '',
     years_of_experience: '', dietary: 'no_restrictions', dietary_other: '',
     attend_day1: true, attend_day2: true,
+    drylab_interest: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -91,6 +92,14 @@ export default function RegisterPage() {
       if (!result?.success) { setError(result?.message || 'Registration failed.'); setLoading(false); return; }
 
       if (result.delegate_id) {
+        // Set drylab interest if opted in
+        if (form.drylab_interest) {
+          sb.rpc('rlc_set_drylab_interest', {
+            p_delegate_id: result.delegate_id,
+            p_interest: true,
+          }).then(() => {});
+        }
+
         fetch('/api/aisensy/send-confirmation', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ delegate_id: result.delegate_id, full_name: form.full_name.trim(), phone: form.phone.trim() }),
@@ -194,6 +203,14 @@ export default function RegisterPage() {
             </label>
           </div>
         </div>
+
+        <label className="rlc-card !p-4 cursor-pointer flex items-start gap-3 hover:border-rlc-accent/50 transition-colors">
+          <input type="checkbox" checked={form.drylab_interest} onChange={(e) => setForm((p) => ({ ...p, drylab_interest: e.target.checked }))} className="w-5 h-5 rounded accent-rlc-accent shrink-0 mt-0.5" />
+          <div>
+            <div className="font-semibold text-sm text-white">SSI Mantra Robotic Simulation — Hands-on</div>
+            <div className="text-xs text-rlc-muted mt-1">Opt in for a 10-minute hands-on session on the SSI Mantra simulation bus. Your time slot will be assigned at the registration desk during check-in.</div>
+          </div>
+        </label>
 
         <div>
           <label className="rlc-label">Dietary Preference</label>
