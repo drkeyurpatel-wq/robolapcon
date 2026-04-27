@@ -33,17 +33,14 @@ export default function LivePage() {
   // Identify delegate by phone
   const handleIdentify = async () => {
     if (!phone.trim()) return;
-    const { data } = await sb.from('rlc_delegates').select('id, full_name').eq('phone', phone.trim()).limit(1).single();
-    if (data) {
-      setDelegateId(data.id);
-      setDelegateName(data.full_name);
+    const { data } = await sb.rpc('rlc_lookup_by_phone', { p_phone: phone.trim() });
+    const result = data as any;
+    if (result?.success && result?.id) {
+      setDelegateId(result.id);
+      setDelegateName(result.full_name);
       setIdentified(true);
     } else {
-      // Try with normalized phone
-      const { data: d2 } = await sb.from('rlc_delegates').select('id, full_name')
-        .eq('phone', phone.replace(/\D/g, '').slice(-10)).limit(1).single();
-      if (d2) { setDelegateId(d2.id); setDelegateName(d2.full_name); setIdentified(true); }
-      else alert('Phone not found. Please register first.');
+      alert('Phone not found. Please register first.');
     }
   };
 

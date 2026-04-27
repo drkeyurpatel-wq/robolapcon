@@ -15,17 +15,20 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError('');
 
-    // Create token client-side (same logic as middleware)
     const salt = 'robolapcon2026salt';
     const token = btoa(password + salt);
 
-    // Set cookie
     const maxAge = 12 * 60 * 60;
     document.cookie = `rlc_admin=${token}; path=/; max-age=${maxAge}; samesite=lax`;
 
-    // Navigate — middleware will validate
-    router.push('/admin/delegates');
-    router.refresh();
+    // Try navigating — if middleware rejects, we'll land back here
+    router.push('/admin/checkin');
+
+    // If still on login page after 2 seconds, password was wrong
+    setTimeout(() => {
+      setLoading(false);
+      setError('Wrong password. Try again.');
+    }, 2000);
   };
 
   return (
