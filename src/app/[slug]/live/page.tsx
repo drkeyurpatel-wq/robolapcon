@@ -151,6 +151,15 @@ export default function LivePage() {
     setSubmittingPoll('');
   };
 
+  // Tick timer every second (forces re-render for countdown)
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const hasLive = polls.some(p => p.status === 'live');
+    if (!hasLive) return;
+    const interval = setInterval(() => setTick(t => t + 1), 1000);
+    return () => clearInterval(interval);
+  }, [polls]);
+
   const submitQuestion = async () => {
     if (!newQuestion.trim() || !delegateId || !event) return;
     setSubmittingQ(true);
@@ -221,34 +230,60 @@ export default function LivePage() {
             {polls.length === 0 && <p className="text-center text-rlc-muted py-12">No active polls right now. Stay tuned!</p>}
             {polls.map(poll => {
               const answered = myResponses.has(poll.id);
-              const options = (poll.options || []) as { label: string; color?: string }[];
+              const options = (poll.options || []) as { label: string }[];
+              const elapsed = poll.launched_at ? Math.floor((Date.now() - new Date(poll.launched_at).getTime()) / 1000) : 0;
+              const remaining = Math.max(0, (poll.timer_seconds || 30) - elapsed);
+              const timerPct = remaining / (poll.timer_seconds || 30) * 100;
+              const expired = remaining <= 0;
+
               return (
                 <div key={poll.id} className="rlc-card">
+                  {/* Timer bar */}
+                  {!expired && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="flex-1 h-1.5 bg-rlc-bg-light rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full transition-all duration-1000 ${remaining <= 5 ? 'bg-rlc-red' : remaining <= 10 ? 'bg-rlc-amber' : 'bg-rlc-accent'}`}
+                          style={{ width: `${timerPct}%` }} />
+                      </div>
+                      <span className={`text-xs font-mono font-bold ${remaining <= 5 ? 'text-rlc-red animate-pulse' : 'text-rlc-muted'}`}>{remaining}s</span>
+                    </div>
+                  )}
+                  {expired && !answered && <p className="text-xs text-rlc-red mb-2">⏰ Time&apos;s up!</p>}
+
                   <h3 className="font-semibold text-white mb-3">{poll.question}</h3>
-                  {poll.poll_type === 'multiple_choice' || poll.poll_type === 'yes_no' ? (
+
+                  {(poll.poll_type === 'multiple_choice' || poll.poll_type === 'yes_no') ? (
                     <div className="space-y-2">
                       {options.map((opt, i) => (
-                        <button key={i} disabled={answered || submittingPoll === poll.id}
+                        <button key={i} disabled={answered || submittingPoll === poll.id || expired}
                           onClick={() => submitPollResponse(poll.id, { choice: opt.label })}
-                          className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                            answered ? 'bg-rlc-bg-light text-rlc-muted cursor-default' :
-                            'bg-rlc-bg-light hover:bg-rlc-accent/20 hover:text-rlc-accent cursor-pointer border border-transparent hover:border-rlc-accent/30'
+                          className={`w-full text-left px-4 py-3.5 rounded-xl text-sm font-medium transition-all ${
+                            answered ? 'bg-rlc-accent/10 text-rlc-accent border border-rlc-accent/20' :
+                            expired ? 'bg-rlc-bg-light text-rlc-muted/50 cursor-not-allowed' :
+                            'bg-rlc-bg-light hover:bg-rlc-accent/20 hover:text-rlc-accent active:scale-[0.98] cursor-pointer border border-transparent hover:border-rlc-accent/30'
                           }`}>
                           {opt.label}
                         </button>
                       ))}
                     </div>
                   ) : poll.poll_type === 'rating' ? (
-                    <div className="flex gap-2 justify-center">
+                    <div className="flex gap-3 justify-center py-2">
                       {[1,2,3,4,5].map(n => (
-                        <button key={n} disabled={answered} onClick={() => submitPollResponse(poll.id, { rating: n })}
-                          className={`w-12 h-12 rounded-xl text-lg font-bold transition-all ${
-                            answered ? 'bg-rlc-bg-light text-rlc-muted' : 'bg-rlc-bg-light hover:bg-rlc-accent hover:text-white'
+                        <button key={n} disabled={answered || expired} onClick={() => submitPollResponse(poll.id, { rating: n })}
+                          className={`w-14 h-14 rounded-2xl text-xl font-bold transition-all ${
+                            answered ? 'bg-rlc-accent/10 text-rlc-accent' :
+                            expired ? 'bg-rlc-bg-light text-rlc-muted/50' :
+                            'bg-rlc-bg-light hover:bg-rlc-accent hover:text-white active:scale-95'
                           }`}>{n}</button>
                       ))}
                     </div>
                   ) : null}
-                  {answered && <p className="text-xs text-rlc-accent mt-3 text-center">✓ Response recorded</p>}
+
+                  {answered && (
+                    <div className="mt-3 pt-2 border-t border-rlc-border/30 text-center">
+                      <p className="text-xs text-rlc-accent">✓ Vote recorded — results on screen soon</p>
+                    </div>
+                  )}
                 </div>
               );
             })}
