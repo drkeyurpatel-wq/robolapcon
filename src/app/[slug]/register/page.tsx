@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { Stethoscope, CheckCircle2, ArrowLeft, Loader2 } from 'lucide-react';
+import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, Radio } from 'lucide-react';
 
 const SPECIALTIES = [
   { value: 'general_surgery', label: 'General Surgery' },
@@ -47,6 +47,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [resultMsg, setResultMsg] = useState('');
+  const [regDelegateId, setRegDelegateId] = useState('');
 
   useEffect(() => {
     const sb = createClient();
@@ -118,6 +119,10 @@ export default function RegisterPage() {
       }
 
       setResultMsg(result.message || 'Registration confirmed!');
+      if (result.delegate_id) {
+        setRegDelegateId(result.delegate_id);
+        try { localStorage.setItem('rlc_delegate', JSON.stringify({ id: result.delegate_id, name: form.full_name.trim() })); } catch {}
+      }
       setSuccess(true);
     } catch { setError('Something went wrong.'); }
     finally { setSubmitting(false); }
@@ -143,7 +148,12 @@ export default function RegisterPage() {
         </div>
         <h1 className="text-3xl font-bold mb-2">You&apos;re Registered!</h1>
         <p className="text-rlc-muted mb-8">{resultMsg}</p>
-        <Link href={`/${slug}`} className="rlc-btn-outline"><ArrowLeft className="w-4 h-4" /> Back to {event.name}</Link>
+        <div className="flex flex-col gap-3">
+          <Link href={`/${slug}/live${regDelegateId ? `?d=${regDelegateId}` : ''}`} className="rlc-btn-amber !py-3 justify-center">
+            <Radio className="w-4 h-4" /> Join Live — Polls &amp; Q&amp;A
+          </Link>
+          <Link href={`/${slug}`} className="rlc-btn-outline !py-3 justify-center"><ArrowLeft className="w-4 h-4" /> Back to {event.name}</Link>
+        </div>
       </div>
     </main>
   );

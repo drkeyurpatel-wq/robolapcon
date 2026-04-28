@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   Calendar, MapPin, ChevronRight, Bot, Microscope, MonitorPlay,
   Users, Award, Coffee, Clock, ArrowRight, Play, Zap, Target,
-  Layers, CircuitBoard, Tv, Shield,
+  Layers, CircuitBoard, Tv, Shield, Radio,
 } from 'lucide-react';
 import { RoboLapConLogo, RoboLapConFullLogo } from '@/components/RoboLapConLogo';
 
@@ -132,12 +132,20 @@ export default function HomePage() {
             <a href="#features" className="hover:text-white transition-colors">Highlights</a>
             <a href="#schedule" className="hover:text-white transition-colors">Schedule</a>
           </div>
-          <Link
-            href={`/${CONF.slug}/register`}
-            className="rlc-btn-amber text-sm !py-2 !px-5 group"
-          >
-            Register <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/${CONF.slug}/live`}
+              className="rlc-btn-outline text-sm !py-2 !px-4 hidden sm:inline-flex"
+            >
+              <Radio className="w-3.5 h-3.5" /> Live
+            </Link>
+            <Link
+              href={`/${CONF.slug}/register`}
+              className="rlc-btn-amber text-sm !py-2 !px-5 group"
+            >
+              Register <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
         </div>
       </nav>
 
