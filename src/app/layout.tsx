@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { InstallBanner } from '@/components/InstallBanner';
+
 export default function RootLayout({
   children,
 }: {
@@ -38,6 +40,7 @@ export default function RootLayout({
       </head>
       <body className="font-outfit antialiased">
         {children}
+        <InstallBanner />
         <script
           dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}`,
