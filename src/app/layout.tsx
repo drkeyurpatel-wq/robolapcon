@@ -1,10 +1,24 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
+
+export const viewport: Viewport = {
+  themeColor: '#00A99D',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: 'ROBOLAPCON 2026 — National Robotic & Laparoscopic Surgery Conference',
   description:
-    'Join India\'s premier robotic and laparoscopic surgery conference. 2 days, 6 tracks, 50+ faculty, live surgeries, and hands-on workshops.',
+    'Join India\'s premier robotic and laparoscopic surgery conference. 2 days, 10 live surgeries, 25+ faculty, hands-on workshops.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'RoboLapCon',
+  },
   openGraph: {
     title: 'ROBOLAPCON 2026',
     description: 'National Robotic & Laparoscopic Surgery Conference',
@@ -19,7 +33,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-outfit antialiased">{children}</body>
+      <head>
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      </head>
+      <body className="font-outfit antialiased">
+        {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}`,
+          }}
+        />
+      </body>
     </html>
   );
 }

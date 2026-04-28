@@ -1,0 +1,14 @@
+{
+  "name": "RoboLapCon 2026",
+  "short_name": "RoboLapCon",
+  "description": "Live Robotic & 3D Laparoscopic Surgery Conference — A Health1 Initiative",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#00A99D",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
