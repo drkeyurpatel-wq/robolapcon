@@ -120,7 +120,13 @@ export default function LivePage() {
     // Realtime subscriptions
     const pollCh = sb.channel('polls-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'event_polls', filter: `event_id=eq.${eid}` },
-        () => { sb.from('event_polls').select('*').eq('event_id', eid).eq('status', 'live').order('display_order').then(({ data }) => setPolls(data || [])); })
+        () => {
+          sb.from('event_polls').select('*').eq('event_id', eid).eq('status', 'live').order('display_order').then(({ data }) => {
+            setPolls(data || []);
+            // Auto-switch to polls tab when a poll goes live
+            if (data && data.length > 0) setTab('polls');
+          });
+        })
       .subscribe();
 
     const qaCh = sb.channel('qa-live')
@@ -232,8 +238,8 @@ export default function LivePage() {
               const answered = myResponses.has(poll.id);
               const options = (poll.options || []) as { label: string }[];
               const elapsed = poll.launched_at ? Math.floor((Date.now() - new Date(poll.launched_at).getTime()) / 1000) : 0;
-              const remaining = Math.max(0, (poll.timer_seconds || 30) - elapsed);
-              const timerPct = remaining / (poll.timer_seconds || 30) * 100;
+              const remaining = Math.max(0, (poll.duration_seconds || 30) - elapsed);
+              const timerPct = remaining / (poll.duration_seconds || 30) * 100;
               const expired = remaining <= 0;
 
               return (
