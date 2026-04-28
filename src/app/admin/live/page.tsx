@@ -1,9 +1,8 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import AdminShell from '@/components/AdminShell';
 import { createClient } from '@/lib/supabase/client';
-import { Send, Pin, Trash2, Radio } from 'lucide-react';
+import { Send, Trash2, Radio } from 'lucide-react';
 
 export default function LiveAdminPage() {
   const [eventId, setEventId] = useState('');
@@ -20,64 +19,63 @@ export default function LiveAdminPage() {
     sb.from('events').select('id').limit(1).single().then(({ data }) => {
       if (!data) return;
       setEventId(data.id);
-      sb.from('rlc_sessions').select('id, title, day_number, type').eq('event_id', data.id)
-        .eq('visible', true).eq('type', 'live_surgery').order('day_number').order('display_order')
-        .then(({ data: s }) => setSessions(s || []));
+      sb.rpc('rlc_admin_sessions', { p_event_id: data.id }).then(({ data: s }) => {
+        setSessions((s || []).filter((x: any) => x.type === 'live_surgery'));
+      });
       loadData(data.id);
     });
   }, []);
 
   const loadData = async (eid: string) => {
-    const { data: u } = await sb.from('event_live_updates').select('*').eq('event_id', eid)
-      .order('created_at', { ascending: false }).limit(20);
+    const { data: u } = await sb.rpc('rlc_admin_live_updates', { p_event_id: eid });
     setUpdates(u || []);
-    const { data: q } = await sb.from('event_qa').select('*').eq('event_id', eid)
-      .order('created_at', { ascending: false }).limit(30);
+    const { data: q } = await sb.rpc('rlc_admin_qa', { p_event_id: eid });
     setQuestions(q || []);
   };
 
   const postUpdate = async () => {
     if (!content.trim() || !eventId) return;
-    await sb.from('event_live_updates').insert({
-      event_id: eventId, session_id: selectedSession || null,
-      content: content.trim(), author_name: authorName.trim() || null, update_type: updateType,
+    await sb.rpc('rlc_admin_post_update', {
+      p_event_id: eventId,
+      p_content: content.trim(),
+      p_author_name: authorName.trim() || null,
+      p_update_type: updateType,
+      p_session_id: selectedSession || null,
     });
     setContent('');
     loadData(eventId);
   };
 
   const deleteUpdate = async (id: string) => {
-    await sb.from('event_live_updates').delete().eq('id', id);
+    await sb.rpc('rlc_admin_delete_update', { p_id: id });
     loadData(eventId);
   };
 
   const approveQuestion = async (id: string, approved: boolean) => {
-    await sb.from('event_qa').update({ is_approved: approved }).eq('id', id);
+    await sb.rpc('rlc_admin_moderate_qa', { p_id: id, p_approved: approved });
     loadData(eventId);
   };
 
   const pinQuestion = async (id: string, pinned: boolean) => {
-    await sb.from('event_qa').update({ is_pinned: pinned }).eq('id', id);
+    await sb.rpc('rlc_admin_pin_qa', { p_id: id, p_pinned: pinned });
     loadData(eventId);
   };
 
   const markAnswered = async (id: string) => {
-    await sb.from('event_qa').update({ is_answered: true }).eq('id', id);
+    await sb.rpc('rlc_admin_answer_qa', { p_id: id });
     loadData(eventId);
   };
 
   return (
     <AdminShell>
       <h1 className="text-2xl font-bold mb-6">Live Commentary & Q&A</h1>
-
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Commentary */}
         <div>
           <h2 className="font-semibold mb-3 flex items-center gap-2"><Radio className="w-4 h-4 text-rlc-accent" /> Post Commentary</h2>
           <div className="space-y-3 mb-4">
             <select value={selectedSession} onChange={e => setSelectedSession(e.target.value)} className="rlc-select">
               <option value="">General</option>
-              {sessions.map(s => <option key={s.id} value={s.id}>D{s.day_number}: {s.title}</option>)}
+              {sessions.map((s: any) => <option key={s.id} value={s.id}>D{s.day_number}: {s.title}</option>)}
             </select>
             <div className="flex gap-2">
               <input value={authorName} onChange={e => setAuthorName(e.target.value)} className="rlc-input !w-1/3" placeholder="Author" />
@@ -94,7 +92,7 @@ export default function LiveAdminPage() {
             </div>
           </div>
           <div className="space-y-2 max-h-96 overflow-y-auto">
-            {updates.map(u => (
+            {updates.map((u: any) => (
               <div key={u.id} className="rlc-card !p-3 flex justify-between items-start">
                 <div>
                   <p className="text-sm text-white">{u.content}</p>
@@ -103,14 +101,13 @@ export default function LiveAdminPage() {
                 <button onClick={() => deleteUpdate(u.id)} className="text-rlc-muted hover:text-rlc-red shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
               </div>
             ))}
+            {updates.length === 0 && <p className="text-sm text-rlc-muted py-4 text-center">No updates posted yet.</p>}
           </div>
         </div>
-
-        {/* Q&A Moderation */}
         <div>
           <h2 className="font-semibold mb-3">Q&A Moderation</h2>
           <div className="space-y-2 max-h-[600px] overflow-y-auto">
-            {questions.map(q => (
+            {questions.map((q: any) => (
               <div key={q.id} className={`rlc-card !p-3 ${!q.is_approved ? 'border-rlc-amber/30' : ''}`}>
                 <p className="text-sm text-white">{q.question_text}</p>
                 <p className="text-xs text-rlc-muted mt-1">{q.delegate_name} · {q.upvote_count} votes</p>
@@ -128,7 +125,7 @@ export default function LiveAdminPage() {
                 </div>
               </div>
             ))}
-            {questions.length === 0 && <p className="text-center text-rlc-muted py-8">No questions submitted yet.</p>}
+            {questions.length === 0 && <p className="text-center text-rlc-muted py-8">No questions yet.</p>}
           </div>
         </div>
       </div>

@@ -62,7 +62,7 @@ export default function PollsPage() {
   }, [eventId]);
 
   const loadPolls = async (eid: string) => {
-    const { data } = await sb.from('event_polls').select('*').eq('event_id', eid).order('created_at', { ascending: false });
+    const { data } = await sb.rpc('rlc_admin_polls', { p_event_id: eid });
     setPolls(data || []);
     loadResponsesFor(data || []);
   };
@@ -92,8 +92,7 @@ export default function PollsPage() {
 
   const deletePoll = async (id: string) => {
     if (!confirm('Delete this poll and all responses?')) return;
-    await sb.from('event_poll_responses').delete().eq('poll_id', id);
-    await sb.from('event_polls').delete().eq('id', id);
+    await sb.rpc('rlc_admin_delete_poll', { p_id: id });
     loadPolls(eventId);
   };
 
@@ -101,14 +100,23 @@ export default function PollsPage() {
     if (!editing?.question?.trim()) return;
     const opts = (editing.options || []).filter((o: any) => o.label?.trim());
     if (editing.poll_type === 'multiple_choice' && opts.length < 2) return alert('Need at least 2 options');
-    const payload = {
-      event_id: eventId, question: editing.question.trim(),
-      poll_type: editing.poll_type || 'multiple_choice',
-      options: editing.poll_type === 'yes_no' ? [{ label: 'Yes' }, { label: 'No' }] : opts,
-      status: 'draft', show_results: false,
-    };
-    if (editing.id) { await sb.from('event_polls').update(payload).eq('id', editing.id); }
-    else { await sb.from('event_polls').insert(payload); }
+    const finalOpts = editing.poll_type === 'yes_no' ? [{ label: 'Yes' }, { label: 'No' }] : opts;
+
+    if (editing.id) {
+      await sb.rpc('rlc_admin_update_poll', {
+        p_id: editing.id,
+        p_question: editing.question.trim(),
+        p_poll_type: editing.poll_type || 'multiple_choice',
+        p_options: finalOpts,
+      });
+    } else {
+      await sb.rpc('rlc_admin_create_poll', {
+        p_event_id: eventId,
+        p_question: editing.question.trim(),
+        p_poll_type: editing.poll_type || 'multiple_choice',
+        p_options: finalOpts,
+      });
+    }
     setEditing(null);
     loadPolls(eventId);
   };
