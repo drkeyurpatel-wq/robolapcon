@@ -299,8 +299,8 @@ export default function HomePage() {
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/[0.08] bg-rlc-bg-light">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="https://images.unsplash.com/photo-1551190822-a9ce113ac100?w=800&q=80&auto=format"
-                  alt="Surgical robot in operation"
+                  src="/images/operating-theatre.jpg"
+                  alt="Robotic surgery operating theatre"
                   className="w-full h-full object-cover opacity-80"
                   loading="lazy"
                 />
@@ -380,8 +380,8 @@ export default function HomePage() {
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/[0.08] bg-rlc-bg-light">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80&auto=format"
-                  alt="Advanced surgical technology"
+                  src="/images/surgical-tech.jpg"
+                  alt="Advanced 3D laparoscopic surgery setup"
                   className="w-full h-full object-cover opacity-80"
                   loading="lazy"
                 />
