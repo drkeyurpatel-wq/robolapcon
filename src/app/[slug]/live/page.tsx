@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { MessageSquare, BarChart3, Send, ThumbsUp, Radio, ChevronUp } from 'lucide-react';
 
+const RESULT_COLORS = ['#00A99D', '#FDB913', '#E31E24', '#6366f1', '#ec4899', '#14b8a6'];
+
 export default function LivePage() {
   const { slug } = useParams<{ slug: string }>();
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -29,6 +31,9 @@ export default function LivePage() {
 
   // Commentary
   const [updates, setUpdates] = useState<any[]>([]);
+
+  // Poll results
+  const [pollResults, setPollResults] = useState<Record<string, any>>({});
 
   const sb = createClient();
 
@@ -103,9 +108,20 @@ export default function LivePage() {
     if (!event) return;
     const eid = event.id;
 
-    // Load polls
-    sb.from('event_polls').select('*').eq('event_id', eid).eq('status', 'live')
-      .order('display_order').then(({ data }) => setPolls(data || []));
+    // Load polls (live + recently closed with results)
+    sb.from('event_polls').select('*').eq('event_id', eid).in('status', ['live', 'closed'])
+      .order('updated_at', { ascending: false }).limit(5)
+      .then(({ data }) => {
+        const all = data || [];
+        setPolls(all);
+        if (all.length > 0 && all.some((p: any) => p.status === 'live')) setTab('polls');
+        // Fetch results for closed polls
+        all.filter((p: any) => p.status === 'closed' && p.show_results).forEach((p: any) => {
+          sb.rpc('event_get_poll_results', { p_poll_id: p.id }).then(({ data: r }) => {
+            if ((r as any)?.success) setPollResults(prev => ({ ...prev, [p.id]: r }));
+          });
+        });
+      });
 
     // Load Q&A
     sb.from('event_qa').select('*').eq('event_id', eid).eq('is_approved', true)
@@ -121,11 +137,18 @@ export default function LivePage() {
     const pollCh = sb.channel('polls-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'event_polls', filter: `event_id=eq.${eid}` },
         () => {
-          sb.from('event_polls').select('*').eq('event_id', eid).eq('status', 'live').order('display_order').then(({ data }) => {
-            setPolls(data || []);
-            // Auto-switch to polls tab when a poll goes live
-            if (data && data.length > 0) setTab('polls');
-          });
+          sb.from('event_polls').select('*').eq('event_id', eid).in('status', ['live', 'closed'])
+            .order('updated_at', { ascending: false }).limit(5)
+            .then(({ data }) => {
+              const all = data || [];
+              setPolls(all);
+              if (all.some((p: any) => p.status === 'live')) setTab('polls');
+              all.filter((p: any) => p.status === 'closed' && p.show_results).forEach((p: any) => {
+                sb.rpc('event_get_poll_results', { p_poll_id: p.id }).then(({ data: r }) => {
+                  if ((r as any)?.success) setPollResults(prev => ({ ...prev, [p.id]: r }));
+                });
+              });
+            });
         })
       .subscribe();
 
@@ -237,14 +260,54 @@ export default function LivePage() {
             {polls.map(poll => {
               const answered = myResponses.has(poll.id);
               const options = (poll.options || []) as { label: string }[];
+              const isClosed = poll.status === 'closed';
               const elapsed = poll.launched_at ? Math.floor((Date.now() - new Date(poll.launched_at).getTime()) / 1000) : 0;
-              const remaining = Math.max(0, (poll.duration_seconds || 30) - elapsed);
+              const remaining = isClosed ? 0 : Math.max(0, (poll.duration_seconds || 30) - elapsed);
               const timerPct = remaining / (poll.duration_seconds || 30) * 100;
               const expired = remaining <= 0;
+              const results = pollResults[poll.id];
 
+              // CLOSED POLL — show results bar chart
+              if (isClosed && results) {
+                const resultData = (results.results || []) as { choice: string; count: number }[];
+                const total = results.total || 1;
+                const bars = options.map((o, i) => {
+                  const r = resultData.find((rd: any) => rd.choice === o.label);
+                  const count = r?.count || 0;
+                  const pct = Math.round((count / total) * 100);
+                  return { label: o.label, count, pct, color: RESULT_COLORS[i % RESULT_COLORS.length] };
+                });
+
+                return (
+                  <div key={poll.id} className="rlc-card">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-semibold text-rlc-muted uppercase tracking-wider">Results</span>
+                      <span className="text-xs text-rlc-muted ml-auto">{results.total} votes</span>
+                    </div>
+                    <h3 className="font-semibold text-white mb-4">{poll.question}</h3>
+                    <div className="space-y-3">
+                      {bars.map((bar, i) => (
+                        <div key={i}>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-rlc-muted">{bar.label}</span>
+                            <span className="font-bold" style={{ color: bar.color }}>{bar.pct}%</span>
+                          </div>
+                          <div className="h-7 bg-rlc-bg-light rounded-lg overflow-hidden">
+                            <div className="h-full rounded-lg flex items-center pl-3 transition-all duration-1000"
+                              style={{ width: `${Math.max(bar.pct, 3)}%`, backgroundColor: bar.color }}>
+                              <span className="text-xs font-medium text-white/80">{bar.count}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+
+              // LIVE POLL — show voting UI
               return (
                 <div key={poll.id} className="rlc-card">
-                  {/* Timer bar */}
                   {!expired && (
                     <div className="flex items-center gap-2 mb-3">
                       <div className="flex-1 h-1.5 bg-rlc-bg-light rounded-full overflow-hidden">
@@ -254,7 +317,7 @@ export default function LivePage() {
                       <span className={`text-xs font-mono font-bold ${remaining <= 5 ? 'text-rlc-red animate-pulse' : 'text-rlc-muted'}`}>{remaining}s</span>
                     </div>
                   )}
-                  {expired && !answered && <p className="text-xs text-rlc-red mb-2">⏰ Time&apos;s up!</p>}
+                  {expired && !answered && !isClosed && <p className="text-xs text-rlc-red mb-2">⏰ Time&apos;s up!</p>}
 
                   <h3 className="font-semibold text-white mb-3">{poll.question}</h3>
 
@@ -285,9 +348,9 @@ export default function LivePage() {
                     </div>
                   ) : null}
 
-                  {answered && (
+                  {answered && !isClosed && (
                     <div className="mt-3 pt-2 border-t border-rlc-border/30 text-center">
-                      <p className="text-xs text-rlc-accent">✓ Vote recorded — results on screen soon</p>
+                      <p className="text-xs text-rlc-accent">✓ Vote recorded — results coming soon</p>
                     </div>
                   )}
                 </div>

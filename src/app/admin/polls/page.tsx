@@ -199,27 +199,30 @@ export default function PollsPage() {
         </div>
       )}
 
-      {/* CLOSED POLLS */}
+      {/* CLOSED POLLS — with results */}
       {closedPolls.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold text-rlc-muted uppercase tracking-widest mb-3">Completed</h3>
-          <div className="space-y-2">
-            {closedPolls.map(p => (
-              <div key={p.id} className="rlc-card flex items-center gap-4 opacity-60">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-white text-sm">{p.question}</h3>
-                  <span className="text-xs text-rlc-muted">{responses[p.id] || 0} responses</span>
+          <div className="space-y-4">
+            {closedPolls.map(p => {
+              const opts = (p.options || []) as { label: string }[];
+              return (
+                <div key={p.id} className="rlc-card">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-white text-sm">{p.question}</h3>
+                    <div className="flex gap-1 shrink-0">
+                      <button onClick={() => launchPoll(p.id)} className="p-2 rounded hover:bg-white/5 text-rlc-muted hover:text-rlc-accent" title="Re-launch">
+                        <Rocket className="w-3.5 h-3.5" />
+                      </button>
+                      <button onClick={() => deletePoll(p.id)} className="p-2 rounded hover:bg-rlc-red/10 text-rlc-muted hover:text-rlc-red">
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                  <PollResultsBar pollId={p.id} options={opts} total={responses[p.id] || 0} />
                 </div>
-                <div className="flex gap-1 shrink-0">
-                  <button onClick={() => launchPoll(p.id)} className="p-2 rounded hover:bg-white/5 text-rlc-muted hover:text-rlc-accent" title="Re-launch">
-                    <Rocket className="w-4 h-4" />
-                  </button>
-                  <button onClick={() => deletePoll(p.id)} className="p-2 rounded hover:bg-rlc-red/10 text-rlc-muted hover:text-rlc-red">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -262,5 +265,47 @@ export default function PollsPage() {
         </div>
       )}
     </AdminShell>
+  );
+}
+
+const COLORS = ['#00A99D', '#FDB913', '#E31E24', '#6366f1', '#ec4899', '#14b8a6'];
+
+function PollResultsBar({ pollId, options, total }: { pollId: string; options: { label: string }[]; total: number }) {
+  const [results, setResults] = useState<any>(null);
+  const sb = createClient();
+
+  useEffect(() => {
+    sb.rpc('event_get_poll_results', { p_poll_id: pollId }).then(({ data }) => {
+      if ((data as any)?.success) setResults(data);
+    });
+  }, [pollId]);
+
+  if (!results) return <p className="text-xs text-rlc-muted">Loading results...</p>;
+
+  const resultData = (results.results || []) as { choice: string; count: number }[];
+  const t = results.total || 1;
+
+  const bars = options.map((o, i) => {
+    const r = resultData.find((rd: any) => rd.choice === o.label);
+    const count = r?.count || 0;
+    const pct = Math.round((count / t) * 100);
+    return { label: o.label, count, pct, color: COLORS[i % COLORS.length] };
+  });
+
+  return (
+    <div className="space-y-2">
+      {bars.map((bar, i) => (
+        <div key={i}>
+          <div className="flex justify-between text-xs mb-1">
+            <span className="text-rlc-muted">{bar.label}</span>
+            <span className="font-bold" style={{ color: bar.color }}>{bar.pct}% <span className="text-rlc-muted font-normal">({bar.count})</span></span>
+          </div>
+          <div className="h-5 bg-rlc-bg-light rounded-lg overflow-hidden">
+            <div className="h-full rounded-lg transition-all duration-700" style={{ width: `${Math.max(bar.pct, 2)}%`, backgroundColor: bar.color }} />
+          </div>
+        </div>
+      ))}
+      <p className="text-xs text-rlc-muted text-right">{results.total} total responses</p>
+    </div>
   );
 }
