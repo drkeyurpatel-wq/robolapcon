@@ -7,11 +7,13 @@ import { MessageSquare, BarChart3, Send, ThumbsUp, Radio, ChevronUp } from 'luci
 
 export default function LivePage() {
   const { slug } = useParams<{ slug: string }>();
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const [event, setEvent] = useState<any>(null);
   const [tab, setTab] = useState<'polls' | 'qa' | 'feed'>('polls');
   const [delegateId, setDelegateId] = useState('');
   const [delegateName, setDelegateName] = useState('');
   const [identified, setIdentified] = useState(false);
+  const [showPhoneFallback, setShowPhoneFallback] = useState(false);
   const [phone, setPhone] = useState('');
 
   // Polls
@@ -30,7 +32,51 @@ export default function LivePage() {
 
   const sb = createClient();
 
-  // Identify delegate by phone
+  // Auto-identify: URL param → localStorage → fallback
+  useEffect(() => {
+    const identify = async (id: string) => {
+      const { data } = await sb.rpc('rlc_lookup_delegate', { p_delegate_id: id });
+      const result = data as any;
+      if (result?.success) {
+        setDelegateId(result.id);
+        setDelegateName(result.full_name);
+        setIdentified(true);
+        try { localStorage.setItem('rlc_delegate', JSON.stringify({ id: result.id, name: result.full_name })); } catch {}
+        return true;
+      }
+      return false;
+    };
+
+    const tryAutoIdentify = async () => {
+      // 1. URL param ?d=uuid
+      const paramId = searchParams?.get('d');
+      if (paramId) {
+        const ok = await identify(paramId);
+        if (ok) return;
+      }
+
+      // 2. localStorage
+      try {
+        const saved = localStorage.getItem('rlc_delegate');
+        if (saved) {
+          const { id, name } = JSON.parse(saved);
+          if (id && name) {
+            setDelegateId(id);
+            setDelegateName(name);
+            setIdentified(true);
+            return;
+          }
+        }
+      } catch {}
+
+      // 3. Nothing found — show phone fallback
+      setShowPhoneFallback(true);
+    };
+
+    tryAutoIdentify();
+  }, []);
+
+  // Phone fallback handler
   const handleIdentify = async () => {
     if (!phone.trim()) return;
     const { data } = await sb.rpc('rlc_lookup_by_phone', { p_phone: phone.trim() });
@@ -39,6 +85,8 @@ export default function LivePage() {
       setDelegateId(result.id);
       setDelegateName(result.full_name);
       setIdentified(true);
+      setShowPhoneFallback(false);
+      try { localStorage.setItem('rlc_delegate', JSON.stringify({ id: result.id, name: result.full_name })); } catch {}
     } else {
       alert('Phone not found. Please register first.');
     }
@@ -122,7 +170,9 @@ export default function LivePage() {
 
   if (!event) return <div className="min-h-screen flex items-center justify-center text-rlc-muted">Loading...</div>;
 
-  if (!identified) {
+  if (!identified && !showPhoneFallback) return <div className="min-h-screen flex items-center justify-center text-rlc-muted">Connecting...</div>;
+
+  if (!identified && showPhoneFallback) {
     return (
       <main className="min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
@@ -130,7 +180,7 @@ export default function LivePage() {
             <Radio className="w-7 h-7 text-rlc-accent" />
           </div>
           <h1 className="text-2xl font-bold mb-1">{event.name}</h1>
-          <p className="text-sm text-rlc-muted mb-6">Enter your registered phone to join live</p>
+          <p className="text-sm text-rlc-muted mb-6">Enter your registered phone to join</p>
           <input value={phone} onChange={e => setPhone(e.target.value)} className="rlc-input mb-3" placeholder="+91 98765 43210"
             onKeyDown={e => e.key === 'Enter' && handleIdentify()} />
           <button onClick={handleIdentify} className="rlc-btn-primary w-full !py-3">Join Live</button>

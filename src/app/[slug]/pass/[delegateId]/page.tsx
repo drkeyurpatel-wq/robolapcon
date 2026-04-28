@@ -115,7 +115,7 @@ export default function PassPage() {
 
         {/* Quick links */}
         <div className="mt-4 flex gap-3">
-          <a href={`/${slug}/live`} className="flex-1 rlc-btn-primary !py-3 text-center text-sm">Join Live</a>
+          <a href={`/${slug}/live?d=${delegateId}`} className="flex-1 rlc-btn-primary !py-3 text-center text-sm">Join Live</a>
           <a href={`/${slug}`} className="flex-1 rlc-btn-outline !py-3 text-center text-sm">Schedule</a>
         </div>
       </div>
