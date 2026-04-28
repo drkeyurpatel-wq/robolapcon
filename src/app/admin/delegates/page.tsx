@@ -29,7 +29,7 @@ export default function DelegatesPage() {
   }), [delegates, search, filterSpec]);
 
   const exportCSV = () => {
-    const h = ['Name','Email','Phone','City','Hospital','Specialty','MCR','Dietary','Status','Registered'];
+    const h = ['Name','Email','Phone','City','Hospital','Specialty','GMC Reg','Dietary','Status','Registered'];
     const rows = filtered.map((d: any) => [d.full_name, d.email, d.phone, d.city||'', d.hospital||'', d.specialty, d.mcr_number||'', d.dietary, d.status, new Date(d.created_at).toLocaleString('en-IN')]);
     const csv = [h, ...rows].map(r => r.map((c: string) => `"${c}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });

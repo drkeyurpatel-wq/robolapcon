@@ -194,7 +194,7 @@ export default function RegisterPage() {
             <input name="specialty_other" value={form.specialty_other} onChange={handleChange} className="rlc-input" placeholder="Your specialty" /></div>
         )}
         <div className="grid sm:grid-cols-2 gap-4">
-          <div><label className="rlc-label">MCR Number</label>
+          <div><label className="rlc-label">GMC Registration Number</label>
             <input name="mcr_number" value={form.mcr_number} onChange={handleChange} className="rlc-input" placeholder="Optional" /></div>
           <div><label className="rlc-label">Experience</label>
             <select name="years_of_experience" value={form.years_of_experience} onChange={handleChange} className="rlc-select">
