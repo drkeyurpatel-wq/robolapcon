@@ -17,29 +17,43 @@ const CONF = {
   dateStart: new Date('2026-06-20T07:30:00+05:30'),
   venue: 'Ahmedabad',
   slug: 'robolapcon-2026',
-  liveSurgeries: 6,
+  liveSurgeries: 10,
   delegates: '200+',
   faculty: '25+',
-  tracks: 4,
+  tracks: 2,
 };
 
-const SCHEDULE_HIGHLIGHTS = [
-  { time: '07:30', title: 'Registration & Breakfast', type: 'break' },
-  { time: '08:00', title: 'Inaugural Ceremony', type: 'ceremony' },
-  { time: '08:30', title: 'Live Robotic Surgery — SSI Mantra 3.0', type: 'live', highlight: true },
-  { time: '10:00', title: 'Panel: Future of Robotic Surgery in India', type: 'panel' },
-  { time: '11:00', title: 'Live 3D Laparoscopic Cholecystectomy', type: 'live', highlight: true },
-  { time: '12:30', title: 'Lunch & Industry Exhibition', type: 'break' },
-  { time: '13:30', title: 'Live Robotic Hernia Repair', type: 'live', highlight: true },
-  { time: '15:00', title: 'Video Session & Best Paper Awards', type: 'session' },
-  { time: '16:30', title: 'Hands-on Dry Lab Workshop', type: 'workshop' },
-  { time: '18:00', title: 'Valedictory & Networking', type: 'ceremony' },
+const DAY1_SCHEDULE = [
+  { time: '16:00', title: 'Registration & Kit Collection', type: 'break' },
+  { time: '16:30', title: 'Inauguration Ceremony', type: 'ceremony' },
+  { time: '16:45', title: 'Recorded Address — Dr Srivastava', type: 'ceremony' },
+  { time: '17:00', title: 'Robotic Hysterectomy', sub: 'Case 1 — Gynecology · SSI Mantra', type: 'live', highlight: true },
+  { time: '18:15', title: '3D Lap Ovarian Cystectomy', sub: 'Case 2 — Gynecology', type: 'live', highlight: true },
+  { time: '19:15', title: 'Tea Break', type: 'break' },
+  { time: '19:30', title: 'Robotic Pyeloplasty', sub: 'Case 3 — Urology · SSI Mantra', type: 'live', highlight: true },
+  { time: '20:30', title: 'Lap Sleeve Gastrectomy', sub: 'Case 4 — Bariatric', type: 'live', highlight: true },
+  { time: '21:30', title: 'Dinner & Networking', type: 'dinner' },
+];
+
+const DAY2_SCHEDULE = [
+  { time: '08:00', title: 'Breakfast & Registration', type: 'break' },
+  { time: '08:30', title: 'Inauguration — Day 2', type: 'ceremony' },
+  { time: '08:45', title: 'Recorded Address — Dr Srivastava', type: 'ceremony' },
+  { time: '09:00', title: 'Robotic Cholecystectomy', sub: 'Case 1 — General Surgery · SSI Mantra', type: 'live', highlight: true },
+  { time: '10:00', title: '3D Lap Inguinal Hernia Repair', sub: 'Case 2 — General Surgery', type: 'live', highlight: true },
+  { time: '11:00', title: 'Tea Break', type: 'break' },
+  { time: '11:15', title: 'Robotic Hiatus Hernia Repair', sub: 'Case 3 — General Surgery · SSI Mantra', type: 'live', highlight: true },
+  { time: '12:15', title: '3D Lap Incisional Hernia Repair', sub: 'Case 4 — General Surgery', type: 'live', highlight: true },
+  { time: '13:15', title: 'Lunch', type: 'break' },
+  { time: '14:00', title: 'Robotic GIST Excision', sub: 'Case 5 — GI Surgery · SSI Mantra', type: 'live', highlight: true },
+  { time: '15:00', title: '3D Lap Mini Gastric Bypass', sub: 'Case 6 — GI Surgery', type: 'live', highlight: true },
+  { time: '16:00', title: 'Closing Ceremony & Awards', type: 'ceremony' },
 ];
 
 const FEATURES = [
   { icon: Bot, title: 'SSI Mantra 3.0', desc: 'India\'s indigenous surgical robot — live in action from our OT', color: 'accent' },
   { icon: Layers, title: '3D Laparoscopy', desc: 'Advanced 3D visualization systems for precision surgery', color: 'accent' },
-  { icon: Tv, title: '6 Live Surgeries', desc: 'Watch cutting-edge procedures beamed live from the operating theatre', color: 'amber' },
+  { icon: Tv, title: '10 Live Surgeries', desc: 'Watch cutting-edge procedures beamed live from the operating theatre across 2 days', color: 'amber' },
   { icon: Microscope, title: 'Dry Lab Workshop', desc: 'Hands-on training with expert mentors and simulation setups', color: 'amber' },
   { icon: Users, title: 'Expert Faculty', desc: '25+ national faculty across general surgery, urology, and gynecology', color: 'accent' },
   { icon: Award, title: 'Awards & Papers', desc: 'Best paper, best video, and innovation awards for young surgeons', color: 'amber' },
@@ -230,7 +244,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { value: '6', label: 'Live Surgeries', color: 'text-rlc-accent' },
+              { value: '10', label: 'Live Surgeries', color: 'text-rlc-accent' },
               { value: '25+', label: 'Expert Faculty', color: 'text-white' },
               { value: '200+', label: 'Delegates', color: 'text-white' },
               { value: '2', label: 'Days of Learning', color: 'text-rlc-amber' },
@@ -415,48 +429,103 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-white/[0.01]" />
         <div className="max-w-4xl mx-auto relative">
           <div className="text-center mb-14">
-            <div className="text-rlc-accent text-sm font-semibold uppercase tracking-widest mb-4">Day 1 preview</div>
+            <div className="text-rlc-accent text-sm font-semibold uppercase tracking-widest mb-4">Full programme</div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">Schedule</h2>
-            <p className="text-white/40">Full two-day programme with parallel tracks</p>
+            <p className="text-white/40">10 live surgeries across 2 days + SSI Mantra Simulation Bus</p>
           </div>
-          <div className="space-y-2">
-            {SCHEDULE_HIGHLIGHTS.map((s, i) => (
-              <div
-                key={i}
-                className={`flex gap-4 items-center p-4 rounded-xl border transition-all duration-300 ${
-                  s.highlight
-                    ? 'bg-rlc-accent/[0.06] border-rlc-accent/20 hover:border-rlc-accent/40'
-                    : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.12]'
-                }`}
-              >
-                <div className="w-14 shrink-0 text-right">
-                  <span className={`text-sm font-mono ${s.highlight ? 'text-rlc-accent font-semibold' : 'text-white/40'}`}>
-                    {s.time}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0 flex items-center gap-3">
-                  {s.highlight && (
-                    <span className="shrink-0 w-2 h-2 rounded-full bg-rlc-accent animate-pulse" />
+
+          {/* DAY 1 */}
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-sm font-bold uppercase tracking-widest text-rlc-accent">Day 1</span>
+              <span className="text-sm text-white/40">Sat 20 June · 4 PM – 11 PM</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-rlc-accent/10 text-rlc-accent border border-rlc-accent/20">Super-Specialty</span>
+            </div>
+            <div className="space-y-1.5">
+              {DAY1_SCHEDULE.map((s, i) => (
+                <div
+                  key={`d1-${i}`}
+                  className={`flex gap-4 items-start p-3.5 rounded-xl border transition-all duration-300 ${
+                    s.highlight
+                      ? 'bg-rlc-accent/[0.06] border-rlc-accent/20 hover:border-rlc-accent/40'
+                      : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.12]'
+                  }`}
+                >
+                  <div className="w-14 shrink-0 text-right pt-0.5">
+                    <span className={`text-sm font-mono ${s.highlight ? 'text-rlc-accent font-semibold' : 'text-white/40'}`}>
+                      {s.time}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      {s.highlight && <span className="shrink-0 w-2 h-2 rounded-full bg-rlc-accent animate-pulse" />}
+                      <span className={`font-medium ${s.highlight ? 'text-white' : 'text-white/60'}`}>{s.title}</span>
+                    </div>
+                    {s.sub && <p className="text-xs text-white/35 mt-0.5 ml-4">{s.sub}</p>}
+                  </div>
+                  {s.type === 'live' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+                      Live
+                    </span>
                   )}
-                  <span className={`font-medium ${s.highlight ? 'text-white' : 'text-white/60'}`}>
-                    {s.title}
-                  </span>
+                  {s.type === 'dinner' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rlc-amber/10 text-rlc-amber border border-rlc-amber/20">
+                      Networking
+                    </span>
+                  )}
                 </div>
-                {s.type === 'live' && (
-                  <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
-                    Live
-                  </span>
-                )}
-                {s.type === 'workshop' && (
-                  <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rlc-amber/10 text-rlc-amber border border-rlc-amber/20">
-                    Hands-on
-                  </span>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <div className="text-center mt-8">
-            <p className="text-white/30 text-sm">Full schedule with faculty details coming soon</p>
+
+          {/* DAY 2 */}
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-sm font-bold uppercase tracking-widest text-rlc-amber">Day 2</span>
+              <span className="text-sm text-white/40">Sun 21 June · 8 AM – 4 PM</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-rlc-amber/10 text-rlc-amber border border-rlc-amber/20">General & GI Surgery</span>
+            </div>
+            <div className="space-y-1.5">
+              {DAY2_SCHEDULE.map((s, i) => (
+                <div
+                  key={`d2-${i}`}
+                  className={`flex gap-4 items-start p-3.5 rounded-xl border transition-all duration-300 ${
+                    s.highlight
+                      ? 'bg-rlc-amber/[0.04] border-rlc-amber/20 hover:border-rlc-amber/40'
+                      : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.12]'
+                  }`}
+                >
+                  <div className="w-14 shrink-0 text-right pt-0.5">
+                    <span className={`text-sm font-mono ${s.highlight ? 'text-rlc-amber font-semibold' : 'text-white/40'}`}>
+                      {s.time}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      {s.highlight && <span className="shrink-0 w-2 h-2 rounded-full bg-rlc-amber animate-pulse" />}
+                      <span className={`font-medium ${s.highlight ? 'text-white' : 'text-white/60'}`}>{s.title}</span>
+                    </div>
+                    {s.sub && <p className="text-xs text-white/35 mt-0.5 ml-4">{s.sub}</p>}
+                  </div>
+                  {s.type === 'live' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+                      Live
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Drylab note */}
+          <div className="p-4 rounded-xl border border-rlc-accent/20 bg-rlc-accent/[0.04]">
+            <div className="flex items-center gap-3">
+              <Microscope className="w-5 h-5 text-rlc-accent shrink-0" />
+              <div>
+                <span className="font-semibold text-white text-sm">SSI Mantra Simulation Bus — Hands-on Dry Lab</span>
+                <p className="text-xs text-white/40 mt-0.5">Both days · 10-min slots assigned during registration</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -487,7 +556,7 @@ export default function HomePage() {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <div className="mt-6 text-sm text-white/30">
-            {CONF.dates} &middot; {CONF.venue} &middot; {CONF.liveSurgeries} Live Surgeries
+            {CONF.dates} &middot; {CONF.venue} &middot; {CONF.liveSurgeries} Live Surgeries &middot; 2 Tracks
           </div>
         </div>
       </section>
