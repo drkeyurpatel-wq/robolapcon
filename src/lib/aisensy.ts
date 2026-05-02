@@ -14,7 +14,7 @@ export async function sendAisensyTemplate({
   templateParams,
   userName,
   mediaUrl,
-}: SendTemplateParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
+}: SendTemplateParams): Promise<{ success: boolean; messageId?: string; error?: string; debug?: any }> {
   try {
     const body: Record<string, any> = {
       apiKey: process.env.AISENSY_API_KEY,
@@ -23,7 +23,6 @@ export async function sendAisensyTemplate({
       userName: userName || 'RoboLapCon',
       templateParams,
       source: 'robolapcon-website',
-      buttons: [],
     };
     if (mediaUrl) {
       // AiSensy v2 expects media as an object, not a flat mediaUrl string
@@ -32,21 +31,33 @@ export async function sendAisensyTemplate({
         filename: 'qr-pass.png',
       };
     }
+
+    const sentBody = { ...body, apiKey: '***REDACTED***' };
+
     const res = await fetch(`${AISENSY_API_BASE}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const responseText = await res.text();
+
     if (!res.ok) {
-      const text = await res.text();
-      return { success: false, error: `AiSensy ${res.status}: ${text}` };
+      return {
+        success: false,
+        error: `AiSensy ${res.status}: ${responseText}`,
+        debug: { sentBody, responseStatus: res.status, responseText },
+      };
     }
 
-    const data = await res.json();
-    return { success: true, messageId: data.data?.messageId || data.messageId };
+    let data: any = null;
+    try { data = JSON.parse(responseText); } catch {}
+
+    return {
+      success: true,
+      messageId: data?.data?.messageId || data?.messageId || data?.submitted_message_id || null,
+      debug: { sentBody, responseStatus: res.status, responseText },
+    };
   } catch (err) {
     return { success: false, error: String(err) };
   }

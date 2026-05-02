@@ -25,11 +25,9 @@ export async function POST(req: NextRequest) {
 
     const sb = createServiceClient();
 
-    // Look up delegate's day selection
     const { data: delegate } = await sb.rpc('rlc_lookup_delegate', { p_delegate_id: delegate_id });
     const dayLabel = buildDayLabel(delegate?.day_attendance || []);
 
-    // Generate QR code image URL (encodes delegate UUID)
     const qrUrl = `${QR_API}?data=${encodeURIComponent(delegate_id)}&size=400x400&format=png`;
 
     const result = await sendAisensyTemplate({
@@ -39,17 +37,22 @@ export async function POST(req: NextRequest) {
       mediaUrl: qrUrl,
     });
 
-    // Log to rlc_whatsapp_messages
+    // ALWAYS log the debug info — success or fail — so we can inspect what AiSensy returned
+    const debugStr = JSON.stringify(result.debug || {});
+    const failureReason = result.error
+      ? `${result.error} | DEBUG: ${debugStr}`
+      : `OK | DEBUG: ${debugStr}`;
+
     await sb.from('rlc_whatsapp_messages').insert({
       delegate_id,
       delegate_phone: phone,
       delegate_name: full_name,
       message_kind: 'registration_confirmation',
       direction: 'out',
-      template_variables: { full_name, day_label: dayLabel },
+      template_variables: { full_name, day_label: dayLabel, qr_url: qrUrl },
       status: result.success ? 'sent' : 'failed',
       aisensy_message_id: result.messageId || null,
-      failure_reason: result.error || null,
+      failure_reason: failureReason,
     });
 
     return NextResponse.json({ success: result.success });
