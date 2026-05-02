@@ -26,7 +26,11 @@ export async function sendAisensyTemplate({
       buttons: [],
     };
     if (mediaUrl) {
-      body.mediaUrl = mediaUrl;
+      // AiSensy v2 expects media as an object, not a flat mediaUrl string
+      body.media = {
+        url: mediaUrl,
+        filename: 'qr-pass.png',
+      };
     }
     const res = await fetch(`${AISENSY_API_BASE}`, {
       method: 'POST',
