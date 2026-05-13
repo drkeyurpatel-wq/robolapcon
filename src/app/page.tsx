@@ -131,6 +131,7 @@ export default function HomePage() {
             <a href="#about" className="hover:text-white transition-colors">About</a>
             <a href="#features" className="hover:text-white transition-colors">Highlights</a>
             <a href="#schedule" className="hover:text-white transition-colors">Schedule</a>
+            <a href="#faculty" className="hover:text-white transition-colors">Faculty</a>
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -535,6 +536,37 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ═══ FACULTY (announcing soon) ═══ */}
+      <section id="faculty" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-rlc-amber/10 text-rlc-amber rounded-full text-xs font-semibold tracking-wider uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-rlc-amber animate-pulse"></span>
+            Announcing Soon
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Faculty</h2>
+          <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
+            A star-studded lineup of India&apos;s leading robotic and laparoscopic surgeons across <span className="text-white font-semibold">gynecology, urology, oncology, bariatric, general &amp; GI surgery</span> — performing all 10 live cases over 2 days.
+          </p>
+          <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5">
+              <div className="text-3xl font-bold text-rlc-accent">25+</div>
+              <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Faculty</div>
+            </div>
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5">
+              <div className="text-3xl font-bold text-rlc-accent">10</div>
+              <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Live Cases</div>
+            </div>
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5">
+              <div className="text-3xl font-bold text-rlc-accent">6</div>
+              <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Specialties</div>
+            </div>
+          </div>
+          <p className="text-xs text-white/40 mt-8">
+            Faculty reveal: <span className="text-rlc-accent font-semibold">18 May 2026</span>
+          </p>
         </div>
       </section>
 
