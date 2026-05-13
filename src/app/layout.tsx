@@ -10,6 +10,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://robolapcon.in'),
   title: 'ROBOLAPCON 2026 — National Robotic & Laparoscopic Surgery Conference',
   description:
     'Join India\'s premier robotic and laparoscopic surgery conference. 2 days, 10 live surgeries, 25+ faculty, hands-on workshops.',
@@ -23,6 +24,8 @@ export const metadata: Metadata = {
     title: 'ROBOLAPCON 2026',
     description: 'National Robotic & Laparoscopic Surgery Conference',
     type: 'website',
+    url: 'https://robolapcon.in',
+    siteName: 'RoboLapCon 2026',
   },
 };
 

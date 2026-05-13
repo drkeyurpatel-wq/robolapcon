@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, Radio } from 'lucide-react';
+import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, QrCode, CalendarDays } from 'lucide-react';
 
 const SPECIALTIES = [
   { value: 'general_surgery', label: 'General Surgery' },
@@ -149,10 +149,14 @@ export default function RegisterPage() {
         <h1 className="text-3xl font-bold mb-2">You&apos;re Registered!</h1>
         <p className="text-rlc-muted mb-8">{resultMsg}</p>
         <div className="flex flex-col gap-3">
-          <Link href={`/${slug}/live${regDelegateId ? `?d=${regDelegateId}` : ''}`} className="rlc-btn-amber !py-3 justify-center">
-            <Radio className="w-4 h-4" /> Join Live — Polls &amp; Q&amp;A
+          {regDelegateId && (
+            <Link href={`/${slug}/pass/${regDelegateId}`} className="rlc-btn-amber !py-3 justify-center">
+              <QrCode className="w-4 h-4" /> View Your Digital Pass
+            </Link>
+          )}
+          <Link href={`/${slug}#schedule`} className="rlc-btn-outline !py-3 justify-center">
+            <CalendarDays className="w-4 h-4" /> Explore Schedule & Faculty
           </Link>
-          <Link href={`/${slug}`} className="rlc-btn-outline !py-3 justify-center"><ArrowLeft className="w-4 h-4" /> Back to {event.name}</Link>
         </div>
       </div>
     </main>
