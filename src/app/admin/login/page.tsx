@@ -22,7 +22,7 @@ export default function AdminLoginPage() {
     document.cookie = `rlc_admin=${token}; path=/; max-age=${maxAge}; samesite=lax`;
 
     // Try navigating — if middleware rejects, we'll land back here
-    router.push('/admin/checkin');
+    router.push('/admin/dashboard');
 
     // If still on login page after 2 seconds, password was wrong
     setTimeout(() => {

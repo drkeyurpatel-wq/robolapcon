@@ -14,9 +14,11 @@ import {
   UtensilsCrossed,
   BarChart2,
   Radio,
+  Activity,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
+  { href: '/admin/dashboard', label: 'Dashboard', icon: Activity },
   { href: '/admin/checkin', label: 'Check-in', icon: ScanLine },
   { href: '/admin/scan', label: 'Food / Gift', icon: UtensilsCrossed },
   { href: '/admin/polls', label: 'Polls', icon: BarChart2 },
