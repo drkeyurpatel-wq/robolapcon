@@ -541,32 +541,60 @@ export default function HomePage() {
 
       {/* ═══ FACULTY (announcing soon) ═══ */}
       <section id="faculty" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-rlc-amber/10 text-rlc-amber rounded-full text-xs font-semibold tracking-wider uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-rlc-amber animate-pulse"></span>
-            Announcing Soon
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-rlc-accent/10 text-rlc-accent rounded-full text-xs font-semibold tracking-wider uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-rlc-accent"></span>
+              Confirmed Faculty
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Faculty</h2>
+            <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+              India&apos;s leading robotic and laparoscopic surgeons across <span className="text-white font-semibold">gynecology, urology, oncology, bariatric, general &amp; GI surgery</span> — performing all 10 live cases over 2 days.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Faculty</h2>
-          <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
-            A star-studded lineup of India&apos;s leading robotic and laparoscopic surgeons across <span className="text-white font-semibold">gynecology, urology, oncology, bariatric, general &amp; GI surgery</span> — performing all 10 live cases over 2 days.
-          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+            {[
+              { name: 'Dr. Keval Patel',         role: 'Urosurgeon' },
+              { name: 'Dr. Mahendra Narwaria',    role: 'Bariatric Surgeon' },
+              { name: 'Dr. Milind Akhani',        role: 'GI, HPB & Liver Transplant Surgeon' },
+              { name: 'Dr. Krunal Solanki',       role: 'General Surgeon' },
+              { name: 'Dr. Manoranjan Kushwaha',  role: 'General Surgeon' },
+              { name: 'Dr. Smit Solanki',         role: 'Gynec Surgeon' },
+              { name: 'Dr. Samir Negi',           role: 'General Surgeon' },
+            ].map((f) => (
+              <div key={f.name} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 hover:border-rlc-accent/30 hover:bg-white/[0.04] transition-all">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rlc-accent/30 to-rlc-amber/20 flex items-center justify-center mb-3 text-base font-bold text-white">
+                  {f.name.replace('Dr. ', '').split(' ').map(p => p[0]).slice(0, 2).join('')}
+                </div>
+                <p className="text-sm font-semibold text-white leading-tight">{f.name}</p>
+                <p className="text-xs text-white/50 mt-1 leading-snug">{f.role}</p>
+              </div>
+            ))}
+            <div className="rounded-2xl border border-dashed border-rlc-amber/30 bg-rlc-amber/[0.04] p-5 flex flex-col items-center justify-center text-center">
+              <div className="inline-flex items-center gap-1.5 mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-rlc-amber animate-pulse"></span>
+                <span className="text-[10px] text-rlc-amber font-semibold tracking-wider uppercase">Announcing Soon</span>
+              </div>
+              <p className="text-sm font-semibold text-white leading-tight">Surgical Oncologist</p>
+              <p className="text-xs text-white/50 mt-1">+ more faculty</p>
+            </div>
+          </div>
+
           <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5">
-              <div className="text-3xl font-bold text-rlc-accent">25+</div>
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
+              <div className="text-3xl font-bold text-rlc-accent">7+</div>
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Faculty</div>
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
               <div className="text-3xl font-bold text-rlc-accent">10</div>
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Live Cases</div>
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
               <div className="text-3xl font-bold text-rlc-accent">6</div>
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Specialties</div>
             </div>
           </div>
-          <p className="text-xs text-white/40 mt-8">
-            Faculty reveal: <span className="text-rlc-accent font-semibold">18 May 2026</span>
-          </p>
         </div>
       </section>
 
