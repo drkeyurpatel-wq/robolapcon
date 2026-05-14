@@ -87,41 +87,41 @@ export default function RegisterPage() {
 
     setSubmitting(true);
     try {
-      const sb = createClient();
-      const { data, error: rpcError } = await sb.rpc('rlc_register_delegate_open', {
-        p_full_name: form.full_name.trim(),
-        p_phone: form.phone.trim(),
-        p_email: form.email.trim().toLowerCase(),
-        p_specialty: form.specialty as any,
-        p_day_attendance: dayAttendance,
-        p_hospital: form.hospital.trim() || null,
-        p_city: form.city.trim() || null,
-        p_mcr_number: form.mcr_number.trim() || null,
-        p_specialty_other: form.specialty === 'other' ? form.specialty_other.trim() : null,
-        p_years_of_experience: form.years_of_experience || null,
-        p_dietary: form.dietary as any,
-        p_dietary_other: form.dietary === 'other' ? form.dietary_other.trim() : null,
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: form.full_name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim().toLowerCase(),
+          specialty: form.specialty,
+          day_attendance: dayAttendance,
+          hospital: form.hospital.trim() || null,
+          city: form.city.trim() || null,
+          mcr_number: form.mcr_number.trim() || null,
+          specialty_other: form.specialty === 'other' ? form.specialty_other.trim() : null,
+          years_of_experience: form.years_of_experience || null,
+          dietary: form.dietary,
+          dietary_other: form.dietary === 'other' ? form.dietary_other.trim() : null,
+          drylab_interest: !!form.drylab_interest,
+        }),
       });
 
-      if (rpcError) { setError(rpcError.message || 'Registration failed.'); setSubmitting(false); return; }
-      const result = data as any;
-      if (!result?.success) { setError(result?.message || 'Registration failed.'); setSubmitting(false); return; }
+      const result = await res.json().catch(() => ({ success: false, message: 'Network error. Please try again.' }));
 
-      // Set drylab interest + event_id
-      if (result.delegate_id) {
-        if (form.drylab_interest) {
-          sb.rpc('rlc_set_drylab_interest', { p_delegate_id: result.delegate_id, p_interest: true }).then(() => {});
-        }
-        fetch('/api/aisensy/send-confirmation', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ delegate_id: result.delegate_id, full_name: form.full_name.trim(), phone: form.phone.trim() }),
-        }).catch(() => {});
+      if (!result?.success) {
+        setError(result?.message || 'Registration failed.');
+        setSubmitting(false);
+        return;
       }
 
+      // Success — could be a fresh registration OR already_registered (treated as success)
       setResultMsg(result.message || 'Registration confirmed!');
       if (result.delegate_id) {
         setRegDelegateId(result.delegate_id);
-        try { localStorage.setItem('rlc_delegate', JSON.stringify({ id: result.delegate_id, name: form.full_name.trim() })); } catch {}
+        try {
+          localStorage.setItem('rlc_delegate', JSON.stringify({ id: result.delegate_id, name: form.full_name.trim() }));
+        } catch {}
       }
       setSuccess(true);
     } catch { setError('Something went wrong.'); }
