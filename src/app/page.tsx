@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import {
   Calendar, MapPin, ChevronRight, Bot, Microscope, MonitorPlay,
-  Users, Award, Coffee, Clock, ArrowRight, Play, Zap, Target,
+  Users, MessageSquare, Coffee, Clock, ArrowRight, Play, Zap, Target,
   Layers, CircuitBoard, Tv, Shield, Radio,
 } from 'lucide-react';
 import { RoboLapConLogo, RoboLapConFullLogo } from '@/components/RoboLapConLogo';
@@ -17,9 +17,9 @@ const CONF = {
   dateStart: new Date('2026-06-20T07:30:00+05:30'),
   venue: 'Ahmedabad',
   slug: 'robolapcon-2026',
-  liveSurgeries: 10,
+  liveSurgeries: 14,
   delegates: '200+',
-  faculty: '25+',
+  faculty: '10+',
   tracks: 2,
 };
 
@@ -53,10 +53,10 @@ const DAY2_SCHEDULE = [
 const FEATURES = [
   { icon: Bot, title: 'SSI Mantra 3.0', desc: 'India\'s indigenous surgical robot — live in action from our OT', color: 'accent' },
   { icon: Layers, title: '3D Laparoscopy', desc: 'Advanced 3D visualization systems for precision surgery', color: 'accent' },
-  { icon: Tv, title: '10 Live Surgeries', desc: 'Watch cutting-edge procedures beamed live from the operating theatre across 2 days', color: 'amber' },
-  { icon: Microscope, title: 'Dry Lab Workshop', desc: 'Hands-on training with expert mentors and simulation setups', color: 'amber' },
-  { icon: Users, title: 'Expert Faculty', desc: '25+ national faculty across general surgery, urology, and gynecology', color: 'accent' },
-  { icon: Award, title: 'Awards & Papers', desc: 'Best paper, best video, and innovation awards for young surgeons', color: 'amber' },
+  { icon: Tv, title: '14 Live Surgeries', desc: 'Watch cutting-edge procedures beamed live from the operating theatre across 2 days', color: 'amber' },
+  { icon: Microscope, title: 'Robotic Simulation Lab', desc: 'Hands-on training with expert mentors and SSI Mantra simulation setups', color: 'amber' },
+  { icon: Users, title: 'Expert Faculty', desc: '10+ national faculty across general surgery, GI, urology, gynecology, oncology and bariatric surgery', color: 'accent' },
+  { icon: MessageSquare, title: 'Interactive Case Discussions', desc: 'Live Q&A and panel discussions with operating faculty after each case', color: 'amber' },
 ];
 
 /* ── Countdown Hook ──────────────────────────────────── */
@@ -253,8 +253,8 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { value: '10', label: 'Live Surgeries', color: 'text-rlc-accent' },
-              { value: '25+', label: 'Expert Faculty', color: 'text-white' },
+              { value: '14', label: 'Live Surgeries', color: 'text-rlc-accent' },
+              { value: '10+', label: 'Expert Faculty', color: 'text-white' },
               { value: '200+', label: 'Delegates', color: 'text-white' },
               { value: '2', label: 'Days of Learning', color: 'text-rlc-amber' },
             ].map((s) => (
@@ -440,7 +440,7 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <div className="text-rlc-accent text-sm font-semibold uppercase tracking-widest mb-4">Full programme</div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">Schedule</h2>
-            <p className="text-white/40">10 live surgeries across 2 days + SSI Mantra Simulation Bus</p>
+            <p className="text-white/40">14 live surgeries across 2 days + SSI Mantra Simulation Bus</p>
           </div>
 
           {/* DAY 1 */}
@@ -526,12 +526,12 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Drylab note */}
+          {/* Simulation Lab note */}
           <div className="p-4 rounded-xl border border-rlc-accent/20 bg-rlc-accent/[0.04]">
             <div className="flex items-center gap-3">
               <Microscope className="w-5 h-5 text-rlc-accent shrink-0" />
               <div>
-                <span className="font-semibold text-white text-sm">SSI Mantra Simulation Bus — Hands-on Dry Lab</span>
+                <span className="font-semibold text-white text-sm">SSI Mantra Robotic Simulation Lab — Hands-on</span>
                 <p className="text-xs text-white/40 mt-0.5">Both days · 10-min slots assigned during registration</p>
               </div>
             </div>
@@ -539,7 +539,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ═══ FACULTY (announcing soon) ═══ */}
+      {/* ═══ FACULTY ═══ */}
       <section id="faculty" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -549,7 +549,7 @@ export default function HomePage() {
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">Faculty</h2>
             <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-              India&apos;s leading robotic and laparoscopic surgeons across <span className="text-white font-semibold">gynecology, urology, oncology, bariatric, general &amp; GI surgery</span> — performing all 10 live cases over 2 days.
+              India&apos;s leading robotic and laparoscopic surgeons across <span className="text-white font-semibold">general surgery, GI/HPB, urology, gynecology, surgical oncology and bariatric surgery</span> — performing all 14 live cases over 2 days.
             </p>
           </div>
 
@@ -561,7 +561,10 @@ export default function HomePage() {
               { name: 'Dr. Krunal Solanki',       role: 'General Surgeon' },
               { name: 'Dr. Manoranjan Kushwaha',  role: 'General Surgeon' },
               { name: 'Dr. Smit Solanki',         role: 'Gynec Surgeon' },
-              { name: 'Dr. Samir Negi',           role: 'General Surgeon' },
+              { name: 'Dr. Sameer Rege',          role: 'General Surgeon' },
+              { name: 'Dr. Digvijay Bedi',        role: 'Bariatric Surgeon' },
+              { name: 'Dr. Bhavin Vadodariya',    role: 'Surgical Oncologist' },
+              { name: 'Dr. Anagha Zope',          role: 'Breast Oncoplastic Surgeon' },
             ].map((f) => (
               <div key={f.name} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 hover:border-rlc-accent/30 hover:bg-white/[0.04] transition-all">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rlc-accent/30 to-rlc-amber/20 flex items-center justify-center mb-3 text-base font-bold text-white">
@@ -571,23 +574,15 @@ export default function HomePage() {
                 <p className="text-xs text-white/50 mt-1 leading-snug">{f.role}</p>
               </div>
             ))}
-            <div className="rounded-2xl border border-dashed border-rlc-amber/30 bg-rlc-amber/[0.04] p-5 flex flex-col items-center justify-center text-center">
-              <div className="inline-flex items-center gap-1.5 mb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-rlc-amber animate-pulse"></span>
-                <span className="text-[10px] text-rlc-amber font-semibold tracking-wider uppercase">Announcing Soon</span>
-              </div>
-              <p className="text-sm font-semibold text-white leading-tight">Surgical Oncologist</p>
-              <p className="text-xs text-white/50 mt-1">+ more faculty</p>
-            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
-              <div className="text-3xl font-bold text-rlc-accent">7+</div>
+              <div className="text-3xl font-bold text-rlc-accent">10+</div>
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Faculty</div>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
-              <div className="text-3xl font-bold text-rlc-accent">10</div>
+              <div className="text-3xl font-bold text-rlc-accent">14</div>
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Live Cases</div>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
