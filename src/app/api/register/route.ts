@@ -29,7 +29,7 @@ async function sendWhatsAppConfirmation(
   let result: any;
   try {
     result = await sendAisensyTemplate({
-      campaignName: 'rlc_registration_confirmation',
+      campaignName: 'rlc_registration_confirmation_final',
       destination: phone,
       templateParams: [full_name, dayLabel],
       mediaUrl: qrUrl,
