@@ -26,8 +26,7 @@ const EXPERIENCE = [
 ];
 const DIETARY = [
   { value: 'no_restrictions', label: 'No Restrictions' },
-  { value: 'jain', label: 'Jain' },
-  { value: 'vegan', label: 'Vegan' },
+  { value: 'jain', label: 'Jain / Swaminarayan' },
   { value: 'other', label: 'Other' },
 ];
 
