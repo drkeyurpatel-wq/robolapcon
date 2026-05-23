@@ -4,15 +4,36 @@ import { sendAisensyTemplate } from '@/lib/aisensy';
 
 const QR_API = 'https://api.qrserver.com/v1/create-qr-code/';
 
+/**
+ * Build human day label from an attendance array.
+ *
+ * Accepts EITHER shape (the two callers in this codebase pass different shapes):
+ *   - DB row shape:        [{ day_number: 1 }, { day_number: 2 }]
+ *   - Request body shape:  [{ day: 1 }, { day: 2 }]
+ *
+ * Throws if neither key is present on any item — we'd rather fail loud than
+ * silently default to "Both Days" and send wrong info to a delegate.
+ */
 function buildDayLabel(dayAttendance: any[]): string {
-  if (!Array.isArray(dayAttendance) || dayAttendance.length === 0) return 'Both Days — Sat 20 & Sun 21 June';
-  const days = dayAttendance.map((d: any) => d.day);
+  if (!Array.isArray(dayAttendance) || dayAttendance.length === 0) {
+    throw new Error('buildDayLabel: empty/invalid dayAttendance');
+  }
+
+  const days = dayAttendance.map((d: any) => {
+    const n = d?.day_number ?? d?.day;
+    if (n !== 1 && n !== 2) {
+      throw new Error(`buildDayLabel: unrecognised shape ${JSON.stringify(d)}`);
+    }
+    return n;
+  });
+
   const hasDay1 = days.includes(1);
   const hasDay2 = days.includes(2);
   if (hasDay1 && hasDay2) return 'Both Days — Sat 20 & Sun 21 June';
   if (hasDay1) return 'Saturday, 20 June';
   if (hasDay2) return 'Sunday, 21 June';
-  return 'Both Days — Sat 20 & Sun 21 June';
+  // unreachable given check above, but TS-safe
+  throw new Error('buildDayLabel: no valid days found');
 }
 
 export async function POST(req: NextRequest) {
@@ -25,8 +46,30 @@ export async function POST(req: NextRequest) {
 
     const sb = createServiceClient();
 
-    const { data: delegate } = await sb.rpc('rlc_lookup_delegate', { p_delegate_id: delegate_id });
-    const dayLabel = buildDayLabel(delegate?.day_attendance || []);
+    // Query rlc_delegate_attendance directly — rlc_lookup_delegate does NOT
+    // return day_attendance, which caused 2 delegates to receive wrong day
+    // info on a backfill on 23 May 2026. See commit log.
+    const { data: attendanceRows, error: attErr } = await sb
+      .from('rlc_delegate_attendance')
+      .select('day_number')
+      .eq('delegate_id', delegate_id);
+
+    if (attErr) {
+      return NextResponse.json({ error: `Attendance lookup failed: ${attErr.message}` }, { status: 500 });
+    }
+
+    if (!attendanceRows || attendanceRows.length === 0) {
+      return NextResponse.json({
+        error: 'No attendance rows for this delegate. Cannot determine day label.',
+      }, { status: 400 });
+    }
+
+    let dayLabel: string;
+    try {
+      dayLabel = buildDayLabel(attendanceRows);
+    } catch (e) {
+      return NextResponse.json({ error: `day_label build failed: ${String(e)}` }, { status: 500 });
+    }
 
     const qrUrl = `${QR_API}?data=${encodeURIComponent(delegate_id)}&size=400x400&format=png`;
 
@@ -55,7 +98,7 @@ export async function POST(req: NextRequest) {
       failure_reason: failureReason,
     });
 
-    return NextResponse.json({ success: result.success });
+    return NextResponse.json({ success: result.success, day_label: dayLabel });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
