@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const qrUrl = `${QR_API}?data=${encodeURIComponent(delegate_id)}&size=400x400&format=png`;
 
     const result = await sendAisensyTemplate({
-      campaignName: 'rlc_registration_confirmation',
+      campaignName: 'rlc_registration_confirmation_final',
       destination: phone,
       templateParams: [full_name, dayLabel],
       mediaUrl: qrUrl,
