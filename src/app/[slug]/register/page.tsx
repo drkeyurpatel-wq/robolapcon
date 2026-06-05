@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, QrCode, CalendarDays } from 'lucide-react';
+import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, QrCode, CalendarDays, Wrench } from 'lucide-react';
 
 const SPECIALTIES = [
   { value: 'general_surgery', label: 'General Surgery' },
@@ -40,7 +40,7 @@ export default function RegisterPage() {
     full_name: '', email: '', phone: '', city: '', hospital: '',
     mcr_number: '', specialty: '', specialty_other: '',
     years_of_experience: '', dietary: 'no_restrictions', dietary_other: '',
-    attend_day1: true, attend_day2: true, drylab_interest: false,
+    attend_day1: false, attend_day2: false, drylab_interest: false,
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -130,13 +130,17 @@ export default function RegisterPage() {
   if (loading) return <div className="min-h-screen flex items-center justify-center text-rlc-muted">Loading...</div>;
   if (!event) return <div className="min-h-screen flex items-center justify-center text-rlc-muted">Event not found.</div>;
   if (!event.registration_open) return (
-    <div className="min-h-screen flex items-center justify-center px-4 text-center">
-      <div>
-        <h1 className="text-2xl font-bold mb-2">Registration Closed</h1>
-        <p className="text-rlc-muted mb-6">Registration for {event.name} is currently closed.</p>
+    <main className="min-h-screen flex items-center justify-center px-4 py-12 text-center">
+      <div className="max-w-md w-full animate-fade-in-up">
+        <div className="w-20 h-20 mx-auto rounded-full bg-rlc-amber/10 flex items-center justify-center mb-6">
+          <Wrench className="w-9 h-9 text-rlc-amber" />
+        </div>
+        <h1 className="text-3xl font-bold mb-3">We&apos;re Currently Upgrading</h1>
+        <p className="text-rlc-muted mb-2">Registration will resume soon.</p>
+        <p className="text-rlc-muted mb-8">Sorry for the inconvenience.</p>
         <Link href={`/${slug}`} className="rlc-btn-outline"><ArrowLeft className="w-4 h-4" /> Back to Event</Link>
       </div>
-    </div>
+    </main>
   );
 
   if (success) return (
