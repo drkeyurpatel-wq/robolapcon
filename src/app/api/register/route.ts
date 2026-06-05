@@ -1,69 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
-import { sendAisensyTemplate } from '@/lib/aisensy';
 
-const QR_API = 'https://api.qrserver.com/v1/create-qr-code/';
-
-function buildDayLabel(dayAttendance: any[]): string {
-  if (!Array.isArray(dayAttendance) || dayAttendance.length === 0) return 'Both Days — Sat 20 & Sun 21 June';
-  const days = dayAttendance.map((d: any) => d.day);
-  const hasDay1 = days.includes(1);
-  const hasDay2 = days.includes(2);
-  if (hasDay1 && hasDay2) return 'Both Days — Sat 20 & Sun 21 June';
-  if (hasDay1) return 'Saturday, 20 June';
-  if (hasDay2) return 'Sunday, 21 June';
-  return 'Both Days — Sat 20 & Sun 21 June';
-}
-
-// Fire-and-log WhatsApp send. Always writes a log row, even on failure.
-// Does NOT throw — caller decides what to do with the result.
-async function sendWhatsAppConfirmation(
-  sb: ReturnType<typeof createServiceClient>,
-  delegate_id: string,
-  full_name: string,
-  phone: string,
-  dayLabel: string
-): Promise<{ success: boolean; error?: string }> {
-  const qrUrl = `${QR_API}?data=${encodeURIComponent(delegate_id)}&size=400x400&format=png`;
-
-  let result: any;
-  try {
-    result = await sendAisensyTemplate({
-      campaignName: 'rlc_registration_confirmation_final',
-      destination: phone,
-      templateParams: [full_name, dayLabel],
-      mediaUrl: qrUrl,
-    });
-  } catch (err) {
-    result = { success: false, error: `Exception: ${String(err)}`, debug: { exception: String(err) } };
-  }
-
-  const debugStr = JSON.stringify(result?.debug || {});
-  const failureReason = result?.error
-    ? `${result.error} | DEBUG: ${debugStr}`
-    : `OK | DEBUG: ${debugStr}`;
-
-  // ALWAYS log — never swallow this failure silently
-  try {
-    await sb.from('rlc_whatsapp_messages').insert({
-      delegate_id,
-      delegate_phone: phone,
-      delegate_name: full_name,
-      message_kind: 'registration_confirmation',
-      direction: 'out',
-      template_variables: { full_name, day_label: dayLabel, qr_url: qrUrl },
-      status: result?.success ? 'sent' : 'failed',
-      aisensy_message_id: result?.messageId || null,
-      failure_reason: failureReason,
-    });
-  } catch (logErr) {
-    // Even logging failed. At least surface to Vercel logs.
-    console.error('[register] failed to insert whatsapp log row:', logErr);
-  }
-
-  return { success: !!result?.success, error: result?.error };
-}
-
+// Registration is invite-gated via the 'OPEN' code and now lands delegates as
+// 'pending'. NO WhatsApp is sent here — the confirmation + QR pass goes out only
+// after the Health1 team approves the delegate (see admin Approve action, which
+// calls /api/aisensy/send-confirmation).
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -74,17 +15,17 @@ export async function POST(req: NextRequest) {
       drylab_interest,
     } = body || {};
 
-    if (!full_name || !phone || !email || !specialty || !day_attendance) {
+    // Email is optional now; phone is the required, unique contact field.
+    if (!full_name || !phone || !specialty || !day_attendance) {
       return NextResponse.json({ success: false, error: 'MISSING_FIELDS', message: 'Required fields missing.' }, { status: 400 });
     }
 
     const sb = createServiceClient();
 
-    // 1. Run the registration RPC
     const { data: rpcResult, error: rpcError } = await sb.rpc('rlc_register_delegate_open', {
       p_full_name: full_name,
       p_phone: phone,
-      p_email: email.toLowerCase(),
+      p_email: email ? String(email).toLowerCase() : null,
       p_specialty: specialty,
       p_day_attendance: day_attendance,
       p_hospital: hospital || null,
@@ -102,22 +43,17 @@ export async function POST(req: NextRequest) {
     }
 
     const result = rpcResult as any;
-    const dayLabel = buildDayLabel(day_attendance);
 
-    // 2. Handle "already registered" gracefully — return success with delegate_id
-    //    so the client can route to the pass page instead of showing an error.
+    // Already registered — treat as success from a UX standpoint. No WhatsApp.
     if (!result?.success && result?.error_code === 'ALREADY_REGISTERED' && result?.delegate_id) {
-      // Re-send the WhatsApp confirmation in case they lost the original
-      await sendWhatsAppConfirmation(sb, result.delegate_id, full_name, phone, dayLabel);
       return NextResponse.json({
-        success: true, // success from UX perspective: they have a pass
+        success: true,
         delegate_id: result.delegate_id,
         already_registered: true,
-        message: 'Welcome back! You\'re already registered — we\'ve resent your WhatsApp confirmation.',
+        message: "You're already registered for ROBOLAPCON 2026. We have your details on file.",
       });
     }
 
-    // 3. Other RPC failures (validation, internal, etc) — return as-is
     if (!result?.success) {
       return NextResponse.json({
         success: false,
@@ -126,21 +62,18 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    // 4. Success path — set drylab interest if needed
+    // Optional drylab interest
     if (drylab_interest && result.delegate_id) {
       await sb.rpc('rlc_set_drylab_interest', { p_delegate_id: result.delegate_id, p_interest: true });
     }
 
-    // 5. Send WhatsApp confirmation server-side (NOT client-side — survives tab close)
-    const wa = await sendWhatsAppConfirmation(sb, result.delegate_id, full_name, phone, dayLabel);
-
+    // Silent — confirmation WhatsApp is deferred until approval.
     return NextResponse.json({
       success: true,
       delegate_id: result.delegate_id,
       days_registered: result.days_registered,
       tracks_count: result.tracks_count,
       message: result.message,
-      whatsapp_sent: wa.success,
     });
   } catch (err) {
     console.error('[register] unhandled exception:', err);

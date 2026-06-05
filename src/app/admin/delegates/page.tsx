@@ -2,7 +2,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import AdminShell from '@/components/AdminShell';
 import { createClient } from '@/lib/supabase/client';
-import { Search, Download, RefreshCw } from 'lucide-react';
+import { Search, Download, RefreshCw, Check, X, Clock } from 'lucide-react';
 
 export default function DelegatesPage() {
   const [delegates, setDelegates] = useState<any[]>([]);
@@ -10,6 +10,8 @@ export default function DelegatesPage() {
   const [search, setSearch] = useState('');
   const [filterSpec, setFilterSpec] = useState('');
   const [filterDay, setFilterDay] = useState('');
+  const [statusFilter, setStatusFilter] = useState(''); // '' | 'pending'
+  const [busyId, setBusyId] = useState('');
 
   const load = async () => {
     setLoading(true);
@@ -31,16 +33,20 @@ export default function DelegatesPage() {
 
   const specialties = useMemo(() => Array.from(new Set((delegates).map((d: any) => d.specialty).filter(Boolean))).sort(), [delegates]);
 
-  // Day attendance totals — authoritative, not affected by search/filter.
+  // Day counts reflect CONFIRMED (registered) delegates only.
   const dayCounts = useMemo(() => {
     let both = 0, d1 = 0, d2 = 0;
     delegates.forEach((d: any) => {
+      if (d.status !== 'registered') return;
       if (d.day1) d1++;
       if (d.day2) d2++;
       if (d.day1 && d.day2) both++;
     });
     return { both, d1, d2 };
   }, [delegates]);
+
+  const pendingCount = useMemo(() => delegates.filter((d: any) => d.status === 'pending').length, [delegates]);
+  const visibleCount = useMemo(() => delegates.filter((d: any) => d.status !== 'rejected').length, [delegates]);
 
   const dayLabel = (d: any) => {
     if (d.day1 && d.day2) return 'Both';
@@ -50,6 +56,8 @@ export default function DelegatesPage() {
   };
 
   const filtered = useMemo(() => delegates.filter((d: any) => {
+    if (d.status === 'rejected') return false;                 // rejected never shown
+    if (statusFilter === 'pending' && d.status !== 'pending') return false;
     const q = search.toLowerCase();
     const match = !q || d.full_name?.toLowerCase().includes(q) || d.email?.toLowerCase().includes(q) || d.phone?.includes(q) || d.city?.toLowerCase().includes(q);
     const matchSpec = !filterSpec || d.specialty === filterSpec;
@@ -58,11 +66,38 @@ export default function DelegatesPage() {
       || (filterDay === 'day2' && d.day2)
       || (filterDay === 'both' && d.day1 && d.day2);
     return match && matchSpec && matchDay;
-  }), [delegates, search, filterSpec, filterDay]);
+  }), [delegates, search, filterSpec, filterDay, statusFilter]);
+
+  const approve = async (d: any) => {
+    setBusyId(d.id);
+    const sb = createClient();
+    const { error } = await sb.rpc('rlc_admin_set_delegate_status', { p_delegate_id: d.id, p_status: 'registered' });
+    if (error) { window.alert('Approve failed: ' + error.message); setBusyId(''); return; }
+    // Fire the confirmation WhatsApp + QR pass now that they're approved.
+    try {
+      await fetch('/api/aisensy/send-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ delegate_id: d.id, full_name: d.full_name, phone: d.phone }),
+      });
+    } catch { /* logged server-side; approval still stands */ }
+    await load();
+    setBusyId('');
+  };
+
+  const reject = async (d: any) => {
+    if (!window.confirm(`Reject ${d.full_name}? They'll be removed from the list and no WhatsApp will be sent.`)) return;
+    setBusyId(d.id);
+    const sb = createClient();
+    const { error } = await sb.rpc('rlc_admin_set_delegate_status', { p_delegate_id: d.id, p_status: 'rejected' });
+    if (error) { window.alert('Reject failed: ' + error.message); setBusyId(''); return; }
+    await load();
+    setBusyId('');
+  };
 
   const exportCSV = () => {
-    const h = ['Name','Email','Phone','City','Hospital','Specialty','Days','GMC Reg','Dietary','Status','Registered'];
-    const rows = filtered.map((d: any) => [d.full_name, d.email, d.phone, d.city||'', d.hospital||'', d.specialty, dayLabel(d), d.mcr_number||'', d.dietary, d.status, new Date(d.created_at).toLocaleString('en-IN')]);
+    const h = ['Name','Email','Phone','City','Hospital','Specialty','Days','Status','GMC Reg','Dietary','Registered'];
+    const rows = filtered.map((d: any) => [d.full_name, d.email||'', d.phone, d.city||'', d.hospital||'', d.specialty, dayLabel(d), d.status, d.mcr_number||'', d.dietary, new Date(d.created_at).toLocaleString('en-IN')]);
     const csv = [h, ...rows].map(r => r.map((c: string) => `"${c}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
@@ -70,27 +105,32 @@ export default function DelegatesPage() {
   };
 
   const fmtSpec = (s: string) => s?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || '';
-
   const toggleDay = (v: string) => setFilterDay(filterDay === v ? '' : v);
 
   return (
     <AdminShell>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div><h1 className="text-2xl font-bold">Delegates</h1><p className="text-sm text-rlc-muted">{filtered.length} of {delegates.length}</p></div>
+        <div><h1 className="text-2xl font-bold">Delegates</h1><p className="text-sm text-rlc-muted">{filtered.length} of {visibleCount}</p></div>
         <div className="flex items-center gap-2">
+          {pendingCount > 0 && (
+            <button onClick={() => setStatusFilter(statusFilter === 'pending' ? '' : 'pending')}
+              className={`rlc-btn-outline !py-2 !px-3 !border-rlc-amber/50 ${statusFilter === 'pending' ? '!bg-rlc-amber/15' : ''}`}>
+              <Clock className="w-4 h-4 text-rlc-amber" /> <span className="text-rlc-amber font-semibold">{pendingCount} Pending</span>
+            </button>
+          )}
           <button onClick={load} className="rlc-btn-outline !py-2 !px-3"><RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /></button>
           <button onClick={exportCSV} className="rlc-btn-primary !py-2 !px-4"><Download className="w-4 h-4" /> CSV</button>
         </div>
       </div>
 
-      {/* Day attendance summary — each card also toggles a filter */}
+      {/* Confirmed day attendance — tap a card to filter */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         <button onClick={() => toggleDay('day1')} className={`rlc-card !p-4 text-left transition ${filterDay === 'day1' ? 'ring-2 ring-rlc-accent' : ''}`}>
-          <div className="text-xs text-rlc-muted">Day 1 attending</div>
+          <div className="text-xs text-rlc-muted">Day 1 confirmed</div>
           <div className="text-2xl font-bold text-white">{dayCounts.d1}</div>
         </button>
         <button onClick={() => toggleDay('day2')} className={`rlc-card !p-4 text-left transition ${filterDay === 'day2' ? 'ring-2 ring-rlc-accent' : ''}`}>
-          <div className="text-xs text-rlc-muted">Day 2 attending</div>
+          <div className="text-xs text-rlc-muted">Day 2 confirmed</div>
           <div className="text-2xl font-bold text-white">{dayCounts.d2}</div>
         </button>
         <button onClick={() => toggleDay('both')} className={`rlc-card !p-4 text-left transition ${filterDay === 'both' ? 'ring-2 ring-rlc-accent' : ''}`}>
@@ -115,17 +155,24 @@ export default function DelegatesPage() {
       </div>
       <div className="rlc-card !p-0 overflow-x-auto">
         <table className="admin-table">
-          <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Specialty</th><th>Day</th><th>Drylab</th><th>Status</th><th>Registered</th></tr></thead>
+          <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Specialty</th><th>Day</th><th>Status</th><th>Action</th><th>Registered</th></tr></thead>
           <tbody>
             {filtered.map((d: any) => (
               <tr key={d.id}>
-                <td><div className="font-medium text-white">{d.full_name}</div><div className="text-xs text-rlc-muted">{d.email}</div></td>
+                <td><div className="font-medium text-white">{d.full_name}</div><div className="text-xs text-rlc-muted">{d.email || 'No email'}</div></td>
                 <td className="text-sm">{d.phone}</td>
                 <td className="text-sm">{d.city || '—'}{d.hospital ? <span className="text-xs text-rlc-muted block">{d.hospital}</span> : null}</td>
                 <td className="text-sm">{fmtSpec(d.specialty)}</td>
                 <td><span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${d.day1 && d.day2 ? 'bg-rlc-accent/10 text-rlc-accent' : 'bg-rlc-amber/10 text-rlc-amber'}`}>{dayLabel(d)}</span></td>
-                <td>{d.drylab_interest ? <span className="text-xs text-rlc-accent">★ Yes</span> : <span className="text-xs text-rlc-muted">—</span>}</td>
-                <td><span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${d.status === 'registered' ? 'bg-rlc-accent/10 text-rlc-accent' : d.status === 'cancelled' ? 'bg-rlc-red/10 text-rlc-red' : 'bg-rlc-amber/10 text-rlc-amber'}`}>{d.status}</span></td>
+                <td><span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${d.status === 'registered' ? 'bg-rlc-accent/10 text-rlc-accent' : d.status === 'pending' ? 'bg-rlc-amber/10 text-rlc-amber' : 'bg-rlc-red/10 text-rlc-red'}`}>{d.status === 'registered' ? 'confirmed' : d.status}</span></td>
+                <td>
+                  {d.status === 'pending' ? (
+                    <div className="flex items-center gap-1.5">
+                      <button onClick={() => approve(d)} disabled={busyId === d.id} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold bg-rlc-accent/15 text-rlc-accent hover:bg-rlc-accent/25 disabled:opacity-40"><Check className="w-3.5 h-3.5" /> Approve</button>
+                      <button onClick={() => reject(d)} disabled={busyId === d.id} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold bg-rlc-red/15 text-rlc-red hover:bg-rlc-red/25 disabled:opacity-40"><X className="w-3.5 h-3.5" /> Reject</button>
+                    </div>
+                  ) : <span className="text-xs text-rlc-muted">—</span>}
+                </td>
                 <td className="text-xs text-rlc-muted whitespace-nowrap">{new Date(d.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
               </tr>
             ))}

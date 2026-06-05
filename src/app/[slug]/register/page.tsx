@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, QrCode, CalendarDays, Wrench } from 'lucide-react';
+import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, CalendarDays, Wrench } from 'lucide-react';
 
 const SPECIALTIES = [
   { value: 'general_surgery', label: 'General Surgery' },
@@ -46,7 +46,6 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [resultMsg, setResultMsg] = useState('');
-  const [regDelegateId, setRegDelegateId] = useState('');
 
   useEffect(() => {
     const sb = createClient();
@@ -71,7 +70,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
     if (!form.full_name.trim()) return setError('Full name is required.');
-    if (!form.email.trim() || !form.email.includes('@')) return setError('Valid email is required.');
+    if (form.email.trim() && !form.email.includes('@')) return setError('Please enter a valid email, or leave it blank.');
     if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 10) return setError('Valid phone required.');
     if (!form.specialty) return setError('Please select your specialty.');
     if (form.specialty === 'other' && !form.specialty_other.trim()) return setError('Please specify your specialty.');
@@ -92,7 +91,7 @@ export default function RegisterPage() {
         body: JSON.stringify({
           full_name: form.full_name.trim(),
           phone: form.phone.trim(),
-          email: form.email.trim().toLowerCase(),
+          email: form.email.trim() ? form.email.trim().toLowerCase() : null,
           specialty: form.specialty,
           day_attendance: dayAttendance,
           hospital: form.hospital.trim() || null,
@@ -117,7 +116,6 @@ export default function RegisterPage() {
       // Success — could be a fresh registration OR already_registered (treated as success)
       setResultMsg(result.message || 'Registration confirmed!');
       if (result.delegate_id) {
-        setRegDelegateId(result.delegate_id);
         try {
           localStorage.setItem('rlc_delegate', JSON.stringify({ id: result.delegate_id, name: form.full_name.trim() }));
         } catch {}
@@ -149,14 +147,9 @@ export default function RegisterPage() {
         <div className="w-20 h-20 mx-auto rounded-full bg-rlc-accent/10 flex items-center justify-center mb-6">
           <CheckCircle2 className="w-10 h-10 text-rlc-accent" />
         </div>
-        <h1 className="text-3xl font-bold mb-2">You&apos;re Registered!</h1>
+        <h1 className="text-3xl font-bold mb-2">Thank You for Registering!</h1>
         <p className="text-rlc-muted mb-8">{resultMsg}</p>
         <div className="flex flex-col gap-3">
-          {regDelegateId && (
-            <Link href={`/${slug}/pass/${regDelegateId}`} className="rlc-btn-amber !py-3 justify-center">
-              <QrCode className="w-4 h-4" /> View Your Digital Pass
-            </Link>
-          )}
           <Link href={`/${slug}#schedule`} className="rlc-btn-outline !py-3 justify-center">
             <CalendarDays className="w-4 h-4" /> Explore Schedule & Faculty
           </Link>
@@ -188,7 +181,7 @@ export default function RegisterPage() {
           <input name="full_name" value={form.full_name} onChange={handleChange} className="rlc-input" placeholder="Dr. Full Name" />
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
-          <div><label className="rlc-label">Email <span className="text-rlc-red">*</span></label>
+          <div><label className="rlc-label">Email <span className="text-rlc-muted text-xs">(optional)</span></label>
             <input name="email" type="email" value={form.email} onChange={handleChange} className="rlc-input" placeholder="doctor@example.com" /></div>
           <div><label className="rlc-label">Phone <span className="text-rlc-red">*</span></label>
             <input name="phone" value={form.phone} onChange={handleChange} className="rlc-input" placeholder="+91 98765 43210" /></div>
