@@ -98,7 +98,7 @@ export default function DelegatesPage() {
 
   const exportCSV = () => {
     const h = ['Name','Email','Phone','City','Hospital','Specialty','Days','Status','GMC Reg','Dietary','Registered'];
-    const rows = filtered.map((d: any) => [d.full_name, d.email||'', d.phone, d.city||'', d.hospital||'', d.specialty, dayLabel(d), d.status, d.mcr_number||'', d.dietary, new Date(d.created_at).toLocaleString('en-IN')]);
+    const rows = filtered.map((d: any) => [d.full_name, d.email||'', d.phone, d.city||'', d.hospital||'', (d.specialty === 'other' && d.specialty_other ? 'Other — ' + d.specialty_other : d.specialty), dayLabel(d), d.status, d.mcr_number||'', d.dietary, new Date(d.created_at).toLocaleString('en-IN')]);
     const csv = [h, ...rows].map(r => r.map((c: string) => `"${c}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
@@ -163,7 +163,7 @@ export default function DelegatesPage() {
                 <td><div className="font-medium text-white">{d.full_name}</div><div className="text-xs text-rlc-muted">{d.email || 'No email'}</div></td>
                 <td className="text-sm">{d.phone}</td>
                 <td className="text-sm">{d.city || '—'}{d.hospital ? <span className="text-xs text-rlc-muted block">{d.hospital}</span> : null}</td>
-                <td className="text-sm">{fmtSpec(d.specialty)}</td>
+                <td className="text-sm">{d.specialty === 'other' && d.specialty_other ? <>Other — <span className="text-rlc-muted">{d.specialty_other}</span></> : fmtSpec(d.specialty)}</td>
                 <td><span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${d.day1 && d.day2 ? 'bg-rlc-accent/10 text-rlc-accent' : 'bg-rlc-amber/10 text-rlc-amber'}`}>{dayLabel(d)}</span></td>
                 <td>{d.drylab_interest ? <span className="text-xs font-semibold text-rlc-accent">★ Yes</span> : <span className="text-xs text-rlc-muted">—</span>}</td>
                 <td><span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${d.status === 'registered' ? 'bg-rlc-accent/10 text-rlc-accent' : d.status === 'pending' ? 'bg-rlc-amber/10 text-rlc-amber' : 'bg-rlc-red/10 text-rlc-red'}`}>{d.status === 'registered' ? 'confirmed' : d.status}</span></td>
