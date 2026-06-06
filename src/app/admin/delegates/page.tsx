@@ -47,6 +47,7 @@ export default function DelegatesPage() {
 
   const pendingCount = useMemo(() => delegates.filter((d: any) => d.status === 'pending').length, [delegates]);
   const visibleCount = useMemo(() => delegates.filter((d: any) => d.status !== 'rejected').length, [delegates]);
+  const drylabCount = useMemo(() => delegates.filter((d: any) => d.status !== 'rejected' && d.drylab_interest).length, [delegates]);
 
   const dayLabel = (d: any) => {
     if (d.day1 && d.day2) return 'Both';
@@ -110,7 +111,7 @@ export default function DelegatesPage() {
   return (
     <AdminShell>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div><h1 className="text-2xl font-bold">Delegates</h1><p className="text-sm text-rlc-muted">{filtered.length} of {visibleCount}</p></div>
+        <div><h1 className="text-2xl font-bold">Delegates</h1><p className="text-sm text-rlc-muted">{filtered.length} of {visibleCount} · Dry-lab opted: <span className="text-rlc-accent font-semibold">{drylabCount}</span></p></div>
         <div className="flex items-center gap-2">
           {pendingCount > 0 && (
             <button onClick={() => setStatusFilter(statusFilter === 'pending' ? '' : 'pending')}
@@ -155,7 +156,7 @@ export default function DelegatesPage() {
       </div>
       <div className="rlc-card !p-0 overflow-x-auto">
         <table className="admin-table">
-          <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Specialty</th><th>Day</th><th>Status</th><th>Action</th><th>Registered</th></tr></thead>
+          <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Specialty</th><th>Day</th><th>Dry-lab</th><th>Status</th><th>Action</th><th>Registered</th></tr></thead>
           <tbody>
             {filtered.map((d: any) => (
               <tr key={d.id}>
@@ -164,6 +165,7 @@ export default function DelegatesPage() {
                 <td className="text-sm">{d.city || '—'}{d.hospital ? <span className="text-xs text-rlc-muted block">{d.hospital}</span> : null}</td>
                 <td className="text-sm">{fmtSpec(d.specialty)}</td>
                 <td><span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${d.day1 && d.day2 ? 'bg-rlc-accent/10 text-rlc-accent' : 'bg-rlc-amber/10 text-rlc-amber'}`}>{dayLabel(d)}</span></td>
+                <td>{d.drylab_interest ? <span className="text-xs font-semibold text-rlc-accent">★ Yes</span> : <span className="text-xs text-rlc-muted">—</span>}</td>
                 <td><span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${d.status === 'registered' ? 'bg-rlc-accent/10 text-rlc-accent' : d.status === 'pending' ? 'bg-rlc-amber/10 text-rlc-amber' : 'bg-rlc-red/10 text-rlc-red'}`}>{d.status === 'registered' ? 'confirmed' : d.status}</span></td>
                 <td>
                   {d.status === 'pending' ? (
@@ -176,7 +178,7 @@ export default function DelegatesPage() {
                 <td className="text-xs text-rlc-muted whitespace-nowrap">{new Date(d.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
               </tr>
             ))}
-            {filtered.length === 0 && <tr><td colSpan={8} className="text-center py-8 text-rlc-muted">{loading ? 'Loading...' : 'No delegates found.'}</td></tr>}
+            {filtered.length === 0 && <tr><td colSpan={9} className="text-center py-8 text-rlc-muted">{loading ? 'Loading...' : 'No delegates found.'}</td></tr>}
           </tbody>
         </table>
       </div>
