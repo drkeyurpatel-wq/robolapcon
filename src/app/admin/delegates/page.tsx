@@ -11,6 +11,7 @@ export default function DelegatesPage() {
   const [filterSpec, setFilterSpec] = useState('');
   const [filterDay, setFilterDay] = useState('');
   const [statusFilter, setStatusFilter] = useState(''); // '' | 'pending'
+  const [drylabOnly, setDrylabOnly] = useState(false);
   const [busyId, setBusyId] = useState('');
 
   const load = async () => {
@@ -59,6 +60,7 @@ export default function DelegatesPage() {
   const filtered = useMemo(() => delegates.filter((d: any) => {
     if (d.status === 'rejected') return false;                 // rejected never shown
     if (statusFilter === 'pending' && d.status !== 'pending') return false;
+    if (drylabOnly && !d.drylab_interest) return false;
     const q = search.toLowerCase();
     const match = !q || d.full_name?.toLowerCase().includes(q) || d.email?.toLowerCase().includes(q) || d.phone?.includes(q) || d.city?.toLowerCase().includes(q);
     const matchSpec = !filterSpec || d.specialty === filterSpec;
@@ -67,7 +69,7 @@ export default function DelegatesPage() {
       || (filterDay === 'day2' && d.day2)
       || (filterDay === 'both' && d.day1 && d.day2);
     return match && matchSpec && matchDay;
-  }), [delegates, search, filterSpec, filterDay, statusFilter]);
+  }), [delegates, search, filterSpec, filterDay, statusFilter, drylabOnly]);
 
   const approve = async (d: any) => {
     setBusyId(d.id);
@@ -125,7 +127,7 @@ export default function DelegatesPage() {
       </div>
 
       {/* Confirmed day attendance — tap a card to filter */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <button onClick={() => toggleDay('day1')} className={`rlc-card !p-4 text-left transition ${filterDay === 'day1' ? 'ring-2 ring-rlc-accent' : ''}`}>
           <div className="text-xs text-rlc-muted">Day 1 confirmed</div>
           <div className="text-2xl font-bold text-white">{dayCounts.d1}</div>
@@ -137,6 +139,10 @@ export default function DelegatesPage() {
         <button onClick={() => toggleDay('both')} className={`rlc-card !p-4 text-left transition ${filterDay === 'both' ? 'ring-2 ring-rlc-accent' : ''}`}>
           <div className="text-xs text-rlc-muted">Both days</div>
           <div className="text-2xl font-bold text-rlc-accent">{dayCounts.both}</div>
+        </button>
+        <button onClick={() => setDrylabOnly(v => !v)} className={`rlc-card !p-4 text-left transition ${drylabOnly ? 'ring-2 ring-rlc-amber' : ''}`}>
+          <div className="text-xs text-rlc-muted">Dry-lab opted</div>
+          <div className="text-2xl font-bold text-rlc-amber">{drylabCount}</div>
         </button>
       </div>
 
