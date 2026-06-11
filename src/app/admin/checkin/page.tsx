@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import AdminShell from '@/components/AdminShell';
 import QrScanner from '@/components/QrScanner';
 import { createClient } from '@/lib/supabase/client';
-import { UserCheck, Printer, RotateCcw, Bot, CheckCircle2, AlertCircle } from 'lucide-react';
+import { UserCheck, Printer, RotateCcw, CheckCircle2, AlertCircle, Search, ScanLine } from 'lucide-react';
 
 const QR_API = 'https://api.qrserver.com/v1/create-qr-code/';
 
@@ -23,20 +23,32 @@ interface DelegateInfo {
   scans: { type: string; day: number; at: string }[];
 }
 
+interface SearchHit {
+  id: string;
+  full_name: string;
+  phone: string;
+  specialty: string;
+  specialty_other: string | null;
+  hospital: string | null;
+  city: string | null;
+  status: string;
+}
+
 export default function CheckinPage() {
+  const [mode, setMode] = useState<'scan' | 'search'>('scan');
   const [delegate, setDelegate] = useState<DelegateInfo | null>(null);
   const [scanning, setScanning] = useState(true);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [checkedIn, setCheckedIn] = useState(false);
   const [dayNumber, setDayNumber] = useState(1);
-  const printRef = useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState('');
+  const [hits, setHits] = useState<SearchHit[]>([]);
+  const [printing, setPrinting] = useState(false);
 
   const sb = createClient();
 
-  const handleScan = useCallback(async (id: string) => {
-    if (loading || !scanning) return;
-    setScanning(false);
+  const loadDelegate = useCallback(async (id: string) => {
     setLoading(true);
     setMessage(null);
     setCheckedIn(false);
@@ -56,7 +68,27 @@ export default function CheckinPage() {
     );
     setCheckedIn(alreadyCheckedIn);
     setLoading(false);
-  }, [loading, scanning, dayNumber, sb]);
+  }, [dayNumber, sb]);
+
+  const handleScan = useCallback(async (id: string) => {
+    if (loading || !scanning) return;
+    setScanning(false);
+    await loadDelegate(id);
+  }, [loading, scanning, loadDelegate]);
+
+  const handleSearch = async (q: string) => {
+    setQuery(q);
+    if (q.trim().length < 2) { setHits([]); return; }
+    const { data } = await sb.rpc('rlc_search_delegates', { p_query: q });
+    setHits((data as any) || []);
+  };
+
+  const selectHit = async (id: string) => {
+    setHits([]);
+    setQuery('');
+    setScanning(false);
+    await loadDelegate(id);
+  };
 
   const handleCheckin = async () => {
     if (!delegate) return;
@@ -79,53 +111,20 @@ export default function CheckinPage() {
     setLoading(false);
   };
 
-  const handlePrint = () => {
-    const printWindow = window.open('', '_blank', 'width=400,height=300');
-    if (!printWindow || !delegate) return;
-
-    const specialtyLabel = delegate.specialty === 'other'
-      ? delegate.specialty_other || 'Other'
-      : delegate.specialty.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
-    const drylabLine = delegate.drylab_interest ? '<div style="font-size:7px;margin-top:2px;font-weight:bold;color:#00A99D;">★ SIMULATION SLOT</div>' : '';
-
-    const qrUrl = `${QR_API}?data=${encodeURIComponent(delegate.id)}&size=80x80&format=png`;
-
-    printWindow.document.write(`<!DOCTYPE html><html><head><title>Print Label</title>
-    <style>
-      @page { size: 50mm 30mm; margin: 0; }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { width: 50mm; height: 30mm; font-family: Arial, sans-serif; padding: 1.5mm; display: flex; align-items: center; }
-      .wrap { display: flex; width: 100%; height: 100%; gap: 2mm; }
-      .info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-      .name { font-size: 9px; font-weight: bold; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .detail { font-size: 6.5px; color: #444; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .qr { width: 22mm; height: 22mm; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-      .qr img { width: 100%; height: 100%; }
-      .brand { font-size: 5.5px; color: #00A99D; font-weight: bold; margin-bottom: 1px; }
-    </style></head><body>
-    <div class="wrap">
-      <div class="info">
-        <div class="brand">ROBOLAPCON 2026</div>
-        <div class="name">${delegate.full_name}</div>
-        <div class="detail">${specialtyLabel}</div>
-        ${delegate.hospital ? `<div class="detail">${delegate.hospital}</div>` : ''}
-        ${delegate.city ? `<div class="detail">${delegate.city}</div>` : ''}
-        ${drylabLine}
-      </div>
-      <div class="qr"><img src="${qrUrl}" /></div>
-    </div>
-    </body></html>`);
-
-    printWindow.document.close();
-    // Wait for QR image to load
-    const img = printWindow.document.querySelector('img');
-    if (img) {
-      img.onload = () => { printWindow.print(); };
-      img.onerror = () => { printWindow.print(); };
+  const handlePrint = async () => {
+    if (!delegate || printing) return;
+    setPrinting(true);
+    const { data } = await sb.rpc('rlc_queue_print', {
+      p_delegate_id: delegate.id,
+      p_day_number: dayNumber,
+    });
+    const result = data as any;
+    if (result?.success) {
+      setMessage({ type: 'success', text: `🖨 Badge sent to printer — ${result.delegate_name}` });
     } else {
-      setTimeout(() => printWindow.print(), 500);
+      setMessage({ type: 'error', text: 'Print queue failed — use the desk laptop directly.' });
     }
+    setPrinting(false);
   };
 
   const reset = () => {
@@ -133,9 +132,11 @@ export default function CheckinPage() {
     setScanning(true);
     setMessage(null);
     setCheckedIn(false);
+    setHits([]);
+    setQuery('');
   };
 
-  const specialtyDisplay = (d: DelegateInfo) =>
+  const specialtyDisplay = (d: { specialty: string; specialty_other: string | null }) =>
     d.specialty === 'other'
       ? d.specialty_other || 'Other'
       : d.specialty.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -146,7 +147,7 @@ export default function CheckinPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold">Check-in Desk</h1>
-            <p className="text-sm text-rlc-muted">Scan delegate QR to check in & print label</p>
+            <p className="text-sm text-rlc-muted">Scan QR or search name to check in &amp; print badge</p>
           </div>
           <select
             value={dayNumber}
@@ -158,11 +159,66 @@ export default function CheckinPage() {
           </select>
         </div>
 
+        {/* Mode tabs */}
+        {!delegate && (
+          <div className="flex gap-2 mb-5">
+            <button
+              onClick={() => { setMode('scan'); setScanning(true); setHits([]); }}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold border transition ${
+                mode === 'scan' ? 'border-rlc-accent text-rlc-accent bg-rlc-accent/10' : 'border-rlc-border text-rlc-muted'
+              }`}
+            >
+              <ScanLine className="w-4 h-4" /> Scan QR
+            </button>
+            <button
+              onClick={() => { setMode('search'); setScanning(false); }}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold border transition ${
+                mode === 'search' ? 'border-rlc-accent text-rlc-accent bg-rlc-accent/10' : 'border-rlc-border text-rlc-muted'
+              }`}
+            >
+              <Search className="w-4 h-4" /> Search
+            </button>
+          </div>
+        )}
+
         {/* Scanner */}
-        {scanning && (
+        {mode === 'scan' && scanning && !delegate && (
           <div className="mb-6">
             <QrScanner onScan={handleScan} active={scanning} />
             <p className="text-center text-xs text-rlc-muted mt-3">Point camera at delegate&apos;s WhatsApp QR code</p>
+          </div>
+        )}
+
+        {/* Search */}
+        {mode === 'search' && !delegate && (
+          <div className="mb-6">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Name or phone number…"
+              autoFocus
+              className="rlc-input w-full !py-3 !text-base"
+            />
+            <div className="mt-3 space-y-2">
+              {hits.map((h) => (
+                <button
+                  key={h.id}
+                  onClick={() => selectHit(h.id)}
+                  className="w-full text-left rlc-card !p-4 hover:border-rlc-accent transition"
+                >
+                  <div className="font-semibold text-white">{h.full_name}</div>
+                  <div className="text-xs text-rlc-muted mt-0.5">
+                    {specialtyDisplay(h)}
+                    {h.hospital ? ` · ${h.hospital}` : ''}
+                    {h.city ? ` · ${h.city}` : ''} · {h.phone}
+                  </div>
+                </button>
+              ))}
+              {query.trim().length >= 2 && hits.length === 0 && (
+                <p className="text-sm text-rlc-muted text-center py-3">No delegates match &ldquo;{query}&rdquo;</p>
+              )}
+            </div>
           </div>
         )}
 
@@ -240,8 +296,8 @@ export default function CheckinPage() {
                   <UserCheck className="w-5 h-5" /> Check In Day {dayNumber}
                 </button>
               ) : (
-                <button onClick={handlePrint} className="rlc-btn-amber flex-1 !py-3">
-                  <Printer className="w-5 h-5" /> Print Label
+                <button onClick={handlePrint} disabled={printing} className="rlc-btn-amber flex-1 !py-3 disabled:opacity-50">
+                  <Printer className="w-5 h-5" /> {printing ? 'Sending…' : 'Print Badge'}
                 </button>
               )}
               <button onClick={reset} className="rlc-btn-outline !py-3 !px-4">
@@ -252,7 +308,7 @@ export default function CheckinPage() {
         )}
 
         {/* Not found — show reset */}
-        {!scanning && !delegate && !loading && (
+        {mode === 'scan' && !scanning && !delegate && !loading && (
           <div className="text-center py-8">
             <button onClick={reset} className="rlc-btn-outline">
               <RotateCcw className="w-4 h-4" /> Scan Another
