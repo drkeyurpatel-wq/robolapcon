@@ -14,46 +14,51 @@ const CONF = {
   name: 'RoboLapCon 2026',
   tagline: 'Live Robotic & 3D Laparoscopic Surgery Conference',
   dates: '20 – 21 June 2026',
-  dateStart: new Date('2026-06-20T07:30:00+05:30'),
+  dateStart: new Date('2026-06-20T14:30:00+05:30'),
   venue: 'Ahmedabad',
   slug: 'robolapcon-2026',
-  liveSurgeries: 14,
+  liveSurgeries: 12,
   delegates: '200+',
   faculty: '10+',
   tracks: 2,
 };
 
 const DAY1_SCHEDULE = [
-  { time: '16:00', title: 'Registration & Kit Collection', type: 'break' },
+  { time: '14:30', title: 'Registration & Afternoon Tea', type: 'break' },
+  { time: '15:00', title: 'Robotic Nephrectomy', sub: 'Dr. Keval Patel · Urology · SSI Mantra', type: 'live', highlight: true },
+  { time: '15:00', title: 'Laparoscopic Bariatric Surgery', sub: 'Dr. Mahendra Narwaria · Bariatric', type: 'live', highlight: true },
   { time: '16:30', title: 'Inauguration Ceremony', type: 'ceremony' },
-  { time: '16:45', title: 'Recorded Address — Dr Srivastava', type: 'ceremony' },
-  { time: '17:00', title: 'Robotic Hysterectomy', sub: 'Case 1 — Gynecology · SSI Mantra', type: 'live', highlight: true },
-  { time: '18:15', title: '3D Lap Ovarian Cystectomy', sub: 'Case 2 — Gynecology', type: 'live', highlight: true },
-  { time: '19:15', title: 'Tea Break', type: 'break' },
-  { time: '19:30', title: 'Robotic Pyeloplasty', sub: 'Case 3 — Urology · SSI Mantra', type: 'live', highlight: true },
-  { time: '20:30', title: 'Lap Sleeve Gastrectomy', sub: 'Case 4 — Bariatric', type: 'live', highlight: true },
-  { time: '21:30', title: 'Dinner & Networking', type: 'dinner' },
+  { time: '16:30', title: 'Recorded Address — Dr Srivastava', type: 'ceremony' },
+  { time: '17:00', title: 'Robotic Hysterectomy', sub: 'Dr. Smit Solanki · Gynecology · SSI Mantra', type: 'live', highlight: true },
+  { time: '17:00', title: 'Laparoscopic Gynecological Surgery', sub: 'Dr. Dipak Limbachiya · Gynecology', type: 'live', highlight: true },
+  { time: '18:30', title: 'Lecture on Robotic Mastectomy', sub: 'Dr. Anagha Zope · Breast Oncoplasty', type: 'lecture' },
+  { time: '19:00', title: 'Robotic Surgical Oncology', sub: 'To Be Announced · SSI Mantra', type: 'live', highlight: true },
+  { time: '20:30', title: 'Panel Discussion + Interactive Q&A', type: 'panel' },
+  { time: '21:00', title: 'Dinner & Networking', type: 'dinner' },
 ];
 
 const DAY2_SCHEDULE = [
-  { time: '08:00', title: 'Breakfast & Registration', type: 'break' },
+  { time: '08:00', title: 'Registration & Breakfast', type: 'break' },
   { time: '08:30', title: 'Inauguration — Day 2', type: 'ceremony' },
-  { time: '08:45', title: 'Recorded Address — Dr Srivastava', type: 'ceremony' },
-  { time: '09:00', title: 'Robotic Cholecystectomy', sub: 'Case 1 — General Surgery · SSI Mantra', type: 'live', highlight: true },
-  { time: '10:00', title: '3D Lap Inguinal Hernia Repair', sub: 'Case 2 — General Surgery', type: 'live', highlight: true },
-  { time: '11:00', title: 'Tea Break', type: 'break' },
-  { time: '11:15', title: 'Robotic Hiatus Hernia Repair', sub: 'Case 3 — General Surgery · SSI Mantra', type: 'live', highlight: true },
-  { time: '12:15', title: '3D Lap Incisional Hernia Repair', sub: 'Case 4 — General Surgery', type: 'live', highlight: true },
-  { time: '13:15', title: 'Lunch', type: 'break' },
-  { time: '14:00', title: 'Robotic GIST Excision', sub: 'Case 5 — GI Surgery · SSI Mantra', type: 'live', highlight: true },
-  { time: '15:00', title: '3D Lap Mini Gastric Bypass', sub: 'Case 6 — GI Surgery', type: 'live', highlight: true },
-  { time: '16:00', title: 'Closing Ceremony & Awards', type: 'ceremony' },
+  { time: '08:30', title: 'Recorded Address — Dr Srivastava', type: 'ceremony' },
+  { time: '09:00', title: 'Robotic TAPP — Inguinal Hernia Repair', sub: 'Dr. Krunal Solanki · General Surgery · SSI Mantra', type: 'live', highlight: true },
+  { time: '09:00', title: 'Laparoscopic ETEP — Incisional Hernia Repair', sub: 'Dr. Sameer Rege · General Surgery', type: 'live', highlight: true },
+  { time: '10:30', title: 'Lecture', sub: 'To Be Announced', type: 'lecture' },
+  { time: '11:00', title: 'Robotic Cholecystectomy', sub: 'Dr. Milind Akhani · GI / HPB · SSI Mantra', type: 'live', highlight: true },
+  { time: '11:00', title: 'Laparoscopic Nissen Fundoplication', sub: 'Dr. Manoranjan Kushwaha · General Surgery', type: 'live', highlight: true },
+  { time: '12:30', title: 'Lecture: Critical Circle of Fundoplication — Creating Uniform Wraps', sub: 'Dr. Kalpesh Jani', type: 'lecture' },
+  { time: '13:00', title: 'Lunch', type: 'break' },
+  { time: '14:00', title: 'Robotic Bariatric Surgery', sub: 'Dr. Digvijaysingh Bedi · Bariatric · SSI Mantra', type: 'live', highlight: true },
+  { time: '14:00', title: 'Laparoscopic ETEP — Inguinal Hernia Repair', sub: 'Dr. Krunal Solanki · General Surgery', type: 'live', highlight: true },
+  { time: '15:30', title: 'Laparoscopic PTEP — Umbilical Hernia Repair', sub: 'Dr. Sameer Rege · General Surgery', type: 'live', highlight: true },
+  { time: '16:30', title: 'Panel Discussion + Interactive Q&A', type: 'panel' },
+  { time: '17:00', title: 'High Tea', type: 'break' },
 ];
 
 const FEATURES = [
   { icon: Bot, title: 'SSI Mantra 3.0', desc: 'India\'s indigenous surgical robot — live in action from our OT', color: 'accent' },
   { icon: Layers, title: '3D Laparoscopy', desc: 'Advanced 3D visualization systems for precision surgery', color: 'accent' },
-  { icon: Tv, title: '14 Live Surgeries', desc: 'Watch cutting-edge procedures beamed live from the operating theatre across 2 days', color: 'amber' },
+  { icon: Tv, title: '12 Live Surgeries', desc: 'Watch cutting-edge procedures beamed live from the operating theatre across 2 days', color: 'amber' },
   { icon: Microscope, title: 'Robotic Simulation Lab', desc: 'Hands-on training with expert mentors and SSI Mantra simulation setups', color: 'amber' },
   { icon: Users, title: 'Expert Faculty', desc: '10+ national faculty across general surgery, GI, urology, gynecology, oncology and bariatric surgery', color: 'accent' },
   { icon: MessageSquare, title: 'Interactive Case Discussions', desc: 'Live Q&A and panel discussions with operating faculty after each case', color: 'amber' },
@@ -253,7 +258,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { value: '14', label: 'Live Surgeries', color: 'text-rlc-accent' },
+              { value: '12', label: 'Live Surgeries', color: 'text-rlc-accent' },
               { value: '10+', label: 'Expert Faculty', color: 'text-white' },
               { value: '200+', label: 'Delegates', color: 'text-white' },
               { value: '2', label: 'Days of Learning', color: 'text-rlc-amber' },
@@ -440,14 +445,14 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <div className="text-rlc-accent text-sm font-semibold uppercase tracking-widest mb-4">Full programme</div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">Schedule</h2>
-            <p className="text-white/40">14 live surgeries across 2 days + SSI Mantra Simulation Bus</p>
+            <p className="text-white/40">12 live surgeries across 2 days + SSI Mantra Simulation Bus</p>
           </div>
 
           {/* DAY 1 */}
           <div className="mb-10">
             <div className="flex items-center gap-3 mb-4">
               <span className="text-sm font-bold uppercase tracking-widest text-rlc-accent">Day 1</span>
-              <span className="text-sm text-white/40">Sat 20 June · 4 PM – 11 PM</span>
+              <span className="text-sm text-white/40">Sat 20 June · 2:30 PM – 9 PM</span>
               <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-rlc-accent/10 text-rlc-accent border border-rlc-accent/20">Super-Specialty</span>
             </div>
             <div className="space-y-1.5">
@@ -482,6 +487,16 @@ export default function HomePage() {
                       Networking
                     </span>
                   )}
+                  {s.type === 'lecture' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rlc-accent/10 text-rlc-accent border border-rlc-accent/20">
+                      Lecture
+                    </span>
+                  )}
+                  {s.type === 'panel' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/[0.06] text-white/60 border border-white/10">
+                      Panel
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
@@ -491,7 +506,7 @@ export default function HomePage() {
           <div className="mb-6">
             <div className="flex items-center gap-3 mb-4">
               <span className="text-sm font-bold uppercase tracking-widest text-rlc-amber">Day 2</span>
-              <span className="text-sm text-white/40">Sun 21 June · 8 AM – 4 PM</span>
+              <span className="text-sm text-white/40">Sun 21 June · 8 AM – 5 PM</span>
               <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-rlc-amber/10 text-rlc-amber border border-rlc-amber/20">General & GI Surgery</span>
             </div>
             <div className="space-y-1.5">
@@ -519,6 +534,16 @@ export default function HomePage() {
                   {s.type === 'live' && (
                     <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
                       Live
+                    </span>
+                  )}
+                  {s.type === 'lecture' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rlc-accent/10 text-rlc-accent border border-rlc-accent/20">
+                      Lecture
+                    </span>
+                  )}
+                  {s.type === 'panel' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/[0.06] text-white/60 border border-white/10">
+                      Panel
                     </span>
                   )}
                 </div>
@@ -549,7 +574,7 @@ export default function HomePage() {
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">Faculty</h2>
             <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-              India&apos;s leading robotic and laparoscopic surgeons across <span className="text-white font-semibold">general surgery, GI/HPB, urology, gynecology, surgical oncology and bariatric surgery</span> — performing all 14 live cases over 2 days.
+              India&apos;s leading robotic and laparoscopic surgeons across <span className="text-white font-semibold">general surgery, GI/HPB, urology, gynecology, surgical oncology and bariatric surgery</span> — performing live surgeries and delivering expert lectures across 2 days.
             </p>
           </div>
 
@@ -562,9 +587,11 @@ export default function HomePage() {
               { name: 'Dr. Manoranjan Kushwaha',  role: 'General Surgeon' },
               { name: 'Dr. Smit Solanki',         role: 'Gynec Surgeon' },
               { name: 'Dr. Sameer Rege',          role: 'General Surgeon' },
-              { name: 'Dr. Digvijay Bedi',        role: 'Bariatric Surgeon' },
+              { name: 'Dr. Digvijaysingh Bedi',  role: 'Bariatric Surgeon' },
               { name: 'Dr. Bhavin Vadodariya',    role: 'Surgical Oncologist' },
               { name: 'Dr. Anagha Zope',          role: 'Breast Oncoplastic Surgeon' },
+              { name: 'Dr. Dipak Limbachiya',     role: 'Laparoscopic Gynec Surgeon' },
+              { name: 'Dr. Kalpesh Jani',         role: 'Laparoscopic & GI Surgeon' },
             ].map((f) => (
               <div key={f.name} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 hover:border-rlc-accent/30 hover:bg-white/[0.04] transition-all">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rlc-accent/30 to-rlc-amber/20 flex items-center justify-center mb-3 text-base font-bold text-white">
@@ -582,7 +609,7 @@ export default function HomePage() {
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Faculty</div>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
-              <div className="text-3xl font-bold text-rlc-accent">14</div>
+              <div className="text-3xl font-bold text-rlc-accent">12</div>
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Live Cases</div>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
