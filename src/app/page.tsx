@@ -31,7 +31,7 @@ const DAY1_SCHEDULE = [
   { time: '17:30', title: 'Robotic Hysterectomy', sub: 'Dr. Smit Solanki · Gynecology · SSI Mantra', type: 'live', highlight: true },
   { time: '17:30', title: 'Laparoscopic Gynecological Surgery', sub: 'Dr. Dipak Limbachiya · Gynecology', type: 'live', highlight: true },
   { time: '19:30', title: 'Robotic Surgical Oncology', sub: 'To Be Announced · SSI Mantra', type: 'live', highlight: true },
-  { time: '19:30', title: 'Oncoplastic Breast Surgery', sub: 'Dr. Anagha Zope · Surgical Oncology', type: 'live', highlight: true },
+  { time: '19:30', title: 'Oncoplastic Breast Surgery', sub: 'Dr. Anagha Zope · Surgical Oncology', type: 'recorded', highlight: true },
   { time: '21:00', title: 'Dinner & Networking', type: 'dinner' },
 ];
 
@@ -44,7 +44,7 @@ const DAY2_SCHEDULE = [
   { time: '10:30', title: 'Lecture', sub: 'To Be Announced', type: 'lecture' },
   { time: '11:00', title: 'Robotic Cholecystectomy', sub: 'Dr. Milind Akhani · GI / HPB · SSI Mantra', type: 'live', highlight: true },
   { time: '11:00', title: 'Laparoscopic Nissen Fundoplication', sub: 'Dr. Manoranjan Kushwaha · General Surgery', type: 'live', highlight: true },
-  { time: '12:30', title: 'Lecture: Critical Circle of Fundoplication — Creating Uniform Wraps', sub: 'Dr. Kalpesh Jani', type: 'lecture' },
+  { time: '12:30', title: 'Critical Circle of Fundoplication — Uniform Wraps', sub: 'Dr. Kalpesh Jani', type: 'recorded', highlight: true },
   { time: '13:00', title: 'Lunch', type: 'break' },
   { time: '14:00', title: 'Robotic Bariatric Surgery', sub: 'Dr. Digvijaysingh Bedi · Bariatric · SSI Mantra', type: 'live', highlight: true },
   { time: '14:00', title: 'Laparoscopic ETEP — Inguinal Hernia Repair', sub: 'Dr. Krunal Solanki · General Surgery', type: 'live', highlight: true },
@@ -443,7 +443,7 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <div className="text-rlc-accent text-sm font-semibold uppercase tracking-widest mb-4">Full programme</div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">Schedule</h2>
-            <p className="text-white/40">12 live surgeries across 2 days + SSI Mantra Simulation Bus</p>
+            <p className="text-white/40">12 live surgeries + 2 recorded cases across 2 days + SSI Mantra Simulation Bus</p>
           </div>
 
           {/* DAY 1 */}
@@ -483,6 +483,11 @@ export default function HomePage() {
                   {s.type === 'dinner' && (
                     <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rlc-amber/10 text-rlc-amber border border-rlc-amber/20">
                       Networking
+                    </span>
+                  )}
+                  {s.type === 'recorded' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rlc-amber/10 text-rlc-amber border border-rlc-amber/20">
+                      Recorded
                     </span>
                   )}
                   {s.type === 'lecture' && (
@@ -542,6 +547,11 @@ export default function HomePage() {
                   {s.type === 'panel' && (
                     <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/[0.06] text-white/60 border border-white/10">
                       Panel
+                    </span>
+                  )}
+                  {s.type === 'recorded' && (
+                    <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rlc-amber/10 text-rlc-amber border border-rlc-amber/20">
+                      Recorded
                     </span>
                   )}
                 </div>
@@ -606,8 +616,8 @@ export default function HomePage() {
               <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Faculty</div>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
-              <div className="text-3xl font-bold text-rlc-accent">12</div>
-              <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Live Cases</div>
+              <div className="text-3xl font-bold text-rlc-accent">14</div>
+              <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wider">Surgical Cases</div>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] py-5 text-center">
               <div className="text-3xl font-bold text-rlc-accent">6</div>
