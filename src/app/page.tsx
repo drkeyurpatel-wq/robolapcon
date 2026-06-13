@@ -26,14 +26,12 @@ const CONF = {
 const DAY1_SCHEDULE = [
   { time: '14:30', title: 'Registration & Afternoon Tea', type: 'break' },
   { time: '15:00', title: 'Robotic Nephrectomy', sub: 'Dr. Keval Patel · Urology · SSI Mantra', type: 'live', highlight: true },
-  { time: '15:00', title: 'Laparoscopic Bariatric Surgery', sub: 'Dr. Mahendra Narwaria · Bariatric', type: 'live', highlight: true },
+  { time: '16:15', title: 'Laparoscopic Bariatric Surgery', sub: 'Dr. Mahendra Narwaria · Bariatric', type: 'live', highlight: true },
   { time: '16:30', title: 'Inauguration Ceremony', type: 'ceremony' },
-  { time: '16:30', title: 'Recorded Address — Dr Srivastava', type: 'ceremony' },
-  { time: '17:00', title: 'Robotic Hysterectomy', sub: 'Dr. Smit Solanki · Gynecology · SSI Mantra', type: 'live', highlight: true },
-  { time: '17:00', title: 'Laparoscopic Gynecological Surgery', sub: 'Dr. Dipak Limbachiya · Gynecology', type: 'live', highlight: true },
-  { time: '18:30', title: 'Lecture on Robotic Mastectomy', sub: 'Dr. Anagha Zope · Breast Oncoplasty', type: 'lecture' },
-  { time: '19:00', title: 'Robotic Surgical Oncology', sub: 'To Be Announced · SSI Mantra', type: 'live', highlight: true },
-  { time: '20:30', title: 'Panel Discussion + Interactive Q&A', type: 'panel' },
+  { time: '17:30', title: 'Robotic Hysterectomy', sub: 'Dr. Smit Solanki · Gynecology · SSI Mantra', type: 'live', highlight: true },
+  { time: '17:30', title: 'Laparoscopic Gynecological Surgery', sub: 'Dr. Dipak Limbachiya · Gynecology', type: 'live', highlight: true },
+  { time: '19:30', title: 'Robotic Surgical Oncology', sub: 'To Be Announced · SSI Mantra', type: 'live', highlight: true },
+  { time: '19:30', title: 'Oncoplastic Breast Surgery', sub: 'Dr. Anagha Zope · Surgical Oncology', type: 'live', highlight: true },
   { time: '21:00', title: 'Dinner & Networking', type: 'dinner' },
 ];
 
@@ -588,7 +586,6 @@ export default function HomePage() {
               { name: 'Dr. Smit Solanki',         role: 'Gynec Surgeon' },
               { name: 'Dr. Sameer Rege',          role: 'General Surgeon' },
               { name: 'Dr. Digvijaysingh Bedi',  role: 'Bariatric Surgeon' },
-              { name: 'Dr. Bhavin Vadodariya',    role: 'Surgical Oncologist' },
               { name: 'Dr. Anagha Zope',          role: 'Breast Oncoplastic Surgeon' },
               { name: 'Dr. Dipak Limbachiya',     role: 'Laparoscopic Gynec Surgeon' },
               { name: 'Dr. Kalpesh Jani',         role: 'Laparoscopic & GI Surgeon' },
