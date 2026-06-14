@@ -11,7 +11,7 @@ export default function LivePage() {
   const { slug } = useParams<{ slug: string }>();
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const [event, setEvent] = useState<any>(null);
-  const [tab, setTab] = useState<'polls' | 'qa' | 'feed'>('polls');
+  const [tab, setTab] = useState<'polls' | 'qa'>('polls');
   const [delegateId, setDelegateId] = useState('');
   const [delegateName, setDelegateName] = useState('');
   const [identified, setIdentified] = useState(false);
@@ -242,7 +242,7 @@ export default function LivePage() {
         </div>
         {/* Tabs */}
         <div className="flex border-t border-rlc-border">
-          {([['polls', BarChart3, 'Polls'], ['qa', MessageSquare, 'Q&A'], ['feed', Radio, 'Live Feed']] as const).map(([key, Icon, label]) => (
+          {([['polls', BarChart3, 'Polls'], ['qa', MessageSquare, 'Q&A']] as const).map(([key, Icon, label]) => (
             <button key={key} onClick={() => setTab(key as any)}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium transition-colors ${tab === key ? 'text-rlc-accent border-b-2 border-rlc-accent' : 'text-rlc-muted'}`}>
               <Icon className="w-4 h-4" />{label}
@@ -394,28 +394,6 @@ export default function LivePage() {
           </div>
         )}
 
-        {/* LIVE FEED TAB */}
-        {tab === 'feed' && (
-          <div className="space-y-3">
-            {updates.length === 0 && <p className="text-center text-rlc-muted py-12">Live commentary will appear here during surgeries.</p>}
-            {updates.map(u => (
-              <div key={u.id} className={`rlc-card !p-4 ${u.is_pinned ? 'border-rlc-accent/50' : ''} ${u.update_type === 'milestone' ? 'border-rlc-amber/50' : ''}`}>
-                <div className="flex items-start gap-3">
-                  <div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${
-                    u.update_type === 'milestone' ? 'bg-rlc-amber' : u.update_type === 'alert' ? 'bg-rlc-red' : 'bg-rlc-accent'
-                  }`} />
-                  <div>
-                    <p className="text-sm text-white">{u.content}</p>
-                    <p className="text-xs text-rlc-muted mt-1">
-                      {u.author_name && `${u.author_name} · `}
-                      {new Date(u.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </main>
   );
