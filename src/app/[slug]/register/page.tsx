@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, CalendarDays, Wrench } from 'lucide-react';
+import { Stethoscope, CheckCircle2, ArrowLeft, Loader2, CalendarDays, Phone } from 'lucide-react';
 
 const SPECIALTIES = [
   { value: 'general_surgery', label: 'General Surgery' },
@@ -130,13 +130,19 @@ export default function RegisterPage() {
   if (!event.registration_open) return (
     <main className="min-h-screen flex items-center justify-center px-4 py-12 text-center">
       <div className="max-w-md w-full animate-fade-in-up">
-        <div className="w-20 h-20 mx-auto rounded-full bg-rlc-amber/10 flex items-center justify-center mb-6">
-          <Wrench className="w-9 h-9 text-rlc-amber" />
+        <div className="w-20 h-20 mx-auto rounded-full bg-rlc-accent/10 flex items-center justify-center mb-6">
+          <CheckCircle2 className="w-10 h-10 text-rlc-accent" />
         </div>
-        <h1 className="text-3xl font-bold mb-3">We&apos;re Currently Upgrading</h1>
-        <p className="text-rlc-muted mb-2">Registration will resume soon.</p>
-        <p className="text-rlc-muted mb-8">Sorry for the inconvenience.</p>
-        <Link href={`/${slug}`} className="rlc-btn-outline"><ArrowLeft className="w-4 h-4" /> Back to Event</Link>
+        <h1 className="text-3xl font-bold mb-3">Registration Closed</h1>
+        <p className="text-rlc-muted mb-2">Thank you for the overwhelming response — we are now closed for registration.</p>
+        <p className="text-rlc-muted mb-6">For any questions or spot registration, please feel free to call us.</p>
+        <a href="tel:+918141625967" className="rlc-btn-amber !py-3 justify-center inline-flex mb-4">
+          <Phone className="w-4 h-4" /> +91 81416 25967
+        </a>
+        <p className="text-rlc-muted mb-8">Thank you.</p>
+        <div>
+          <Link href={`/${slug}`} className="rlc-btn-outline"><ArrowLeft className="w-4 h-4" /> Back to Event</Link>
+        </div>
       </div>
     </main>
   );
