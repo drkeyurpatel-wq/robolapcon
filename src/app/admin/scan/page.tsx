@@ -4,23 +4,38 @@ import { useState, useCallback } from 'react';
 import AdminShell from '@/components/AdminShell';
 import QrScanner from '@/components/QrScanner';
 import { createClient } from '@/lib/supabase/client';
-import { UtensilsCrossed, Gift, CheckCircle2, AlertCircle, RotateCcw } from 'lucide-react';
+import { UtensilsCrossed, Gift, CheckCircle2, AlertCircle, RotateCcw, ScanLine, Search } from 'lucide-react';
 
-type ScanMode = 'food' | 'gift';
+type Counter = 'food' | 'gift';
+type InputMode = 'scan' | 'search';
+
+interface SearchHit {
+  id: string;
+  full_name: string;
+  phone: string;
+  specialty: string;
+  specialty_other: string | null;
+  hospital: string | null;
+  city: string | null;
+  status: string;
+}
 
 export default function ScanPage() {
-  const [mode, setMode] = useState<ScanMode>('food');
+  const [mode, setMode] = useState<Counter>('food');
+  const [inputMode, setInputMode] = useState<InputMode>('scan');
   const [dayNumber, setDayNumber] = useState(1);
   const [scanning, setScanning] = useState(true);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ type: 'success' | 'error' | 'warn'; name: string; text: string } | null>(null);
   const [scanCount, setScanCount] = useState(0);
+  const [query, setQuery] = useState('');
+  const [hits, setHits] = useState<SearchHit[]>([]);
 
   const sb = createClient();
 
-  const handleScan = useCallback(async (id: string) => {
-    if (loading || !scanning) return;
-    setScanning(false);
+  // Core action: record the food/gift scan and (for gift) queue the certificate.
+  // Used by both the QR scanner and the name-search selection.
+  const record = useCallback(async (id: string) => {
     setLoading(true);
     setResult(null);
 
@@ -55,17 +70,45 @@ export default function ScanPage() {
     }
 
     setLoading(false);
+    setQuery('');
+    setHits([]);
     // Auto-reset after 3 seconds for quick scanning
     setTimeout(() => {
       setScanning(true);
       setResult(null);
     }, 3000);
-  }, [loading, scanning, mode, dayNumber, sb]);
+  }, [mode, dayNumber, sb]);
+
+  const handleScan = useCallback(async (id: string) => {
+    if (loading || !scanning) return;
+    setScanning(false);
+    await record(id);
+  }, [loading, scanning, record]);
+
+  const handleSearch = async (q: string) => {
+    setQuery(q);
+    if (q.trim().length < 2) { setHits([]); return; }
+    const { data } = await sb.rpc('rlc_search_delegates', { p_query: q });
+    setHits((data as any) || []);
+  };
+
+  const selectHit = async (id: string) => {
+    setHits([]);
+    setQuery('');
+    await record(id);
+  };
 
   const reset = () => {
     setScanning(true);
     setResult(null);
+    setQuery('');
+    setHits([]);
   };
+
+  const specialtyDisplay = (d: { specialty: string; specialty_other: string | null }) =>
+    d.specialty === 'other'
+      ? d.specialty_other || 'Other'
+      : d.specialty.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
     <AdminShell>
@@ -84,8 +127,8 @@ export default function ScanPage() {
           </select>
         </div>
 
-        {/* Mode Toggle */}
-        <div className="flex gap-2 mb-6">
+        {/* Counter Toggle */}
+        <div className="flex gap-2 mb-4">
           <button
             onClick={() => { setMode('food'); reset(); }}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all ${
@@ -104,8 +147,61 @@ export default function ScanPage() {
           </button>
         </div>
 
+        {/* Scan / Search Toggle */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => { setInputMode('scan'); reset(); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border transition ${
+              inputMode === 'scan' ? 'border-rlc-accent text-rlc-accent bg-rlc-accent/10' : 'border-rlc-border text-rlc-muted'
+            }`}
+          >
+            <ScanLine className="w-4 h-4" /> Scan QR
+          </button>
+          <button
+            onClick={() => { setInputMode('search'); setScanning(false); setResult(null); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border transition ${
+              inputMode === 'search' ? 'border-rlc-accent text-rlc-accent bg-rlc-accent/10' : 'border-rlc-border text-rlc-muted'
+            }`}
+          >
+            <Search className="w-4 h-4" /> Search
+          </button>
+        </div>
+
         {/* Scanner */}
-        <QrScanner onScan={handleScan} active={scanning} />
+        {inputMode === 'scan' && <QrScanner onScan={handleScan} active={scanning} />}
+
+        {/* Search */}
+        {inputMode === 'search' && !result && (
+          <div className="mb-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Name or phone number…"
+              autoFocus
+              className="rlc-input w-full !py-3 !text-base"
+            />
+            <div className="mt-3 space-y-2">
+              {hits.map((h) => (
+                <button
+                  key={h.id}
+                  onClick={() => selectHit(h.id)}
+                  className="w-full text-left rlc-card !p-4 hover:border-rlc-accent transition"
+                >
+                  <div className="font-semibold text-white">{h.full_name}</div>
+                  <div className="text-xs text-rlc-muted mt-0.5">
+                    {specialtyDisplay(h)}
+                    {h.hospital ? ` · ${h.hospital}` : ''}
+                    {h.city ? ` · ${h.city}` : ''} · {h.phone}
+                  </div>
+                </button>
+              ))}
+              {query.trim().length >= 2 && hits.length === 0 && (
+                <p className="text-sm text-rlc-muted text-center py-3">No delegates match {`"${query}"`}</p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Result — big, visible from a distance */}
         {result && (
@@ -125,7 +221,7 @@ export default function ScanPage() {
               result.type === 'warn' ? 'text-rlc-amber' :
               'text-rlc-red'
             }`}>{result.text}</p>
-            <p className="text-xs text-rlc-muted mt-3">Auto-scanning in 3s...</p>
+            <p className="text-xs text-rlc-muted mt-3">Auto-resetting in 3s...</p>
           </div>
         )}
 
@@ -136,7 +232,7 @@ export default function ScanPage() {
           </div>
         )}
 
-        {!scanning && !result && !loading && (
+        {inputMode === 'scan' && !scanning && !result && !loading && (
           <div className="mt-6 text-center">
             <button onClick={reset} className="rlc-btn-outline">
               <RotateCcw className="w-4 h-4" /> Scan Again
