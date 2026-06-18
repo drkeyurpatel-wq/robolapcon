@@ -32,7 +32,21 @@ export default function ScanPage() {
 
     const res = data as any;
     if (res?.success) {
-      setResult({ type: 'success', name: res.delegate_name, text: `${mode === 'food' ? '🍽' : '🎁'} ${res.delegate_name} — ${mode} collected` });
+      let extra = '';
+      if (mode === 'gift') {
+        try {
+          const { data: cert } = await sb.rpc('rlc_queue_certificate', {
+            p_delegate_id: id,
+            p_day_number: dayNumber,
+          });
+          if ((cert as any)?.success) {
+            extra = (cert as any).already_issued ? ' · cert already queued' : ' · 🎓 cert queued';
+          }
+        } catch (_) {
+          /* cert queue is best-effort; never block the gift scan */
+        }
+      }
+      setResult({ type: 'success', name: res.delegate_name, text: `${mode === 'food' ? '🍽' : '🎁'} ${res.delegate_name} — ${mode} collected${extra}` });
       setScanCount((c) => c + 1);
     } else if (res?.error === 'Already scanned') {
       setResult({ type: 'warn', name: res.delegate_name || '', text: res.message || 'Already collected' });
