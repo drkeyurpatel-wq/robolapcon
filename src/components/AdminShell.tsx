@@ -12,6 +12,7 @@ import {
   LogOut,
   ScanLine,
   UtensilsCrossed,
+  Gift,
   BarChart2,
   Radio,
   Activity,
@@ -20,7 +21,8 @@ import {
 const NAV_ITEMS = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: Activity },
   { href: '/admin/checkin', label: 'Check-in', icon: ScanLine },
-  { href: '/admin/scan', label: 'Food / Gift', icon: UtensilsCrossed },
+  { href: '/admin/scan/food', label: 'Food', icon: UtensilsCrossed },
+  { href: '/admin/scan/gift', label: 'Gift', icon: Gift },
   { href: '/admin/polls', label: 'Polls', icon: BarChart2 },
   { href: '/admin/live', label: 'Live Feed', icon: Radio },
   { href: '/admin/delegates', label: 'Delegates', icon: Users },
