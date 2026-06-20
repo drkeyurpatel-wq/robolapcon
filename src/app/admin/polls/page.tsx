@@ -177,10 +177,17 @@ export default function PollsPage() {
           <h3 className="text-sm font-semibold text-rlc-muted uppercase tracking-widest mb-3">Ready to Launch</h3>
           <div className="space-y-2">
             {draftPolls.map(p => (
-              <div key={p.id} className="rlc-card flex items-center gap-4">
+              <div key={p.id} className="rlc-card flex items-start gap-4">
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-white text-sm">{p.question}</h3>
-                  <span className="text-xs text-rlc-muted">{p.poll_type.replace('_', ' ')} · {(p.options || []).length} options</span>
+                  {(p.options || []).length > 0 && (
+                    <ul className="mt-1.5 flex flex-wrap gap-1.5">
+                      {(p.options || []).map((o: any, i: number) => (
+                        <li key={i} className="text-xs text-rlc-muted bg-rlc-bg-light px-2 py-0.5 rounded-md">{o.label}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <span className="text-xs text-rlc-muted mt-1.5 block">{p.poll_type.replace('_', ' ')} · {(p.options || []).length} options</span>
                 </div>
                 <div className="flex gap-1 shrink-0">
                   <button onClick={() => launchPoll(p.id)} className="rlc-btn-primary !py-2 !px-4" title="Launch">
