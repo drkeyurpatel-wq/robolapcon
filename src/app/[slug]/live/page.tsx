@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { MessageSquare, BarChart3, Send, ThumbsUp, Radio, ChevronUp } from 'lucide-react';
@@ -35,9 +35,12 @@ export default function LivePage() {
   // Poll results
   const [pollResults, setPollResults] = useState<Record<string, any>>({});
 
+  // Track the most recent live poll so we can show its results after it closes
+  const lastLivePollIdRef = useRef<string | null>(null);
+
   const sb = createClient();
 
-  // Auto-identify: URL param → localStorage → fallback
+  // Auto-identify: URL param -> localStorage -> fallback
   useEffect(() => {
     const identify = async (id: string) => {
       const { data } = await sb.rpc('rlc_lookup_delegate', { p_delegate_id: id });
@@ -74,7 +77,7 @@ export default function LivePage() {
         }
       } catch {}
 
-      // 3. Nothing found — show phone fallback
+      // 3. Nothing found - show phone fallback
       setShowPhoneFallback(true);
     };
 
@@ -97,31 +100,59 @@ export default function LivePage() {
     }
   };
 
-  // Load event + data
+  // Load event
   useEffect(() => {
     sb.rpc('get_event_by_slug', { p_slug: slug }).then(({ data }) => {
       if (data) setEvent(data);
     });
   }, [slug]);
 
+  // Load + track the active poll.
+  // IMPORTANT: resolve the live poll the SAME way the display screen does, via
+  // event_get_live_poll (status='live' ORDER BY launched_at DESC). The previous
+  // approach ordered by updated_at, which is never bumped on launch/close, so the
+  // phone never followed the live poll. Realtime is a booster; the 2s interval is
+  // the safety net for flaky conference wifi / backgrounded tabs.
   useEffect(() => {
     if (!event) return;
     const eid = event.id;
 
-    // Load polls (live + recently closed with results)
-    sb.from('event_polls').select('*').eq('event_id', eid).in('status', ['live', 'closed'])
-      .order('updated_at', { ascending: false }).limit(5)
-      .then(({ data }) => {
-        const all = data || [];
-        setPolls(all);
-        if (all.length > 0 && all.some((p: any) => p.status === 'live')) setTab('polls');
-        // Fetch results for closed polls
-        all.filter((p: any) => p.status === 'closed' && p.show_results).forEach((p: any) => {
-          sb.rpc('event_get_poll_results', { p_poll_id: p.id }).then(({ data: r }) => {
-            if ((r as any)?.success) setPollResults(prev => ({ ...prev, [p.id]: r }));
-          });
-        });
-      });
+    const loadActivePoll = async () => {
+      const { data } = await sb.rpc('event_get_live_poll', { p_event_id: eid });
+      const live = data as any;
+
+      if (live?.id) {
+        // A poll is live -> show it for voting.
+        lastLivePollIdRef.current = live.id;
+        setPolls([live]);
+        setPollResults({});
+        return;
+      }
+
+      // No live poll. If one just closed, show its results.
+      const lastId = lastLivePollIdRef.current;
+      if (lastId) {
+        const { data: r } = await sb.rpc('event_get_poll_results', { p_poll_id: lastId });
+        const res = r as any;
+        if (res?.success && res?.show_results) {
+          setPolls([{
+            id: lastId,
+            status: 'closed',
+            question: res.question,
+            poll_type: res.poll_type,
+            options: res.options,
+          }]);
+          setPollResults({ [lastId]: res });
+          return;
+        }
+      }
+
+      // Nothing live and nothing to reveal.
+      setPolls([]);
+    };
+
+    loadActivePoll();
+    const pollInterval = setInterval(loadActivePoll, 2000);
 
     // Load Q&A
     sb.from('event_qa').select('*').eq('event_id', eid).eq('is_approved', true)
@@ -133,23 +164,10 @@ export default function LivePage() {
       .order('created_at', { ascending: false }).limit(50)
       .then(({ data }) => setUpdates(data || []));
 
-    // Realtime subscriptions
+    // Realtime subscriptions (booster on top of the 2s poll)
     const pollCh = sb.channel('polls-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'event_polls', filter: `event_id=eq.${eid}` },
-        () => {
-          sb.from('event_polls').select('*').eq('event_id', eid).in('status', ['live', 'closed'])
-            .order('updated_at', { ascending: false }).limit(5)
-            .then(({ data }) => {
-              const all = data || [];
-              setPolls(all);
-              if (all.some((p: any) => p.status === 'live')) setTab('polls');
-              all.filter((p: any) => p.status === 'closed' && p.show_results).forEach((p: any) => {
-                sb.rpc('event_get_poll_results', { p_poll_id: p.id }).then(({ data: r }) => {
-                  if ((r as any)?.success) setPollResults(prev => ({ ...prev, [p.id]: r }));
-                });
-              });
-            });
-        })
+        loadActivePoll)
       .subscribe();
 
     const qaCh = sb.channel('qa-live')
@@ -162,7 +180,7 @@ export default function LivePage() {
         (payload) => { setUpdates(prev => [payload.new as any, ...prev]); })
       .subscribe();
 
-    return () => { sb.removeChannel(pollCh); sb.removeChannel(qaCh); sb.removeChannel(feedCh); };
+    return () => { clearInterval(pollInterval); sb.removeChannel(pollCh); sb.removeChannel(qaCh); sb.removeChannel(feedCh); };
   }, [event]);
 
   // Load my responses
