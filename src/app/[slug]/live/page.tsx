@@ -37,6 +37,9 @@ export default function LivePage() {
 
   // Track the most recent live poll so we can show its results after it closes
   const lastLivePollIdRef = useRef<string | null>(null);
+  // Monotonic sequence so only the newest poll-load applies its state (prevents
+  // out-of-order/stale reads from flipping the screen back and forth).
+  const loadSeqRef = useRef(0);
 
   const sb = createClient();
 
@@ -118,7 +121,10 @@ export default function LivePage() {
     const eid = event.id;
 
     const loadActivePoll = async () => {
+      const seq = ++loadSeqRef.current;
       const { data } = await sb.rpc('event_get_live_poll', { p_event_id: eid });
+      // A newer load started while we were awaiting — discard this stale result.
+      if (seq !== loadSeqRef.current) return;
       const live = data as any;
 
       if (live?.id) {
@@ -133,6 +139,7 @@ export default function LivePage() {
       const lastId = lastLivePollIdRef.current;
       if (lastId) {
         const { data: r } = await sb.rpc('event_get_poll_results', { p_poll_id: lastId });
+        if (seq !== loadSeqRef.current) return;
         const res = r as any;
         if (res?.success && res?.show_results) {
           setPolls([{
@@ -148,6 +155,7 @@ export default function LivePage() {
       }
 
       // Nothing live and nothing to reveal.
+      if (seq !== loadSeqRef.current) return;
       setPolls([]);
     };
 

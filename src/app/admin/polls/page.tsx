@@ -19,6 +19,10 @@ export default function PollsPage() {
   const [duration, setDuration] = useState(30);
   const [liveCountdown, setLiveCountdown] = useState<Record<string, number>>({});
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // Poll ids whose auto-close has already been fired, so the 1s ticker never
+  // calls event_close_poll more than once per poll (which caused an update storm
+  // and made delegate phones strobe between question and results).
+  const closingRef = useRef<Set<string>>(new Set());
   const sb = createClient();
 
   useEffect(() => {
@@ -32,21 +36,20 @@ export default function PollsPage() {
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
-      setLiveCountdown(prev => {
-        const next: Record<string, number> = {};
-        for (const p of polls) {
-          if (p.status === 'live' && p.launched_at) {
-            const elapsed = Math.floor((Date.now() - new Date(p.launched_at).getTime()) / 1000);
-            const remaining = Math.max(0, (p.duration_seconds || 30) - elapsed);
-            next[p.id] = remaining;
-            // Auto-close when timer hits 0
-            if (remaining === 0) {
-              sb.rpc('event_close_poll', { p_poll_id: p.id }).then(() => loadPolls(eventId));
-            }
+      const next: Record<string, number> = {};
+      for (const p of polls) {
+        if (p.status === 'live' && p.launched_at) {
+          const elapsed = Math.floor((Date.now() - new Date(p.launched_at).getTime()) / 1000);
+          const remaining = Math.max(0, (p.duration_seconds || 30) - elapsed);
+          next[p.id] = remaining;
+          // Auto-close exactly once when the timer hits 0.
+          if (remaining === 0 && !closingRef.current.has(p.id)) {
+            closingRef.current.add(p.id);
+            sb.rpc('event_close_poll', { p_poll_id: p.id }).then(() => loadPolls(eventId));
           }
         }
-        return next;
-      });
+      }
+      setLiveCountdown(next);
     }, 1000);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [polls, eventId]);
@@ -81,6 +84,7 @@ export default function PollsPage() {
   };
 
   const launchPoll = async (id: string) => {
+    closingRef.current.delete(id); // allow this poll to auto-close again
     await sb.rpc('event_launch_poll', { p_poll_id: id, p_duration: duration });
     loadPolls(eventId);
   };
