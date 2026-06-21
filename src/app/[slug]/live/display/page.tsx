@@ -15,6 +15,10 @@ export default function DisplayPage() {
   const [phase, setPhase] = useState<'idle' | 'voting' | 'reveal'>('idle');
   const [responseCount, setResponseCount] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // Once a given poll launch (id + launched_at) has been revealed, don't let the
+  // 2s poll / realtime drag the screen back into 'voting' while the DB row is
+  // still 'live' for the gap before it closes. This was the source of the strobe.
+  const revealedKeyRef = useRef<string | null>(null);
   const sb = createClient();
 
   useEffect(() => {
@@ -31,6 +35,10 @@ export default function DisplayPage() {
       if (p?.id) {
         setPoll(p);
         setResponseCount(p.response_count || 0);
+        // If this exact poll launch has already been revealed locally, hold the
+        // results on screen instead of snapping back to voting.
+        const key = `${p.id}:${p.launched_at}`;
+        if (revealedKeyRef.current === key) return;
         if (p.status === 'live' && !p.show_results) {
           setPhase('voting');
           // Compute countdown
@@ -46,6 +54,7 @@ export default function DisplayPage() {
           // Poll just closed — fetch results
           const { data: r } = await sb.rpc('event_get_poll_results', { p_poll_id: poll.id });
           if ((r as any)?.success && (r as any)?.show_results) {
+            revealedKeyRef.current = `${poll.id}:${poll.launched_at}`;
             setResults(r);
             setPhase('reveal');
             setCountdown(null);
@@ -94,6 +103,7 @@ export default function DisplayPage() {
         await new Promise(r => setTimeout(r, 1500));
         const { data } = await sb.rpc('event_get_poll_results', { p_poll_id: poll.id });
         if ((data as any)?.success) {
+          revealedKeyRef.current = `${poll.id}:${poll.launched_at}`;
           setResults(data);
           setPhase('reveal');
         }
