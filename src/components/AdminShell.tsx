@@ -16,6 +16,7 @@ import {
   BarChart2,
   Radio,
   Activity,
+  Star,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -30,6 +31,7 @@ const NAV_ITEMS = [
   { href: '/admin/faculty', label: 'Faculty', icon: UserCircle },
   { href: '/admin/sessions', label: 'Sessions', icon: CalendarDays },
   { href: '/admin/reports', label: 'Reports', icon: BarChart3 },
+  { href: '/admin/feedback', label: 'Feedback', icon: Star },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
