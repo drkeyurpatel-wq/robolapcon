@@ -1,13 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Stethoscope, CheckCircle2, Star, ArrowLeft } from 'lucide-react';
 
 const RATINGS = [1, 2, 3, 4, 5];
 const LABELS: Record<number, string> = { 1: 'Poor', 2: 'Fair', 3: 'Good', 4: 'Very Good', 5: 'Excellent' };
+
+const SPECIALTIES: [string, string][] = [
+  ['general_surgery', 'General Surgery'],
+  ['surgical_gastroenterology', 'Surgical Gastroenterology'],
+  ['urology', 'Urology'],
+  ['gynecology_obstetrics', 'Gynecology & Obstetrics'],
+  ['surgical_oncology', 'Surgical Oncology'],
+  ['colorectal_surgery', 'Colorectal Surgery'],
+  ['bariatric_surgery', 'Bariatric Surgery'],
+  ['pediatric_surgery', 'Pediatric Surgery'],
+  ['thoracic_surgery', 'Thoracic Surgery'],
+  ['other', 'Other'],
+];
 
 function StarRating({ value, onChange, label }: { value: number; onChange: (v: number) => void; label: string }) {
   const [hover, setHover] = useState(0);
@@ -33,15 +46,17 @@ function StarRating({ value, onChange, label }: { value: number; onChange: (v: n
 
 export default function FeedbackPage() {
   const { slug } = useParams<{ slug: string }>();
-  const searchParams = useSearchParams();
-  const delegateId = searchParams.get('d') || null;
 
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [err, setErr] = useState('');
 
   const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    speciality: '',
     overall_rating: 0,
     surgery_quality: 0,
     venue_rating: 0,
@@ -62,15 +77,28 @@ export default function FeedbackPage() {
     });
   }, [slug]);
 
+  const phoneDigits = form.phone.replace(/\D/g, '');
+  const valid =
+    form.name.trim().length > 1 &&
+    phoneDigits.length >= 10 &&
+    !!form.speciality &&
+    form.overall_rating > 0;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.overall_rating === 0) return;
+    setErr('');
+    if (!valid) {
+      setErr('Please fill in your name, mobile number, speciality and an overall rating.');
+      return;
+    }
     setSubmitting(true);
     try {
       const sb = createClient();
-      await sb.rpc('rlc_submit_feedback', {
+      const { error } = await sb.rpc('rlc_submit_feedback', {
         p_event_id: event.id,
-        p_delegate_id: delegateId,
+        p_name: form.name.trim(),
+        p_phone: form.phone.trim(),
+        p_speciality: form.speciality,
         p_overall_rating: form.overall_rating,
         p_surgery_quality: form.surgery_quality || null,
         p_venue_rating: form.venue_rating || null,
@@ -82,9 +110,16 @@ export default function FeedbackPage() {
         p_attend_next_year: form.attend_next_year || null,
         p_additional_comments: form.additional_comments.trim() || null,
       });
+      if (error) {
+        setErr('Something went wrong submitting your feedback. Please try again.');
+        return;
+      }
       setSuccess(true);
-    } catch { /* ignore */ }
-    finally { setSubmitting(false); }
+    } catch {
+      setErr('Something went wrong submitting your feedback. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-rlc-muted">Loading...</div>;
@@ -114,10 +149,38 @@ export default function FeedbackPage() {
           <span className="font-bold text-lg">Health<span className="text-rlc-accent">1</span> Events</span>
         </div>
         <h1 className="text-3xl font-bold mt-4">How was {event.name}?</h1>
-        <p className="text-rlc-muted mt-1">Your honest feedback helps us improve. Takes less than 2 minutes. Responses are anonymous.</p>
+        <p className="text-rlc-muted mt-1">Your honest feedback helps us improve. Takes less than 2 minutes.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto space-y-6">
+        <div>
+          <label className="rlc-label">Name *</label>
+          <input type="text" name="name" value={form.name}
+            onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+            className="rlc-input" placeholder="Dr. Full Name" autoComplete="name" />
+        </div>
+
+        <div>
+          <label className="rlc-label">Mobile Number *</label>
+          <input type="tel" inputMode="numeric" name="phone" value={form.phone}
+            onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
+            className="rlc-input" placeholder="Registered WhatsApp number" autoComplete="tel" />
+        </div>
+
+        <div>
+          <label className="rlc-label">Speciality *</label>
+          <select name="speciality" value={form.speciality}
+            onChange={e => setForm(p => ({ ...p, speciality: e.target.value }))}
+            className="rlc-input">
+            <option value="" disabled>Select your speciality</option>
+            {SPECIALTIES.map(([val, lbl]) => (
+              <option key={val} value={val}>{lbl}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="h-px bg-rlc-border my-2" />
+
         <StarRating value={form.overall_rating} onChange={v => setForm(p => ({ ...p, overall_rating: v }))} label="Overall Experience *" />
         <StarRating value={form.surgery_quality} onChange={v => setForm(p => ({ ...p, surgery_quality: v }))} label="Live Surgery Quality" />
         <StarRating value={form.venue_rating} onChange={v => setForm(p => ({ ...p, venue_rating: v }))} label="Venue & Arrangements" />
@@ -168,11 +231,12 @@ export default function FeedbackPage() {
             className="rlc-input !h-20 resize-none" placeholder="Optional" />
         </div>
 
-        {form.overall_rating === 0 && (
-          <p className="text-xs text-rlc-amber">Please rate your overall experience to submit.</p>
+        {err && <p className="text-xs text-rlc-red">{err}</p>}
+        {!valid && !err && (
+          <p className="text-xs text-rlc-amber">Name, mobile, speciality and an overall rating are required.</p>
         )}
 
-        <button type="submit" disabled={submitting || form.overall_rating === 0}
+        <button type="submit" disabled={submitting || !valid}
           className="rlc-btn-amber w-full text-base !py-3.5 disabled:opacity-50 disabled:cursor-not-allowed">
           {submitting ? 'Submitting...' : 'Submit Feedback'}
         </button>
