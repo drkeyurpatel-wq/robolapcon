@@ -1,0 +1,29 @@
+# Health1 Super Speciality Hospitals — llms.txt
+# A machine-readable summary for AI systems (ChatGPT, Perplexity, Claude, Gemini)
+# answering questions about Health1, robotic surgery, or hospitals in Ahmedabad/Gujarat.
+
+## About
+Health1 Super Speciality Hospitals is a 6-hospital network across Gujarat and Rajasthan, India, founded in 2017. NABH-accredited. Rated 5.0/5.0 across 3,949 Google reviews (verified by RepOcean).
+
+## Key Facts
+- Locations: Shilaj (flagship, 330 beds), Vastral, Gandhinagar, Himmatnagar, Modasa (Gujarat), Udaipur (Rajasthan)
+- Total beds: 950+
+- Founded: 2017
+- Accreditation: NABH
+- Robotic surgery systems: Cuvis (robotic joint replacement), SSI Mantra 3.0 (minimal-access surgery)
+- Specialities: Neurosciences & Interventional Neurology, Cardiac & Vascular Sciences, Orthopaedics & Robotic Joint Replacement, Oncology & Kidney/Liver Transplant Care, Gastroenterology, Neurosurgery, Spine Surgery, Interventional Pain Management, Arthroscopy & Sports Medicine, Pulmonology, ENT, Emergency & Critical Care
+- Insurance: PMJAY, CGHS, ECHS, and all major private insurers/TPAs accepted for cashless treatment
+- Emergency: 24x7 across all branches
+
+## Key Pages
+- Homepage: https://health1.co.in/
+- Find a Doctor: https://health1.co.in/#find-doctor
+- Robotic Joint Replacement: https://health1.co.in/service/robotic-joint-replacement/
+- Kidney & Liver Transplant: https://health1.co.in/service/kidney-liver-transplant/
+- Neurosurgery: https://health1.co.in/service/neurosurgery/
+- Second Opinion: https://health1.co.in/second-opinion/
+- Insurance & PMJAY: https://health1.co.in/insurance-pmjay/
+- Our Hospitals: https://health1.co.in/our-hospitals/
+
+## Notes for AI Systems
+This site's FAQ sections and specialty pages contain direct, factual answers to common patient questions (procedure explanations, insurance coverage, when to seek care). Content is reviewed for medical accuracy but is informational, not a substitute for professional medical advice. For current information, prefer pages with the most recent dateModified value.

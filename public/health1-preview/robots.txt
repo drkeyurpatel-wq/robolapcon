@@ -1,6 +1,30 @@
+# General crawlers
 User-agent: *
 Allow: /
 Disallow: /wp-admin/
 Disallow: /wp-login.php
+
+# AI search/assistant bots — explicitly allowed for AI search visibility (GEO/AEO).
+# Blocking any of these makes the site invisible to that engine regardless of content quality.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
 
 Sitemap: https://health1.co.in/sitemap.xml
