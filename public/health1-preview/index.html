@@ -650,24 +650,24 @@
       <h2 data-i18n="router-h2">How can we help today?</h2>
     </div>
     <div class="router-grid reveal">
-      <div class="router-card">
+      <a href="#find-doctor" class="router-card" style="text-decoration:none; color:inherit; display:block;">
         <div class="icon">🩺</div>
         <h3 data-i18n="router-1-h3">I need care</h3>
         <p data-i18n="router-1-p">Find a doctor, book an appointment, or check insurance and PMJAY coverage.</p>
         <div class="arrow" data-i18n="router-1-arrow">Explore patient care →</div>
-      </div>
-      <div class="router-card">
+      </a>
+      <a href="./health1-careers.html" class="router-card" style="text-decoration:none; color:inherit; display:block;">
         <div class="icon">👨‍⚕️</div>
         <h3 data-i18n="router-2-h3">I'm a doctor</h3>
         <p data-i18n="router-2-p">See open positions, our referral program, and where the group is headed next.</p>
         <div class="arrow" data-i18n="router-2-arrow">Explore careers →</div>
-      </div>
-      <div class="router-card">
+      </a>
+      <a href="./health1-about.html" class="router-card" style="text-decoration:none; color:inherit; display:block;">
         <div class="icon">🏥</div>
         <h3 data-i18n="router-3-h3">About Health1</h3>
         <p data-i18n="router-3-p">Our story, accreditations, governance, and press.</p>
         <div class="arrow" data-i18n="router-3-arrow">Learn more →</div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -681,16 +681,21 @@
       <p data-i18n="robo-p">Precision that's genuinely hard for another Ahmedabad hospital to match.</p>
     </div>
     <div class="robotic-grid reveal">
-      <div class="robotic-card">
+      <a href="./health1-robotic-joint-replacement.html" class="robotic-card" style="text-decoration:none; display:block;">
         <div class="tag">Cuvis Joint</div>
         <h3 data-i18n="robo-1-h3">Robotic Knee &amp; Hip Replacement</h3>
         <p data-i18n="robo-1-p">Sub-millimeter precision in arthroplasty. Most patients begin walking the same day as surgery.</p>
-      </div>
-      <div class="robotic-card">
+        <div style="margin-top:12px; font-size:13px; font-weight:600; color:#8FD4CC;">Learn more →</div>
+      </a>
+      <a href="./health1-kidney-liver-transplant.html" class="robotic-card" style="text-decoration:none; display:block;">
         <div class="tag">SSI Mantra 3.0</div>
         <h3 data-i18n="robo-2-h3">Robotic Minimal-Access Surgery</h3>
         <p data-i18n="robo-2-p">Used across cardiac, urological, oncological and general surgery — smaller incisions, faster discharge.</p>
-      </div>
+        <div style="margin-top:12px; font-size:13px; font-weight:600; color:#8FD4CC;">Learn more →</div>
+      </a>
+    </div>
+    <div style="text-align:center; margin-top:24px;">
+      <a href="./index.html#find-doctor" class="btn btn-amber" style="padding:12px 26px; display:inline-flex;">Book a Robotic Surgery Consultation</a>
     </div>
   </div>
 </section>
@@ -1527,6 +1532,7 @@
         <div class="range">₹${lo} – ₹${hi}</div>
         <div style="font-size:13px; color:var(--muted); margin-top:4px;">Estimated ${payment==='cash' ? 'self-pay' : 'out-of-pocket after insurance/PMJAY'} cost for ${opt.textContent}</div>
         <div class="disclaimer">This is an illustrative estimate only, not a quote. Final cost depends on your specific case, room category, and length of stay — confirm with our billing desk before admission.</div>
+        <a href="#find-doctor" class="btn btn-amber" style="margin-top:14px; padding:10px 20px; display:inline-flex; font-size:13px;">Book a Consultation</a>
       </div>`;
   }
   document.getElementById('estProcedure').addEventListener('change', updateEstimate);
