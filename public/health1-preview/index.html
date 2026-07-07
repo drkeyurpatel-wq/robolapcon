@@ -474,8 +474,12 @@
   .branch-card{
     border-radius:14px; overflow:hidden; background:var(--card); border:1px solid var(--line);
     transition:transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
+    position:relative;
   }
   .branch-card:hover{transform:translateY(-3px); box-shadow:0 12px 28px rgba(0,0,0,0.08);}
+  .card-stretch-link{position:absolute; inset:0; z-index:1;}
+  .branch-body{position:relative; z-index:2; pointer-events:none;}
+  .branch-body a{position:relative; z-index:3; pointer-events:auto;}
   .branch-img{height:150px; background-size:cover; background-position:center; position:relative;}
   .branch-img.placeholder{
     background:repeating-linear-gradient(45deg, #EFEBE2, #EFEBE2 10px, #E7E1D3 10px, #E7E1D3 20px);
@@ -895,28 +899,34 @@
     </div>
     <div class="branch-grid reveal">
       <div class="branch-card">
+        <a href="./health1-branch-shilaj.html" class="card-stretch-link" aria-label="View Health1 Shilaj branch details"></a>
         <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/gallery_img_2.jpg')"></div>
-        <div class="branch-body"><h3><a href="./health1-branch-shilaj.html" style="color:inherit; text-decoration:none;">Health1 — Shilaj</a></h3><div class="beds" data-i18n="hosp-1-beds">330 beds · Flagship</div><div class="call">📞 +91 90 33 11 44 44</div><div class="cross-link" data-i18n="hosp-1-link">Specialities: <a href="#specialities">Neuro</a> · <a href="#specialities">Cardiac</a> · <a href="#robotic">Robotic Ortho</a> · <a href="#specialities">Transplant</a></div></div>
+        <div class="branch-body"><h3>Health1 — Shilaj</h3><div class="beds" data-i18n="hosp-1-beds">330 beds · Flagship</div><div class="call"><a href="tel:+919033114444">📞 +91 90 33 11 44 44</a></div><div class="cross-link" data-i18n="hosp-1-link">Specialities: <a href="#specialities">Neuro</a> · <a href="#specialities">Cardiac</a> · <a href="#robotic">Robotic Ortho</a> · <a href="#specialities">Transplant</a></div></div>
       </div>
       <div class="branch-card">
+        <a href="./health1-branch-vastral.html" class="card-stretch-link" aria-label="View Health1 Vastral branch details"></a>
         <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/Vastral-Hospital-1.png')"></div>
-        <div class="branch-body"><h3><a href="./health1-branch-vastral.html" style="color:inherit; text-decoration:none;">Health1 — Vastral</a></h3><div class="beds" data-i18n="hosp-2-beds">111 beds</div><div class="call">📞 +91 90331 12222</div><div class="cross-link" data-i18n="hosp-2-link">Specialities: <a href="#specialities">Neuro</a> · <a href="#specialities">General Medicine</a></div></div>
+        <div class="branch-body"><h3>Health1 — Vastral</h3><div class="beds" data-i18n="hosp-2-beds">111 beds</div><div class="call"><a href="tel:+919033112222">📞 +91 90331 12222</a></div><div class="cross-link" data-i18n="hosp-2-link">Specialities: <a href="#specialities">Neuro</a> · <a href="#specialities">General Medicine</a></div></div>
       </div>
       <div class="branch-card">
+        <a href="./health1-branch-gandhinagar.html" class="card-stretch-link" aria-label="View SGS Health1 Gandhinagar branch details"></a>
         <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/SGS-Gandhinagar-1.jpeg')"></div>
-        <div class="branch-body"><h3><a href="./health1-branch-gandhinagar.html" style="color:inherit; text-decoration:none;">SGS Health1 — Gandhinagar</a></h3><div class="beds" data-i18n="hosp-3-beds">200 beds</div><div class="call">📞 +91 72270 74088</div><div class="cross-link" data-i18n="hosp-3-link">Specialities: <a href="#specialities">Cardiac</a> · <a href="#specialities">Neuro</a></div></div>
+        <div class="branch-body"><h3>SGS Health1 — Gandhinagar</h3><div class="beds" data-i18n="hosp-3-beds">200 beds</div><div class="call"><a href="tel:+917227074088">📞 +91 72270 74088</a></div><div class="cross-link" data-i18n="hosp-3-link">Specialities: <a href="#specialities">Cardiac</a> · <a href="#specialities">Neuro</a></div></div>
       </div>
       <div class="branch-card">
+        <a href="./health1-branch-himmatnagar.html" class="card-stretch-link" aria-label="View Avishkar Health1 Himmatnagar branch details"></a>
         <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/AVISHKAR-HEALTH1-HOSPITAL-1-scaled.jpg')"></div>
-        <div class="branch-body"><h3><a href="./health1-branch-himmatnagar.html" style="color:inherit; text-decoration:none;">Avishkar Health1 — Himmatnagar</a></h3><div class="beds" data-i18n="hosp-4-beds">100 beds</div><div class="call">📞 +91 97129 94444</div><div class="cross-link" data-i18n="hosp-4-link">Specialities: <a href="#specialities">General Medicine</a> · <a href="#specialities">Emergency</a></div></div>
+        <div class="branch-body"><h3>Avishkar Health1 — Himmatnagar</h3><div class="beds" data-i18n="hosp-4-beds">100 beds</div><div class="call"><a href="tel:+919712994444">📞 +91 97129 94444</a></div><div class="cross-link" data-i18n="hosp-4-link">Specialities: <a href="#specialities">General Medicine</a> · <a href="#specialities">Emergency</a></div></div>
       </div>
       <div class="branch-card">
+        <a href="./health1-branch-modasa.html" class="card-stretch-link" aria-label="View Unity Health1 Modasa branch details"></a>
         <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/08/health-1-hospital-modasa-1.jpeg')"></div>
-        <div class="branch-body"><h3><a href="./health1-branch-modasa.html" style="color:inherit; text-decoration:none;">Unity Health1 — Modasa</a></h3><div class="beds" data-i18n="hosp-5-beds">51 beds</div><div class="call">📞 +91 9712662222</div><div class="cross-link" data-i18n="hosp-5-link">Specialities: <a href="#specialities">General Medicine</a> · <a href="#specialities">Emergency</a></div></div>
+        <div class="branch-body"><h3>Unity Health1 — Modasa</h3><div class="beds" data-i18n="hosp-5-beds">51 beds</div><div class="call"><a href="tel:+919712662222">📞 +91 9712662222</a></div><div class="cross-link" data-i18n="hosp-5-link">Specialities: <a href="#specialities">General Medicine</a> · <a href="#specialities">Emergency</a></div></div>
       </div>
       <div class="branch-card">
+        <a href="./health1-branch-udaipur.html" class="card-stretch-link" aria-label="View Health1 Udaipur branch details"></a>
         <div class="branch-img placeholder" data-i18n="hosp-6-photo">Photo coming soon</div>
-        <div class="branch-body"><h3><a href="./health1-branch-udaipur.html" style="color:inherit; text-decoration:none;">Health1 — Udaipur</a></h3><div class="beds" data-i18n="hosp-6-beds">51 beds</div><div class="call">📞 +91 9119118000</div><div class="cross-link" data-i18n="hosp-6-link">Specialities: <a href="#specialities">Transplant</a> · <a href="#specialities">General Medicine</a></div></div>
+        <div class="branch-body"><h3>Health1 — Udaipur</h3><div class="beds" data-i18n="hosp-6-beds">51 beds</div><div class="call"><a href="tel:+919119118000">📞 +91 9119118000</a></div><div class="cross-link" data-i18n="hosp-6-link">Specialities: <a href="#specialities">Transplant</a> · <a href="#specialities">General Medicine</a></div></div>
       </div>
     </div>
   </div>
