@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID (analytics.google.com) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+
 <link rel="icon" type="image/png" sizes="32x32" href="https://health1.co.in/wp-content/uploads/2025/12/cropped-faviicon-32x32.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Health1 Super Speciality Hospitals — Robotic Surgery &amp; Transplant Care, Ahmedabad</title>
@@ -842,7 +851,7 @@
       <div>
         <div class="stars">★★★★★</div>
         <div class="meta" data-i18n="proof-meta">3,949 Google reviews · verified by RepOcean</div>
-        <a href="#" style="font-size:12.5px; font-weight:600; color:var(--teal);" data-i18n="proof-seeall">See all reviews →</a>
+        <a href="./health1-patient-stories.html" style="font-size:12.5px; font-weight:600; color:var(--teal);" data-i18n="proof-seeall">See all reviews →</a>
       </div>
     </div>
     <div class="testimonial-row">
@@ -896,7 +905,7 @@
         <h2 data-i18n="gal-h2">Photo Gallery</h2>
         <p style="margin-bottom:0;" data-i18n="gal-p">A look inside our hospitals — operation theatres, ICUs, and patient care areas.</p>
       </div>
-      <a href="#" class="btn btn-outline" data-i18n="gal-viewall">View Full Gallery →</a>
+      <a href="./health1-gallery.html" class="btn btn-outline" data-i18n="gal-viewall">View Full Gallery →</a>
     </div>
     <div class="gallery-grid reveal">
       <img src="https://health1.co.in/wp-content/uploads/2025/07/gallery_img_3.jpg" alt="Health1 facility" loading="lazy" decoding="async" class="skel" onload="this.classList.remove('skel')">
@@ -1061,7 +1070,7 @@
         <a href="#find-doctor" data-i18n="foot-finddoc">Find a Doctor</a>
         <a href="#find-doctor" data-i18n="btn-book">Book Appointment</a>
         <a href="#gallery" data-i18n="nav-gal">Photo Gallery</a>
-        <a href="#" data-i18n="foot-patientstories">Patient Stories (Reviews)</a>
+        <a href="./health1-patient-stories.html" data-i18n="foot-patientstories">Patient Stories (Reviews)</a>
         <a href="#" data-i18n="foot-successstories">Success Stories</a>
         <a href="./health1-opd-ipd.html" data-i18n="foot-opdipd">OPD / IPD Info</a>
         <a href="#" data-i18n="foot-resources">Patient Resources</a>
@@ -1462,6 +1471,7 @@
       if(error) throw error;
 
       showAptStatus('Request received — our team will call you shortly to confirm your slot.', 'success');
+      if(typeof gtag === 'function') gtag('event', 'appointment_booked', {branch: branch, department: dept});
       aptForm.reset();
     } catch(err){
       console.error('Appointment booking error:', err);
@@ -1526,7 +1536,10 @@
   const chatLauncher = document.getElementById('chatLauncher');
   const chatPanel = document.getElementById('chatPanel');
   const chatBody = document.getElementById('chatBody');
-  chatLauncher.addEventListener('click', ()=> chatPanel.classList.toggle('show'));
+  chatLauncher.addEventListener('click', ()=>{
+    chatPanel.classList.toggle('show');
+    if(chatPanel.classList.contains('show') && typeof gtag === 'function') gtag('event', 'chatbot_opened');
+  });
   document.getElementById('chatClose').addEventListener('click', ()=> chatPanel.classList.remove('show'));
 
   const chatScripts = {
