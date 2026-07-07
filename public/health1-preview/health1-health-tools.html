@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="32x32" href="https://health1.co.in/wp-content/uploads/2025/12/cropped-faviicon-32x32.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Tools &amp; Calculators | Health1 Super Speciality Hospitals</title>
+<meta name="description" content="Free health calculators from Health1 — BMI calculator, blood pressure category checker, and ideal body weight estimator. Informational tools, not a diagnosis.">
+<link rel="canonical" href="https://health1.co.in/health-tools/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Home","item":"https://health1.co.in/"},
+  {"@type":"ListItem","position":2,"name":"Health Tools & Calculators"}
+]}
+</script>
+<style>
+  :root{
+    --teal:#005AAB; --teal-dark:#00396B; --charcoal:#2B2B2E; --amber:#1BB199; --amber-dark:#149C88;
+    --red:#DF2516; --gold:#FCBE0D; --bg:#FAF9F6; --card:#FFFFFF; --line:#E7E3DA; --muted:#6B6B6E;
+    --dur-fast:150ms; --dur-base:250ms; --ease:cubic-bezier(0.4,0,0.2,1);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--charcoal); font-family:'IBM Plex Sans', sans-serif; line-height:1.65;}
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; margin:0 0 0.4em;}
+  .container{max-width:900px; margin:0 auto; padding:0 24px;}
+  a{color:inherit;}
+  .site-header{padding:14px 0; border-bottom:1px solid var(--line); background:white; position:sticky; top:0; z-index:50;}
+  .site-header-inner{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .logo img{height:34px; width:auto; display:block;}
+  .btn{display:inline-flex; padding:9px 16px; border-radius:8px; font-weight:600; font-size:13px; text-decoration:none;}
+  .breadcrumb{font-size:12.5px; color:var(--muted); padding:14px 0;}
+  .breadcrumb a{color:var(--teal); font-weight:600;}
+  .hero{padding:12px 0 32px;}
+  .eyebrow{font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--teal); margin-bottom:12px;}
+  .hero h1{font-size:34px; max-width:640px;}
+  .hero p{font-size:16px; color:var(--muted); max-width:600px;}
+  .disclaimer-band{background:#FDF8EC; border:1px solid #F0DFB0; border-left:3px solid var(--gold); border-radius:8px; padding:14px 20px; font-size:13.5px; color:var(--muted); margin-bottom:32px;}
+  .tools-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:40px;}
+  @media(max-width:800px){.tools-grid{grid-template-columns:1fr;}}
+  .tool-tab{background:white; border:1.5px solid var(--line); border-radius:10px; padding:12px 16px; font-weight:600; font-size:13.5px; cursor:pointer; text-align:center; transition:all var(--dur-fast) var(--ease);}
+  .tool-tab.active{background:var(--teal); color:white; border-color:var(--teal);}
+  .tool-panel{display:none; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:32px; margin-bottom:40px;}
+  .tool-panel.active{display:block;}
+  .tool-panel h2{font-size:22px; margin-bottom:6px;}
+  .tool-panel .tool-sub{color:var(--muted); font-size:14px; margin-bottom:24px;}
+  .input-row{display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap;}
+  .input-group{flex:1; min-width:140px;}
+  .input-group label{display:block; font-size:12.5px; font-weight:600; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.02em;}
+  .input-group input, .input-group select{
+    width:100%; padding:11px 14px; border-radius:8px; border:1.5px solid var(--line);
+    font-family:inherit; font-size:15px; background:var(--bg);
+  }
+  .input-group input:focus, .input-group select:focus{outline:2px solid var(--teal); border-color:var(--teal);}
+  .unit-toggle{display:flex; gap:8px; margin-bottom:20px;}
+  .unit-btn{padding:8px 16px; border-radius:20px; border:1.5px solid var(--line); background:white; font-size:12.5px; font-weight:600; cursor:pointer;}
+  .unit-btn.active{background:var(--teal); color:white; border-color:var(--teal);}
+  .calc-btn{background:var(--amber); color:white; border:none; padding:13px 28px; border-radius:8px; font-weight:600; font-size:14.5px; cursor:pointer;}
+  .calc-btn:hover{background:var(--amber-dark);}
+  .result-box{margin-top:24px; padding:20px 24px; background:var(--bg); border-radius:12px; border:1.5px solid var(--line); display:none;}
+  .result-box.show{display:block;}
+  .result-value{font-family:'Fraunces',serif; font-size:36px; font-weight:700; color:var(--teal);}
+  .result-category{display:inline-block; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; margin-top:8px;}
+  .cat-under{background:#FFF3D6; color:#8A6D00;}
+  .cat-normal{background:#E3F5F0; color:var(--amber-dark);}
+  .cat-over{background:#FDE8D6; color:#B8560A;}
+  .cat-obese{background:#FBE0DD; color:var(--red);}
+  .result-note{font-size:13px; color:var(--muted); margin-top:12px; line-height:1.6;}
+  .bp-scale{margin-top:20px;}
+  .bp-row{display:flex; justify-content:space-between; padding:10px 14px; border-radius:8px; font-size:13.5px; margin-bottom:6px;}
+  .site-footer{border-top:1px solid var(--line); background:white; padding:28px 0; margin-top:40px;}
+  .site-footer-inner{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--muted);}
+  .site-footer a{color:var(--muted); text-decoration:none; margin-left:16px;}
+  .skip-link{position:absolute; left:-9999px; top:0; z-index:999; background:var(--teal); color:white; padding:12px 20px; border-radius:0 0 8px 0; font-weight:600; font-size:14px;}
+  .skip-link:focus{left:0;}
+  a:focus-visible, button:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){*{transition-duration:0.01ms !important;}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<header class="site-header"><div class="container site-header-inner">
+  <a href="./index.html" class="logo"><img src="https://health1.co.in/wp-content/uploads/2025/08/Health1logo.webp" alt="Health1 Super Speciality Hospitals"></a>
+  <div style="display:flex; gap:8px;">
+    <a href="tel:+917969996999" class="btn" style="background:var(--red); color:white;">📞 Emergency</a>
+    <a href="./index.html#find-doctor" class="btn" style="background:var(--amber); color:white;">Book Appointment</a>
+  </div>
+</div></header>
+<div class="container"><div class="breadcrumb"><a href="./index.html">Home</a> › Health Tools &amp; Calculators</div></div>
+
+<section class="hero" id="main-content">
+  <div class="container">
+    <div class="eyebrow">Free Health Tools</div>
+    <h1>Quick Health Calculators</h1>
+    <p>Simple tools to understand your numbers — not a diagnosis, and not a substitute for talking to a doctor.</p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="disclaimer-band">
+    <strong>These tools are informational only.</strong> They don't account for your full medical history, muscle mass, pregnancy, or other individual factors. If a result concerns you, or you have symptoms, talk to a Health1 doctor rather than relying on a calculator.
+  </div>
+
+  <div class="tools-grid">
+    <div class="tool-tab active" data-tool="bmi">BMI Calculator</div>
+    <div class="tool-tab" data-tool="bp">Blood Pressure Checker</div>
+    <div class="tool-tab" data-tool="ibw">Ideal Body Weight</div>
+  </div>
+
+  <!-- BMI CALCULATOR -->
+  <div class="tool-panel active" id="panel-bmi">
+    <h2>BMI Calculator</h2>
+    <div class="tool-sub">Body Mass Index — a general screening measure based on height and weight.</div>
+    <div class="unit-toggle">
+      <button class="unit-btn active" data-unit="metric" data-target="bmi">Metric (cm/kg)</button>
+      <button class="unit-btn" data-unit="imperial" data-target="bmi">Imperial (ft-in/lb)</button>
+    </div>
+    <div id="bmi-metric-inputs">
+      <div class="input-row">
+        <div class="input-group"><label>Height (cm)</label><input type="number" id="bmi-height-cm" placeholder="170"></div>
+        <div class="input-group"><label>Weight (kg)</label><input type="number" id="bmi-weight-kg" placeholder="70"></div>
+      </div>
+    </div>
+    <div id="bmi-imperial-inputs" style="display:none;">
+      <div class="input-row">
+        <div class="input-group"><label>Height (ft)</label><input type="number" id="bmi-height-ft" placeholder="5"></div>
+        <div class="input-group"><label>Height (in)</label><input type="number" id="bmi-height-in" placeholder="7"></div>
+        <div class="input-group"><label>Weight (lb)</label><input type="number" id="bmi-weight-lb" placeholder="154"></div>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcBMI()">Calculate BMI</button>
+    <div class="result-box" id="bmi-result">
+      <div class="result-value" id="bmi-value"></div>
+      <span class="result-category" id="bmi-category"></span>
+      <div class="result-note">Standard adult BMI categories: Underweight &lt;18.5 · Normal 18.5–24.9 · Overweight 25–29.9 · Obese 30+. BMI doesn't distinguish muscle from fat, so athletes and older adults should interpret it with that in mind.</div>
+    </div>
+  </div>
+
+  <!-- BLOOD PRESSURE CHECKER -->
+  <div class="tool-panel" id="panel-bp">
+    <h2>Blood Pressure Category Checker</h2>
+    <div class="tool-sub">Enter a reading to see which category it falls into.</div>
+    <div class="input-row">
+      <div class="input-group"><label>Systolic (top number)</label><input type="number" id="bp-systolic" placeholder="120"></div>
+      <div class="input-group"><label>Diastolic (bottom number)</label><input type="number" id="bp-diastolic" placeholder="80"></div>
+    </div>
+    <button class="calc-btn" onclick="calcBP()">Check Category</button>
+    <div class="result-box" id="bp-result">
+      <span class="result-category" id="bp-category" style="font-size:16px; padding:8px 16px;"></span>
+      <div class="result-note" id="bp-note"></div>
+    </div>
+    <div class="bp-scale">
+      <div class="bp-row" style="background:#E3F5F0;"><span>Normal</span><span>Below 120 / 80</span></div>
+      <div class="bp-row" style="background:#FFF3D6;"><span>Elevated</span><span>120-129 / below 80</span></div>
+      <div class="bp-row" style="background:#FDE8D6;"><span>High (Stage 1)</span><span>130-139 / 80-89</span></div>
+      <div class="bp-row" style="background:#FBE0DD;"><span>High (Stage 2)</span><span>140+ / 90+</span></div>
+      <div class="bp-row" style="background:#F5C6C0; font-weight:700;"><span>Hypertensive Crisis</span><span>180+ / 120+ — Seek care immediately</span></div>
+    </div>
+  </div>
+
+  <!-- IDEAL BODY WEIGHT -->
+  <div class="tool-panel" id="panel-ibw">
+    <h2>Ideal Body Weight Estimator</h2>
+    <div class="tool-sub">A rough reference range based on height, using the commonly used Devine formula.</div>
+    <div class="input-row">
+      <div class="input-group"><label>Gender</label>
+        <select id="ibw-gender"><option value="male">Male</option><option value="female">Female</option></select>
+      </div>
+      <div class="input-group"><label>Height (cm)</label><input type="number" id="ibw-height" placeholder="170"></div>
+    </div>
+    <button class="calc-btn" onclick="calcIBW()">Estimate</button>
+    <div class="result-box" id="ibw-result">
+      <div class="result-value" id="ibw-value"></div>
+      <div class="result-note">This is a population-level reference, not a personal target — healthy weight varies by build, muscle mass, and age. Use it as a general guide only.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:32px 0 8px;">
+    <a href="./index.html#find-doctor" class="btn" style="background:var(--teal); color:white; padding:12px 24px;">Talk to a Health1 Doctor About Your Results</a>
+  </div>
+</div>
+
+<footer class="site-footer"><div class="container site-footer-inner">
+  <div>© 2026 Health1 Super Speciality Hospitals.</div>
+  <div>
+    <a href="./index.html">Home</a>
+    <a href="./health1-privacy-policy.html">Privacy Policy</a>
+    <a href="./health1-terms-of-service.html">Terms of Service</a>
+    <a href="tel:+917969996999">079 6999 6999</a>
+  </div>
+</div></footer>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tool-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.tool-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tool-panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-'+tab.dataset.tool).classList.add('active');
+    });
+  });
+
+  // Unit toggle for BMI
+  document.querySelectorAll('.unit-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.unit-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const metric = btn.dataset.unit === 'metric';
+      document.getElementById('bmi-metric-inputs').style.display = metric ? 'block' : 'none';
+      document.getElementById('bmi-imperial-inputs').style.display = metric ? 'none' : 'block';
+    });
+  });
+
+  function bmiCategory(bmi){
+    if(bmi < 18.5) return {label:'Underweight', cls:'cat-under'};
+    if(bmi < 25) return {label:'Normal weight', cls:'cat-normal'};
+    if(bmi < 30) return {label:'Overweight', cls:'cat-over'};
+    return {label:'Obese', cls:'cat-obese'};
+  }
+
+  function calcBMI(){
+    const metric = document.querySelector('.unit-btn[data-unit="metric"]').classList.contains('active');
+    let heightM, weightKg;
+    if(metric){
+      const h = parseFloat(document.getElementById('bmi-height-cm').value);
+      const w = parseFloat(document.getElementById('bmi-weight-kg').value);
+      if(!h || !w){ return; }
+      heightM = h / 100; weightKg = w;
+    } else {
+      const ft = parseFloat(document.getElementById('bmi-height-ft').value) || 0;
+      const inch = parseFloat(document.getElementById('bmi-height-in').value) || 0;
+      const lb = parseFloat(document.getElementById('bmi-weight-lb').value);
+      if((!ft && !inch) || !lb){ return; }
+      heightM = ((ft * 12) + inch) * 0.0254; weightKg = lb * 0.453592;
+    }
+    const bmi = weightKg / (heightM * heightM);
+    const cat = bmiCategory(bmi);
+    document.getElementById('bmi-value').textContent = bmi.toFixed(1);
+    const catEl = document.getElementById('bmi-category');
+    catEl.textContent = cat.label;
+    catEl.className = 'result-category ' + cat.cls;
+    document.getElementById('bmi-result').classList.add('show');
+  }
+
+  function calcBP(){
+    const sys = parseInt(document.getElementById('bp-systolic').value);
+    const dia = parseInt(document.getElementById('bp-diastolic').value);
+    if(!sys || !dia) return;
+    let label, cls, note;
+    if(sys >= 180 || dia >= 120){
+      label = 'Hypertensive Crisis'; cls = 'cat-obese';
+      note = 'This reading needs immediate medical attention — please call Emergency or go to your nearest Health1 branch now, especially if you also have chest pain, shortness of breath, or vision changes.';
+    } else if(sys >= 140 || dia >= 90){
+      label = 'High Blood Pressure (Stage 2)'; cls = 'cat-obese';
+      note = 'This falls in the Stage 2 high blood pressure range. Please book a consultation to discuss management.';
+    } else if(sys >= 130 || dia >= 80){
+      label = 'High Blood Pressure (Stage 1)'; cls = 'cat-over';
+      note = 'This falls in the Stage 1 high blood pressure range — worth discussing with a doctor, especially if readings are consistently in this range.';
+    } else if(sys >= 120){
+      label = 'Elevated'; cls = 'cat-under';
+      note = 'Your systolic reading is slightly elevated. Lifestyle factors (salt intake, activity, stress) are worth reviewing, and this is worth monitoring over time.';
+    } else {
+      label = 'Normal'; cls = 'cat-normal';
+      note = 'This reading is in the normal range. Keep up regular monitoring, especially if you have risk factors like family history.';
+    }
+    const catEl = document.getElementById('bp-category');
+    catEl.textContent = label;
+    catEl.className = 'result-category ' + cls;
+    document.getElementById('bp-note').textContent = note;
+    document.getElementById('bp-result').classList.add('show');
+  }
+
+  function calcIBW(){
+    const gender = document.getElementById('ibw-gender').value;
+    const heightCm = parseFloat(document.getElementById('ibw-height').value);
+    if(!heightCm) return;
+    const heightIn = heightCm / 2.54;
+    const over5ft = Math.max(0, heightIn - 60);
+    let ibwKg;
+    if(gender === 'male'){
+      ibwKg = 50 + 2.3 * over5ft;
+    } else {
+      ibwKg = 45.5 + 2.3 * over5ft;
+    }
+    const low = (ibwKg * 0.9).toFixed(0);
+    const high = (ibwKg * 1.1).toFixed(0);
+    document.getElementById('ibw-value').textContent = `${low}–${high} kg`;
+    document.getElementById('ibw-result').classList.add('show');
+  }
+</script>
+</body>
+</html>

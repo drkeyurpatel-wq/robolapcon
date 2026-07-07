@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="32x32" href="https://health1.co.in/wp-content/uploads/2025/12/cropped-faviicon-32x32.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health1 Super Speciality Hospitals — Robotic Surgery &amp; Transplant Care, Ahmedabad</title>
+<meta name="description" content="Health1 Super Speciality Hospitals: 6 NABH-accredited hospitals across Gujarat &amp; Rajasthan. Robotic surgery, kidney &amp; liver transplant care. Cashless and PMJAY accepted.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<!-- PLACEHOLDER: canonical URL below assumes health1.co.in is retained. Update this to the final chosen domain before deployment — see domain decision note. -->
+<link rel="canonical" href="https://health1.co.in/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Hospital",
+  "name": "Health1 Super Speciality Hospitals",
+  "url": "https://health1.co.in/",
+  "medicalSpecialty": ["Neurology", "Cardiology", "Orthopedic", "Oncologic", "Urology"],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Near Venitian Villa, Shilaj Circle, S.P. Ring Road, Thaltej",
+    "addressLocality": "Ahmedabad",
+    "addressRegion": "Gujarat",
+    "postalCode": "380059",
+    "addressCountry": "IN"
+  },
+  "telephone": "+91-79-6999-6999",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "3949"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is PMJAY accepted, and at which branches?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — PMJAY is accepted across Health1 branches. Coverage for specific procedures can vary by location, so confirm with your nearest branch before admission."}},
+    {"@type": "Question", "name": "Which insurance companies does Health1 work with for cashless treatment?", "acceptedAnswer": {"@type": "Answer", "text": "Health1 is empanelled with virtually every major insurer and TPA in India, along with government schemes like CGHS, ECHS, and corporate tie-ups including GEB, ONGC, and Railways."}},
+    {"@type": "Question", "name": "What happens in a medical emergency?", "acceptedAnswer": {"@type": "Answer", "text": "Every Health1 branch runs a 24x7 emergency department with an on-call intensive care team."}},
+    {"@type": "Question", "name": "How is robotic knee replacement different from conventional surgery?", "acceptedAnswer": {"@type": "Answer", "text": "The Cuvis robotic system places implants with sub-millimeter precision. Most patients begin walking with support the same day, versus several days for conventional surgery."}},
+    {"@type": "Question", "name": "Can I get a second opinion before committing to surgery?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — for complex or life-changing decisions like transplant or major surgery, you can request a second opinion from a senior Health1 specialist before proceeding."}},
+    {"@type": "Question", "name": "What's the process for international or NRI patients?", "acceptedAnswer": {"@type": "Answer", "text": "Health1 assists with advance cost estimates and visa-related documentation for international patients."}}
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+  :root{
+    --teal:#005AAB;
+    --teal-dark:#00396B;
+    --charcoal:#2B2B2E;
+    --amber:#1BB199;
+    --amber-dark:#149C88;
+    --red:#DF2516;
+    --gold:#FCBE0D;
+    --bg:#FAF9F6;
+    --card:#FFFFFF;
+    --line:#E7E3DA;
+    --muted:#6B6B6E;
+    --dur-fast:150ms;
+    --dur-base:250ms;
+    --dur-slow:400ms;
+    --ease:cubic-bezier(0.4,0,0.2,1);
+    --ease-out:cubic-bezier(0,0,0.2,1);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--charcoal);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0 0 0.4em 0;
+    line-height:1.15;
+  }
+  p{line-height:1.6; color:var(--charcoal); margin:0 0 1em 0;}
+  a{color:inherit; text-decoration:none;}
+  .container{max-width:1180px; margin:0 auto; padding:0 24px;}
+  img{max-width:100%; display:block;}
+
+  /* ---------- Accessibility ---------- */
+  .skip-link{
+    position:absolute; left:-9999px; top:0; z-index:999; background:var(--teal); color:white;
+    padding:12px 20px; border-radius:0 0 8px 0; font-weight:600; font-size:14px;
+  }
+  .skip-link:focus{left:0;}
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible{
+    outline:3px solid var(--amber); outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(250,249,246,0.96);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center;
+  }
+  .logo-img{height:38px; width:auto; display:block;}
+  nav.primary{display:flex; gap:28px; font-size:14.5px; font-weight:500;}
+  nav.primary a{color:var(--charcoal); transition:color var(--dur-fast) var(--ease); position:relative;}
+  nav.primary a:hover{color:var(--teal);}
+  .header-actions{display:flex; align-items:center; gap:12px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 18px; border-radius:8px; font-weight:600; font-size:14px;
+    cursor:pointer; border:none; transition:transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+    white-space:nowrap;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-amber{background:var(--amber); color:white;}
+  .btn-amber:hover{transform:scale(1.02); box-shadow:0 4px 14px rgba(27,177,153,0.35);}
+  .btn-red{background:var(--red); color:white;}
+  .btn-red:hover{transform:scale(1.02); box-shadow:0 4px 14px rgba(223,37,22,0.35);}
+  .btn-outline{background:transparent; color:var(--teal); border:1.5px solid var(--teal);}
+  .btn-outline:hover{background:var(--teal); color:white;}
+  @media(max-width:900px){ nav.primary{display:none;} }
+
+  .hamburger{
+    display:none; width:38px; height:38px; border:1px solid var(--line); border-radius:8px;
+    background:white; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  }
+  .hamburger span{width:18px; height:2px; background:var(--charcoal); border-radius:2px; transition:transform var(--dur-base) var(--ease), opacity var(--dur-fast) var(--ease);}
+  .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .hamburger.open span:nth-child(2){opacity:0;}
+  .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+  @media(max-width:900px){ .hamburger{display:flex;} .desktop-only{display:none;} }
+
+  .lang-toggle{
+    width:38px; height:38px; border-radius:8px; border:1.5px solid var(--teal); background:white;
+    color:var(--teal); font-weight:700; font-size:13px; cursor:pointer; font-family:inherit;
+    transition:background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .lang-toggle:hover, .lang-toggle.active{background:var(--teal); color:white;}
+  .lang-toggle-mobile{
+    background:none; border:none; width:100%; text-align:left; cursor:pointer; color:var(--teal); font-weight:600;
+  }
+
+  .sheet-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:299;
+    opacity:0; pointer-events:none; transition:opacity var(--dur-base) var(--ease);
+  }
+  .sheet-backdrop.show{opacity:1; pointer-events:auto;}
+  .mobile-sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:300;
+    background:white; border-radius:20px 20px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,0.15);
+    transform:translateY(100%); transition:transform var(--dur-slow) var(--ease-out);
+    padding:10px 20px 28px;
+  }
+  .mobile-sheet.show{transform:translateY(0);}
+  .sheet-handle{width:40px; height:4px; background:var(--line); border-radius:4px; margin:6px auto 16px;}
+  .sheet-link{display:block; padding:13px 4px; font-size:16px; font-weight:500; border-bottom:1px solid var(--line);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:72px 0 56px;
+    background:
+      radial-gradient(1200px 500px at 85% -10%, rgba(0,90,171,0.06), transparent),
+      var(--bg);
+  }
+  .hero-inner{display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center;}
+  @media(max-width:900px){ .hero-inner{grid-template-columns:1fr;} }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:18px;
+  }
+  .eyebrow::before{content:''; width:20px; height:1.5px; background:var(--teal);}
+  .hero h1{font-size:44px; max-width:600px;}
+  .hero .sub{font-size:17px; color:var(--muted); max-width:520px; margin-bottom:28px;}
+  .hero-ctas{display:flex; gap:14px; margin-bottom:36px; flex-wrap:wrap;}
+  .btn-red.pulse{animation:pulse 2s infinite;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(223,37,22,0.35);}
+    70%{box-shadow:0 0 0 12px rgba(223,37,22,0);}
+    100%{box-shadow:0 0 0 0 rgba(223,37,22,0);}
+  }
+  .trust-strip{
+    display:flex; flex-wrap:wrap; gap:22px 30px; font-size:13.5px; color:var(--muted); font-weight:500;
+  }
+  .trust-strip span{display:flex; align-items:center; gap:7px;}
+  .trust-strip .dot{width:5px; height:5px; border-radius:50%; background:var(--amber);}
+
+  /* ---------- Symptom search ---------- */
+  .symptom-search{
+    display:flex; align-items:center; gap:8px; background:white; border:1.5px solid var(--line);
+    border-radius:12px; padding:6px 6px 6px 16px; margin-bottom:16px; max-width:480px;
+    box-shadow:0 6px 20px rgba(0,90,171,0.06); transition:border-color var(--dur-fast) var(--ease);
+  }
+  .symptom-search:focus-within{border-color:var(--teal);}
+  .ss-icon{font-size:15px; opacity:0.5;}
+  .symptom-search input{
+    flex:1; border:none; outline:none; font-family:inherit; font-size:14.5px; padding:9px 0; background:transparent;
+  }
+  .symptom-search .btn{padding:10px 18px; font-size:13.5px;}
+  #symptomResult{max-width:480px;}
+  .symptom-card{
+    background:white; border:1.5px solid var(--teal); border-radius:12px; padding:16px 18px; margin-bottom:16px;
+    animation:slideIn var(--dur-slow) var(--ease-out);
+  }
+  .symptom-card.urgent{border-color:var(--red); background:#FDF3F2;}
+  .symptom-card .sr-label{font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; color:var(--teal); margin-bottom:6px;}
+  .symptom-card.urgent .sr-label{color:var(--red);}
+  .symptom-card .sr-title{font-family:'Fraunces',serif; font-size:17px; font-weight:600; margin-bottom:6px;}
+  .symptom-card .sr-meta{font-size:13px; color:var(--muted); margin-bottom:10px;}
+  .symptom-card .sr-actions{display:flex; gap:10px; flex-wrap:wrap;}
+  .symptom-card .sr-actions .btn{padding:9px 16px; font-size:13px;}
+  @keyframes slideIn{from{opacity:0; transform:translateY(-8px);} to{opacity:1; transform:translateY(0);}}
+  .learn-more{margin-bottom:10px; font-size:12.5px;}
+  .learn-more summary{cursor:pointer; color:var(--teal); font-weight:600; list-style:none;}
+  .learn-more summary::before{content:'ℹ '; }
+  .learn-more p{margin:8px 0 0; color:var(--muted); line-height:1.6;}
+
+  /* ---------- Doctor Finder ---------- */
+  .doctor-filters{display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;}
+
+  /* ---------- Booking Form ---------- */
+  .booking-form-wrap{
+    background:white; border:1.5px solid var(--line); border-radius:18px; padding:32px;
+    margin-top:32px; max-width:640px;
+  }
+  .booking-form-wrap h3{font-size:20px; margin-bottom:6px;}
+  .booking-sub{font-size:13.5px; color:var(--muted); margin-bottom:22px;}
+  .form-row{display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap;}
+  .form-group{flex:1; min-width:180px;}
+  .form-group label{display:block; font-size:12.5px; font-weight:600; color:var(--muted); margin-bottom:6px;}
+  .form-group input, .form-group select, .form-group textarea{
+    width:100%; padding:11px 14px; border-radius:8px; border:1.5px solid var(--line);
+    font-family:inherit; font-size:14.5px; background:var(--bg); transition:border-color var(--dur-fast) var(--ease);
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    outline:none; border-color:var(--teal);
+  }
+  .form-group input:invalid:not(:placeholder-shown){border-color:var(--red);}
+  .checkbox-row{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--muted); margin-bottom:20px; cursor:pointer;}
+  .checkbox-row input{width:auto;}
+  .form-status{margin-top:16px; font-size:14px; font-weight:600; display:none;}
+  .form-status.show{display:block;}
+  .form-status.success{color:var(--amber-dark);}
+  .form-status.error{color:var(--red);}
+  #apt-submit-btn:disabled{opacity:0.6; cursor:not-allowed;}
+  .spinner{display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,0.4); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; margin-right:8px; vertical-align:-2px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .doctor-filters select{
+    padding:10px 14px; border-radius:8px; border:1.5px solid var(--line); font-family:inherit;
+    font-size:13.5px; background:white; color:var(--charcoal); cursor:pointer;
+  }
+  .doctor-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  @media(max-width:900px){ .doctor-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:560px){ .doctor-grid{grid-template-columns:1fr;} }
+  .doctor-card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px;
+    transition:transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
+  }
+  .doctor-card:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(0,0,0,0.07);}
+  .doctor-avatar{
+    width:52px; height:52px; border-radius:50%; background:rgba(0,90,171,0.1); color:var(--teal);
+    display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:700;
+    font-size:18px; margin-bottom:12px;
+  }
+  .doctor-card h4{font-size:15px; margin-bottom:2px;}
+  .doctor-card .spec{font-size:12.5px; color:var(--amber); font-weight:600; margin-bottom:8px;}
+  .doctor-card .meta{font-size:12px; color:var(--muted); line-height:1.7;}
+  .no-results{font-size:14px; color:var(--muted); padding:20px 0;}
+
+  /* ---------- Cost Estimator ---------- */
+  .estimator{background:var(--card); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .estimator-box{
+    background:var(--bg); border:1px solid var(--line); border-radius:16px; padding:28px; max-width:600px; margin:0 auto;
+  }
+  .estimator-row{display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;}
+  .estimator-row select{
+    flex:1; min-width:180px; padding:11px 14px; border-radius:8px; border:1.5px solid var(--line);
+    font-family:inherit; font-size:13.5px; background:white; cursor:pointer;
+  }
+  .estimate-result{
+    background:white; border:1.5px solid var(--teal); border-radius:12px; padding:18px 20px; margin-top:6px;
+  }
+  .estimate-result .range{font-family:'Fraunces',serif; font-size:26px; font-weight:700; color:var(--teal);}
+  .estimate-result .disclaimer{font-size:11.5px; color:var(--muted); margin-top:8px; line-height:1.6;}
+
+  /* ---------- Second Opinion ---------- */
+  .second-opinion{background:var(--teal-dark); color:white;}
+  .so-inner{display:flex; align-items:center; justify-content:space-between; gap:32px; flex-wrap:wrap;}
+  .so-inner p{color:rgba(255,255,255,0.75); max-width:480px; margin-bottom:0;}
+  .so-inner h2{font-size:26px; color:white;}
+
+  /* ---------- Video ---------- */
+  .video-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:800px){ .video-grid{grid-template-columns:1fr;} }
+  .video-card{border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--card);}
+  .video-thumb{
+    aspect-ratio:16/9; background:linear-gradient(135deg, var(--teal), var(--teal-dark));
+    display:flex; align-items:center; justify-content:center; color:white; font-size:32px;
+    transition:transform var(--dur-base) var(--ease);
+  }
+  .video-card:hover .video-thumb{transform:scale(1.02);}
+  .video-label{padding:14px 16px; font-size:13.5px; font-weight:600;}
+  .video-label span{display:block; font-size:11.5px; font-weight:500; color:var(--muted); margin-top:4px;}
+
+  /* ---------- FAQ ---------- */
+  .faq-list{display:flex; flex-direction:column; gap:10px;}
+  .faq-item{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px;}
+  .faq-item summary{cursor:pointer; font-weight:600; font-size:15px; list-style:none; display:flex; justify-content:space-between; align-items:center;}
+  .faq-item summary::after{content:'+'; font-size:20px; color:var(--teal); font-weight:400; transition:transform var(--dur-base) var(--ease);}
+  .faq-item[open] summary::after{transform:rotate(45deg);}
+  .faq-item p{margin:12px 0 0; color:var(--muted); font-size:14px; line-height:1.7;}
+
+  /* ---------- New Service band ---------- */
+  .new-service-band{background:white; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:32px 0;}
+  .new-service-inner{display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;}
+  .ns-badge{display:inline-block; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; color:var(--amber); background:rgba(27,177,153,0.1); border-radius:20px; padding:5px 12px; margin-bottom:8px;}
+  .new-service-inner h3{font-size:19px; margin-bottom:4px;}
+  .new-service-inner p{font-size:14px; color:var(--muted); margin:0; max-width:480px;}
+
+  .more-specialities{margin-top:28px; padding-top:24px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; font-size:13.5px;}
+  .more-specialities span{color:var(--muted); font-weight:600;}
+  .more-specialities a{color:var(--teal); font-weight:600;}
+  .more-specialities a:hover{text-decoration:underline;}
+
+  .hero-visual{
+    position:relative; border-radius:18px; overflow:hidden; aspect-ratio:4/3.1;
+    background:var(--teal);
+  }
+  .hero-visual img{width:100%; height:100%; object-fit:cover; opacity:0.92;}
+  .hero-visual .badge{
+    position:absolute; bottom:18px; left:18px; background:white; border-radius:12px;
+    padding:14px 18px; box-shadow:0 8px 24px rgba(0,0,0,0.12); display:flex; gap:12px; align-items:center;
+  }
+  .badge .stars{color:var(--gold); font-size:15px; letter-spacing:1px;}
+  .badge .num{font-family:'Fraunces',serif; font-weight:700; font-size:20px; color:var(--teal);}
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{opacity:0; transform:translateY(12px); transition:opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- Section shell ---------- */
+  section{padding:76px 0;}
+  .section-head{max-width:640px; margin-bottom:44px;}
+  .section-head .eyebrow{margin-bottom:12px;}
+  .section-head h2{font-size:32px;}
+  .section-head p{color:var(--muted); font-size:15.5px;}
+
+  /* ---------- Audience router ---------- */
+  .router-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:800px){ .router-grid{grid-template-columns:1fr;} }
+  .router-card{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:32px 28px; cursor:pointer;
+    transition:transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
+  }
+  .router-card:hover{transform:translateY(-4px); box-shadow:0 14px 32px rgba(0,90,171,0.10); border-color:var(--teal);}
+  .router-card .icon{
+    width:44px; height:44px; border-radius:10px; background:rgba(0,90,171,0.08);
+    display:flex; align-items:center; justify-content:center; margin-bottom:18px; font-size:20px;
+  }
+  .router-card h3{font-size:19px; margin-bottom:8px;}
+  .router-card p{font-size:14.5px; color:var(--muted); margin-bottom:0;}
+  .router-card .arrow{margin-top:16px; font-size:14px; font-weight:600; color:var(--teal);}
+
+  /* ---------- Robotic Surgery spotlight (signature section) ---------- */
+  .robotic{background:var(--teal-dark); color:white; position:relative; overflow:hidden;}
+  .robotic .container{position:relative; z-index:2;}
+  .robotic .section-head p{color:rgba(255,255,255,0.72);}
+  .robotic .eyebrow{color:#FFD666;}
+  .robotic .eyebrow::before{background:#FFD666;}
+  .robotic-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+  @media(max-width:800px){ .robotic-grid{grid-template-columns:1fr;} }
+  .robotic-card{
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    border-radius:16px; padding:30px; transition:background var(--dur-base) var(--ease);
+  }
+  .robotic-card:hover{background:rgba(255,255,255,0.1);}
+  .robotic-card h3{font-size:21px; color:white;}
+  .robotic-card p{color:rgba(255,255,255,0.75); font-size:14.5px;}
+  .robotic-card .tag{
+    display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:0.03em; text-transform:uppercase;
+    color:#FFD666; border:1px solid rgba(143,212,204,0.4); border-radius:20px; padding:4px 12px; margin-bottom:14px;
+  }
+  /* signature: precision-arc svg that draws itself on scroll */
+  .precision-arc{position:absolute; right:-120px; top:-120px; width:520px; height:520px; opacity:0.5; z-index:1;}
+  .precision-arc circle{
+    fill:none; stroke:#FFD666; stroke-width:1;
+    stroke-dasharray:1400; stroke-dashoffset:1400;
+    transition:stroke-dashoffset 1.8s var(--ease-out);
+  }
+  .robotic.in .precision-arc circle{stroke-dashoffset:0;}
+
+  /* ---------- Specialities ---------- */
+  .pillar-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:900px){ .pillar-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .pillar-grid{grid-template-columns:1fr;} }
+  .pillar-card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:26px;
+    transition:transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
+  }
+  .pillar-card:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(0,0,0,0.06);}
+  .pillar-card .num{font-family:'Fraunces',serif; font-size:13px; color:var(--amber); font-weight:600; margin-bottom:10px;}
+  .pillar-card h3{font-size:17px; margin-bottom:8px;}
+  .pillar-card p{font-size:14px; color:var(--muted); margin-bottom:10px;}
+  .cross-link{font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:10px; margin-top:4px;}
+  .cross-link a{color:var(--teal); font-weight:600;}
+  .cross-link a:hover{text-decoration:underline;}
+
+  /* ---------- Gallery ---------- */
+  .gallery-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-top:8px;}
+  @media(max-width:900px){ .gallery-grid{grid-template-columns:repeat(3,1fr);} }
+  @media(max-width:560px){ .gallery-grid{grid-template-columns:repeat(2,1fr);} }
+  .gallery-grid img{
+    width:100%; height:130px; object-fit:cover; border-radius:10px;
+    transition:transform var(--dur-base) var(--ease), filter var(--dur-base) var(--ease);
+    filter:brightness(0.97);
+  }
+  .gallery-grid img:hover{transform:scale(1.03); filter:brightness(1.03);}
+  .skel{background:linear-gradient(90deg, #EFEBE2 25%, #E7E1D3 37%, #EFEBE2 63%); background-size:400% 100%; animation:shimmer 1.4s ease infinite;}
+  @keyframes shimmer{0%{background-position:100% 0;} 100%{background-position:0 0;}}
+
+  /* ---------- Social proof ---------- */
+  .proof{background:var(--card); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .proof-inner{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:32px;}
+  .proof-score{display:flex; align-items:center; gap:16px;}
+  .proof-score .big{font-family:'Fraunces',serif; font-size:52px; font-weight:700; color:var(--teal);}
+  .proof-score .stars{color:var(--gold); font-size:18px; letter-spacing:2px;}
+  .proof-score .meta{font-size:13.5px; color:var(--muted);}
+  .testimonial-row{display:flex; gap:18px; overflow-x:auto; padding-bottom:6px; max-width:640px;}
+  .testimonial{
+    flex:0 0 260px; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:18px;
+    font-size:13.5px; color:var(--charcoal);
+  }
+  .testimonial .stars{color:var(--gold); font-size:12px; margin-bottom:8px;}
+  .testimonial .name{font-weight:600; margin-top:10px; font-size:12.5px; color:var(--muted);}
+
+  /* ---------- Branches ---------- */
+  .branch-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:900px){ .branch-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .branch-grid{grid-template-columns:1fr;} }
+  .branch-card{
+    border-radius:14px; overflow:hidden; background:var(--card); border:1px solid var(--line);
+    transition:transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
+  }
+  .branch-card:hover{transform:translateY(-3px); box-shadow:0 12px 28px rgba(0,0,0,0.08);}
+  .branch-img{height:150px; background-size:cover; background-position:center; position:relative;}
+  .branch-img.placeholder{
+    background:repeating-linear-gradient(45deg, #EFEBE2, #EFEBE2 10px, #E7E1D3 10px, #E7E1D3 20px);
+    display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:12px; font-weight:600;
+  }
+  .branch-body{padding:18px;}
+  .branch-body h3{font-size:16.5px; margin-bottom:4px;}
+  .branch-body .beds{font-size:12.5px; color:var(--amber); font-weight:600; margin-bottom:10px;}
+  .branch-body .call{font-size:13px; color:var(--teal); font-weight:600;}
+
+  /* ---------- Numbers strip ---------- */
+  .stats{background:var(--teal); color:white;}
+  .stats-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:20px; text-align:center;}
+  @media(max-width:900px){ .stats-grid{grid-template-columns:repeat(3,1fr);} }
+  @media(max-width:560px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
+  .stat .n{font-family:'Fraunces',serif; font-size:34px; font-weight:700;}
+  .stat .l{font-size:12.5px; color:rgba(255,255,255,0.75); margin-top:4px;}
+
+  /* ---------- Insurance band ---------- */
+  .insure{background:var(--card);}
+  .insure-inner{display:flex; gap:40px; align-items:center; flex-wrap:wrap;}
+  .insure-text{flex:1; min-width:280px;}
+  .scheme-pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  .pill{
+    font-size:12.5px; font-weight:600; padding:6px 14px; border-radius:20px;
+    background:rgba(0,90,171,0.08); color:var(--teal);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--charcoal); color:rgba(255,255,255,0.8); padding:56px 0 100px;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px;}
+  @media(max-width:800px){ .footer-grid{grid-template-columns:1fr 1fr;} }
+  footer h4{font-size:13px; text-transform:uppercase; letter-spacing:0.04em; color:rgba(255,255,255,0.5); margin-bottom:16px;}
+  footer a{display:block; font-size:14px; margin-bottom:10px; color:rgba(255,255,255,0.82); transition:color var(--dur-fast) var(--ease);}
+  footer a:hover{color:#FFD666;}
+  .footer-logo{font-family:'Fraunces',serif; font-size:20px; color:white; margin-bottom:14px;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.12); margin-top:40px; padding-top:20px; font-size:12.5px; color:rgba(255,255,255,0.45);}
+  .social-row{display:flex; gap:10px; margin-bottom:24px;}
+  .social-icon{
+    width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,0.2);
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;
+    transition:background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+  .social-icon:hover{background:var(--teal); border-color:var(--teal);}
+  .newsletter-form{display:flex; gap:8px;}
+  .newsletter-form input{
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:8px;
+    padding:9px 12px; color:white; font-size:13px; font-family:inherit; width:150px;
+  }
+  .newsletter-form input::placeholder{color:rgba(255,255,255,0.4);}
+
+  /* ---------- Mobile bottom action bar ---------- */
+  .mobile-bar{
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:200;
+    background:white; border-top:1px solid var(--line); padding:10px 16px;
+    box-shadow:0 -6px 20px rgba(0,0,0,0.08);
+  }
+  .mobile-bar-inner{display:flex; gap:10px;}
+  .mobile-bar .btn{flex:1; justify-content:center;}
+  @media(max-width:900px){ .mobile-bar{display:block;} body{padding-bottom:74px;} }
+
+  /* ---------- Chatbot ---------- */
+  .chat-launcher{
+    position:fixed; right:22px; bottom:22px; z-index:250;
+    width:56px; height:56px; border-radius:50%; background:var(--teal); color:white;
+    border:none; font-size:22px; cursor:pointer; box-shadow:0 8px 24px rgba(0,90,171,0.35);
+    transition:transform var(--dur-base) var(--ease);
+  }
+  .chat-launcher:hover{transform:scale(1.06);}
+  @media(max-width:900px){ .chat-launcher{bottom:88px; right:16px; width:50px; height:50px; font-size:19px;} }
+
+  .chat-panel{
+    position:fixed; right:22px; bottom:90px; z-index:250; width:340px; max-width:calc(100vw - 32px);
+    background:white; border-radius:16px; box-shadow:0 20px 50px rgba(0,0,0,0.18);
+    display:flex; flex-direction:column; overflow:hidden;
+    opacity:0; transform:translateY(16px) scale(0.98); pointer-events:none;
+    transition:opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  .chat-panel.show{opacity:1; transform:translateY(0) scale(1); pointer-events:auto;}
+  @media(max-width:900px){ .chat-panel{bottom:150px; right:16px;} }
+  .chat-header{
+    background:var(--teal); color:white; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .chat-title{font-weight:600; font-size:14.5px;}
+  .chat-sub{font-size:11.5px; color:rgba(255,255,255,0.7);}
+  .chat-close{background:none; border:none; color:white; font-size:16px; cursor:pointer;}
+  .chat-body{padding:16px; max-height:360px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;}
+  .chat-msg{font-size:13.5px; padding:10px 13px; border-radius:12px; max-width:85%; line-height:1.5;}
+  .chat-msg.bot{background:var(--bg); align-self:flex-start; border-bottom-left-radius:4px;}
+  .chat-msg.user{background:var(--teal); color:white; align-self:flex-end; border-bottom-right-radius:4px;}
+  .chat-chips{display:flex; flex-direction:column; gap:8px;}
+  .chip{
+    background:white; border:1.5px solid var(--teal); color:var(--teal); border-radius:20px;
+    padding:9px 14px; font-size:13px; font-weight:600; text-align:left; cursor:pointer;
+    transition:background var(--dur-fast) var(--ease);
+  }
+  .chip:hover{background:rgba(0,90,171,0.08);}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header>
+  <div class="header-inner">
+    <a href="#main-content" class="logo"><img src="https://health1.co.in/wp-content/uploads/2025/08/Health1logo.webp" alt="Health1 Super Speciality Hospitals" class="logo-img"></a>
+    <nav class="primary">
+      <a href="#specialities" data-i18n="nav-spec">Specialities</a>
+      <a href="#find-doctor">Find a Doctor</a>
+      <a href="#robotic" data-i18n="nav-robo">Robotic Surgery</a>
+      <a href="#hospitals" data-i18n="nav-hosp">Our Hospitals</a>
+      <a href="#gallery" data-i18n="nav-gal">Gallery</a>
+      <a href="#videos">Videos</a>
+      <a href="#about" data-i18n="nav-about">About</a>
+    </nav>
+    <div class="header-actions">
+      <button class="lang-toggle" id="langToggle" aria-label="Switch language to Gujarati">ગુ</button>
+      <a href="#" class="btn btn-red" data-i18n="btn-emergency">📞 Emergency</a>
+      <a href="#" class="btn btn-amber desktop-only" data-i18n="btn-book">Book Appointment</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-sheet" id="mobileSheet">
+  <div class="mobile-sheet-inner">
+    <div class="sheet-handle"></div>
+    <a href="#specialities" class="sheet-link" data-i18n="nav-spec">Specialities</a>
+    <a href="#robotic" class="sheet-link" data-i18n="nav-robo">Robotic Surgery</a>
+    <a href="#hospitals" class="sheet-link" data-i18n="nav-hosp">Our Hospitals</a>
+    <a href="#gallery" class="sheet-link" data-i18n="nav-gal">Gallery</a>
+    <a href="#videos" class="sheet-link">Videos</a>
+    <a href="#about" class="sheet-link" data-i18n="nav-about">About</a>
+    <button class="sheet-link lang-toggle-mobile" id="langToggleMobile">ગુજરાતીમાં જુઓ / View in Gujarati</button>
+    <a href="#" class="btn btn-amber" style="margin-top:8px; justify-content:center;" data-i18n="btn-book">Book Appointment</a>
+  </div>
+</div>
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+
+<section class="hero" id="main-content">
+  <div class="container hero-inner">
+    <div>
+      <div class="eyebrow" data-i18n="hero-eyebrow">Health1 Super Speciality Hospitals</div>
+      <h1 data-i18n="hero-h1">Ahmedabad's Robotic Surgery Network, with Kidney &amp; Liver Transplant Care — 6 Hospitals, One Standard of Care.</h1>
+      <p class="sub" data-i18n="hero-sub">NABH-accredited since 2017. 950+ beds. Cashless and PMJAY accepted.</p>
+
+      <div class="symptom-search">
+        <span class="ss-icon">🔍</span>
+        <input type="text" id="symptomInput" data-i18n-placeholder="hero-placeholder" placeholder="What's bothering you? e.g. knee pain, chest pain, kidney..." onkeydown="if(event.key==='Enter')matchSymptom()">
+        <button class="btn btn-amber" onclick="matchSymptom()" data-i18n="hero-findcare">Find Care</button>
+      </div>
+      <div id="symptomResult"></div>
+
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-amber" style="padding:14px 24px; font-size:15px;" data-i18n="btn-book">Book Appointment</a>
+        <a href="#" class="btn btn-red pulse" style="padding:14px 24px; font-size:15px;" data-i18n="hero-emergency247">24×7 Emergency</a>
+      </div>
+      <div class="trust-strip">
+        <span><span class="dot"></span><span data-i18n="trust-1">★ 5.0 (3,949 Google reviews)</span></span>
+        <span><span class="dot"></span><span data-i18n="trust-2">NABH Accredited</span></span>
+        <span><span class="dot"></span><span data-i18n="trust-3">Since 2017</span></span>
+        <span><span class="dot"></span><span data-i18n="trust-4">950+ Beds</span></span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://health1.co.in/wp-content/uploads/2025/07/gallery_img_1.jpg" alt="Health1 Shilaj hospital" loading="eager" fetchpriority="high" decoding="async">
+      <div class="badge">
+        <div class="stars">★★★★★</div>
+        <div><div class="num">5.0</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="router">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" data-i18n="router-eyebrow">Get Started</div>
+      <h2 data-i18n="router-h2">How can we help today?</h2>
+    </div>
+    <div class="router-grid reveal">
+      <div class="router-card">
+        <div class="icon">🩺</div>
+        <h3 data-i18n="router-1-h3">I need care</h3>
+        <p data-i18n="router-1-p">Find a doctor, book an appointment, or check insurance and PMJAY coverage.</p>
+        <div class="arrow" data-i18n="router-1-arrow">Explore patient care →</div>
+      </div>
+      <div class="router-card">
+        <div class="icon">👨‍⚕️</div>
+        <h3 data-i18n="router-2-h3">I'm a doctor</h3>
+        <p data-i18n="router-2-p">See open positions, our referral program, and where the group is headed next.</p>
+        <div class="arrow" data-i18n="router-2-arrow">Explore careers →</div>
+      </div>
+      <div class="router-card">
+        <div class="icon">🏥</div>
+        <h3 data-i18n="router-3-h3">About Health1</h3>
+        <p data-i18n="router-3-p">Our story, accreditations, governance, and press.</p>
+        <div class="arrow" data-i18n="router-3-arrow">Learn more →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="robotic" id="robotic">
+  <svg class="precision-arc" viewBox="0 0 200 200"><circle cx="100" cy="100" r="88"/></svg>
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" data-i18n="robo-eyebrow">Flagship capability</div>
+      <h2 data-i18n="robo-h2">Two Robotic Systems. One Goal: Faster Recovery.</h2>
+      <p data-i18n="robo-p">Precision that's genuinely hard for another Ahmedabad hospital to match.</p>
+    </div>
+    <div class="robotic-grid reveal">
+      <div class="robotic-card">
+        <div class="tag">Cuvis Joint</div>
+        <h3 data-i18n="robo-1-h3">Robotic Knee &amp; Hip Replacement</h3>
+        <p data-i18n="robo-1-p">Sub-millimeter precision in arthroplasty. Most patients begin walking the same day as surgery.</p>
+      </div>
+      <div class="robotic-card">
+        <div class="tag">SSI Mantra 3.0</div>
+        <h3 data-i18n="robo-2-h3">Robotic Minimal-Access Surgery</h3>
+        <p data-i18n="robo-2-p">Used across cardiac, urological, oncological and general surgery — smaller incisions, faster discharge.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="specialities">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" data-i18n="spec-eyebrow">Our Specialities</div>
+      <h2 data-i18n="spec-h2">Care organized around what happens to you</h2>
+      <p data-i18n="spec-p">32 departments, grouped into six clinical pillars — not a flat list to scroll through.</p>
+    </div>
+    <div class="pillar-grid reveal">
+      <div class="pillar-card"><div class="num">01</div><h3 data-i18n="spec-1-h3">Neurosciences &amp; Interventional Neurology</h3><p data-i18n="spec-1-p">Stroke care, spine, and neurological disorders.</p><div class="cross-link" data-i18n="spec-1-link">Available at: <a href="#hospitals">Shilaj</a> · <a href="#hospitals">Vastral</a> · <a href="#hospitals">Gandhinagar</a></div><a href="./health1-neurology-stroke-care.html" style="display:block; margin-top:10px; font-size:13px; font-weight:600; color:var(--teal);">Learn more →</a></div>
+      <div class="pillar-card"><div class="num">02</div><h3 data-i18n="spec-2-h3">Cardiac &amp; Vascular Sciences</h3><p data-i18n="spec-2-p">Cath lab, cardiac surgery, vascular interventions.</p><div class="cross-link" data-i18n="spec-2-link">Available at: <a href="#hospitals">Shilaj</a> · <a href="#hospitals">Gandhinagar</a></div></div>
+      <div class="pillar-card"><div class="num">03</div><h3 data-i18n="spec-3-h3">Orthopaedics &amp; Robotic Joint Replacement</h3><p data-i18n="spec-3-p">Cuvis-assisted knee and hip replacement.</p><div class="cross-link" data-i18n="spec-3-link">Available at: <a href="#hospitals">Shilaj</a> · <a href="#robotic">Robotic Surgery →</a></div><a href="./health1-robotic-joint-replacement.html" style="display:block; margin-top:10px; font-size:13px; font-weight:600; color:var(--teal);">Learn more →</a></div>
+      <div class="pillar-card"><div class="num">04</div><h3 data-i18n="spec-4-h3">Oncology &amp; Organ Transplant Care</h3><p data-i18n="spec-4-p">Kidney, liver, pancreas and bone marrow transplant.</p><div class="cross-link" data-i18n="spec-4-link">Available at: <a href="#hospitals">Shilaj</a> · <a href="#hospitals">Udaipur</a></div><a href="./health1-kidney-liver-transplant.html" style="display:block; margin-top:10px; font-size:13px; font-weight:600; color:var(--teal);">Learn more →</a></div>
+      <div class="pillar-card"><div class="num">05</div><h3 data-i18n="spec-5-h3">Women's, Children's &amp; General Medicine</h3><p data-i18n="spec-5-p">Obstetrics, pediatrics, and everyday care.</p><div class="cross-link" data-i18n="spec-5-link">Available at: all 6 branches</div></div>
+      <div class="pillar-card"><div class="num">06</div><h3 data-i18n="spec-6-h3">Emergency &amp; Critical Care</h3><p data-i18n="spec-6-p">24×7 emergency department across all branches.</p><div class="cross-link" data-i18n="spec-6-link">Available at: all 6 branches</div></div>
+    </div>
+    <div class="more-specialities reveal">
+      <span>Also see:</span>
+      <a href="./health1-neurosurgery.html">Neurosurgery</a>
+      <a href="./health1-spine-surgery.html">Spine Surgery</a>
+      <a href="./health1-arthroscopy-sports-medicine.html">Arthroscopy &amp; Sports Medicine</a>
+      <a href="./health1-gastroenterology.html">Gastroenterology</a>
+      <a href="./health1-pulmonology.html">Pulmonology</a>
+      <a href="./health1-ent.html">ENT</a>
+    </div>
+  </div>
+</section>
+
+<section class="new-service-band">
+  <div class="container new-service-inner reveal">
+    <div>
+      <div class="ns-badge">New at Health1 Shilaj</div>
+      <h3>Interventional Pain Management</h3>
+      <p>Chronic back, neck, and joint pain treated without open surgery — image-guided procedures, day-visit recovery.</p>
+    </div>
+    <a href="./health1-interventional-pain.html" class="btn btn-outline">Learn More →</a>
+  </div>
+</section>
+
+<section id="find-doctor">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Find the Right Doctor</div>
+      <h2>Filter by specialty, branch, and language</h2>
+      <p>22 real Health1 doctors shown as a preview — the full directory covers 150+ doctors across all specialities.</p>
+    </div>
+    <div class="doctor-filters reveal">
+      <select id="filterSpec">
+        <option value="">All Specialities</option>
+        <option value="Orthopaedics">Orthopaedics</option>
+        <option value="Cardiac">Cardiac</option>
+        <option value="Neuro">Neuro</option>
+        <option value="Neurosurgery">Neurosurgery</option>
+        <option value="Spine">Spine Surgery</option>
+        <option value="Transplant">Transplant</option>
+        <option value="Urology">Urology</option>
+        <option value="General">General Medicine</option>
+      </select>
+      <select id="filterBranch">
+        <option value="">All Branches</option>
+        <option value="Shilaj">Shilaj</option>
+        <option value="Vastral">Vastral</option>
+        <option value="Gandhinagar">Gandhinagar</option>
+        <option value="Himmatnagar">Himmatnagar</option>
+        <option value="Modasa">Modasa</option>
+        <option value="Udaipur">Udaipur</option>
+      </select>
+      <select id="filterLang">
+        <option value="">Any Language</option>
+        <option value="Gujarati">Gujarati</option>
+        <option value="Hindi">Hindi</option>
+        <option value="English">English</option>
+      </select>
+    </div>
+    <div class="doctor-grid reveal" id="doctorGrid"></div>
+
+    <div class="booking-form-wrap reveal" id="booking-form">
+      <h3>Book Your Appointment</h3>
+      <p class="booking-sub">Fill this in and our team will call to confirm your slot — usually within a few hours during OPD timings.</p>
+      <form id="appointmentForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="apt-name">Full Name *</label>
+            <input type="text" id="apt-name" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="apt-phone">Phone Number *</label>
+            <input type="tel" id="apt-phone" required autocomplete="tel" pattern="[0-9+\-\s]{10,15}" placeholder="+91 XXXXX XXXXX">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="apt-branch">Preferred Branch *</label>
+            <select id="apt-branch" required>
+              <option value="">Select branch</option>
+              <option value="Shilaj">Shilaj</option>
+              <option value="Vastral">Vastral</option>
+              <option value="Gandhinagar">Gandhinagar</option>
+              <option value="Himmatnagar">Himmatnagar</option>
+              <option value="Modasa">Modasa</option>
+              <option value="Udaipur">Udaipur</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="apt-dept">Department *</label>
+            <select id="apt-dept" required>
+              <option value="">Select department</option>
+              <option value="Orthopaedics">Orthopaedics</option>
+              <option value="Cardiac">Cardiac</option>
+              <option value="Neuro">Neuro</option>
+              <option value="Neurosurgery">Neurosurgery</option>
+              <option value="Spine">Spine Surgery</option>
+              <option value="Transplant">Transplant</option>
+              <option value="Urology">Urology</option>
+              <option value="Gastroenterology">Gastroenterology</option>
+              <option value="Pulmonology">Pulmonology</option>
+              <option value="ENT">ENT</option>
+              <option value="General">General Medicine</option>
+              <option value="Emergency">Emergency</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="apt-date">Preferred Date</label>
+            <input type="date" id="apt-date">
+          </div>
+          <div class="form-group">
+            <label for="apt-time">Preferred Time</label>
+            <select id="apt-time">
+              <option value="">Any time</option>
+              <option value="Morning">Morning (9 AM – 12 PM)</option>
+              <option value="Evening">Evening (4 PM – 7 PM)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="apt-notes">Anything we should know? (optional)</label>
+          <textarea id="apt-notes" rows="2" placeholder="Symptoms, existing patient, doctor preference, etc."></textarea>
+        </div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="apt-existing"> I'm an existing Health1 patient
+        </label>
+        <button type="submit" class="btn btn-amber" id="apt-submit-btn" style="padding:13px 28px; font-size:14.5px;">Request Appointment</button>
+        <div class="form-status" id="apt-form-status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="container proof-inner reveal">
+    <div class="proof-score">
+      <div class="big">5.0</div>
+      <div>
+        <div class="stars">★★★★★</div>
+        <div class="meta" data-i18n="proof-meta">3,949 Google reviews · verified by RepOcean</div>
+        <a href="#" style="font-size:12.5px; font-weight:600; color:var(--teal);" data-i18n="proof-seeall">See all reviews →</a>
+      </div>
+    </div>
+    <div class="testimonial-row">
+      <div class="testimonial">"Hospital infrastructure is very good. High tech institute for organ transplantation and robotic surgeries."<div class="name">— Bhavin Baria</div></div>
+      <div class="testimonial">"Very good treatment under PMJAY. Dr. Krunal Patel is very good."<div class="name">— Sonu Ahari</div></div>
+      <div class="testimonial">"Excellent experience — clean, organized, patient-friendly environment."<div class="name">— Rahul Suthar</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="hospitals">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" data-i18n="hosp-eyebrow">Our Hospitals</div>
+      <h2 data-i18n="hosp-h2">Six locations across Gujarat &amp; Rajasthan</h2>
+    </div>
+    <div class="branch-grid reveal">
+      <div class="branch-card">
+        <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/gallery_img_2.jpg')"></div>
+        <div class="branch-body"><h3><a href="./health1-branch-shilaj.html" style="color:inherit; text-decoration:none;">Health1 — Shilaj</a></h3><div class="beds" data-i18n="hosp-1-beds">330 beds · Flagship</div><div class="call">📞 +91 90 33 11 44 44</div><div class="cross-link" data-i18n="hosp-1-link">Specialities: <a href="#specialities">Neuro</a> · <a href="#specialities">Cardiac</a> · <a href="#robotic">Robotic Ortho</a> · <a href="#specialities">Transplant</a></div></div>
+      </div>
+      <div class="branch-card">
+        <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/Vastral-Hospital-1.png')"></div>
+        <div class="branch-body"><h3><a href="./health1-branch-vastral.html" style="color:inherit; text-decoration:none;">Health1 — Vastral</a></h3><div class="beds" data-i18n="hosp-2-beds">111 beds</div><div class="call">📞 +91 90331 12222</div><div class="cross-link" data-i18n="hosp-2-link">Specialities: <a href="#specialities">Neuro</a> · <a href="#specialities">General Medicine</a></div></div>
+      </div>
+      <div class="branch-card">
+        <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/SGS-Gandhinagar-1.jpeg')"></div>
+        <div class="branch-body"><h3><a href="./health1-branch-gandhinagar.html" style="color:inherit; text-decoration:none;">SGS Health1 — Gandhinagar</a></h3><div class="beds" data-i18n="hosp-3-beds">200 beds</div><div class="call">📞 +91 72270 74088</div><div class="cross-link" data-i18n="hosp-3-link">Specialities: <a href="#specialities">Cardiac</a> · <a href="#specialities">Neuro</a></div></div>
+      </div>
+      <div class="branch-card">
+        <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/07/AVISHKAR-HEALTH1-HOSPITAL-1-scaled.jpg')"></div>
+        <div class="branch-body"><h3><a href="./health1-branch-himmatnagar.html" style="color:inherit; text-decoration:none;">Avishkar Health1 — Himmatnagar</a></h3><div class="beds" data-i18n="hosp-4-beds">100 beds</div><div class="call">📞 +91 97129 94444</div><div class="cross-link" data-i18n="hosp-4-link">Specialities: <a href="#specialities">General Medicine</a> · <a href="#specialities">Emergency</a></div></div>
+      </div>
+      <div class="branch-card">
+        <div class="branch-img" style="background-image:url('https://health1.co.in/wp-content/uploads/2025/08/health-1-hospital-modasa-1.jpeg')"></div>
+        <div class="branch-body"><h3><a href="./health1-branch-modasa.html" style="color:inherit; text-decoration:none;">Unity Health1 — Modasa</a></h3><div class="beds" data-i18n="hosp-5-beds">51 beds</div><div class="call">📞 +91 9712662222</div><div class="cross-link" data-i18n="hosp-5-link">Specialities: <a href="#specialities">General Medicine</a> · <a href="#specialities">Emergency</a></div></div>
+      </div>
+      <div class="branch-card">
+        <div class="branch-img placeholder" data-i18n="hosp-6-photo">Photo coming soon</div>
+        <div class="branch-body"><h3><a href="./health1-branch-udaipur.html" style="color:inherit; text-decoration:none;">Health1 — Udaipur</a></h3><div class="beds" data-i18n="hosp-6-beds">51 beds</div><div class="call">📞 +91 9119118000</div><div class="cross-link" data-i18n="hosp-6-link">Specialities: <a href="#specialities">Transplant</a> · <a href="#specialities">General Medicine</a></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="container">
+    <div class="section-head reveal" style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; max-width:none;">
+      <div>
+        <div class="eyebrow" data-i18n="gal-eyebrow">See it for yourself</div>
+        <h2 data-i18n="gal-h2">Photo Gallery</h2>
+        <p style="margin-bottom:0;" data-i18n="gal-p">A look inside our hospitals — operation theatres, ICUs, and patient care areas.</p>
+      </div>
+      <a href="#" class="btn btn-outline" data-i18n="gal-viewall">View Full Gallery →</a>
+    </div>
+    <div class="gallery-grid reveal">
+      <img src="https://health1.co.in/wp-content/uploads/2025/07/gallery_img_3.jpg" alt="Health1 facility" loading="lazy" decoding="async" class="skel" onload="this.classList.remove('skel')">
+      <img src="https://health1.co.in/wp-content/uploads/2025/07/gallery_img_5.jpg" alt="Health1 facility" loading="lazy" decoding="async" class="skel" onload="this.classList.remove('skel')">
+      <img src="https://health1.co.in/wp-content/uploads/2025/07/Vastral-Hospital-2.png" alt="Health1 Vastral" loading="lazy" decoding="async" class="skel" onload="this.classList.remove('skel')">
+      <img src="https://health1.co.in/wp-content/uploads/2025/07/SGS-Gandhinagar-4.jpeg" alt="Health1 Gandhinagar" loading="lazy" decoding="async" class="skel" onload="this.classList.remove('skel')">
+      <img src="https://health1.co.in/wp-content/uploads/2025/08/health-1-hospital-modasa-3-scaled.jpeg" alt="Health1 Modasa" loading="lazy" decoding="async" class="skel" onload="this.classList.remove('skel')">
+      <img src="https://health1.co.in/wp-content/uploads/2025/07/AVISHKAR-HEALTH1-HOSPITAL-9.jpg" alt="Health1 Himmatnagar" loading="lazy" decoding="async" class="skel" onload="this.classList.remove('skel')">
+    </div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="container">
+    <div class="section-head reveal" style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; max-width:none;">
+      <div>
+        <div class="eyebrow">See It, Don't Just Read It</div>
+        <h2>Watch Health1</h2>
+        <p style="margin-bottom:0;">Facility tours, doctor introductions, and real patient stories.</p>
+      </div>
+      <a href="https://www.youtube.com/@health1hospitals" target="_blank" rel="noopener" class="btn btn-outline">Visit Our Channel →</a>
+    </div>
+    <div class="video-grid reveal">
+      <div class="video-card">
+        <div class="video-thumb">▶</div>
+        <div class="video-label">Facility Tour — Shilaj Flagship<span>Coming soon</span></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">▶</div>
+        <div class="video-label">Meet Dr. Keyur Patel — Interventional Neurology<span>Coming soon</span></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">▶</div>
+        <div class="video-label">Patient Story — Robotic Knee Replacement<span>Coming soon</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid reveal">
+      <div class="stat"><div class="n">2.5L+</div><div class="l" data-i18n="stat-1">OPD Patients Treated</div></div>
+      <div class="stat"><div class="n">50K+</div><div class="l" data-i18n="stat-2">IPD Patients Treated</div></div>
+      <div class="stat"><div class="n">70K+</div><div class="l" data-i18n="stat-3">Surgeries Performed</div></div>
+      <div class="stat"><div class="n">20K+</div><div class="l" data-i18n="stat-4">Cathlab Procedures</div></div>
+      <div class="stat"><div class="n">950+</div><div class="l" data-i18n="stat-5">Beds</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="insure">
+  <div class="container insure-inner reveal">
+    <div class="insure-text">
+      <div class="eyebrow" data-i18n="ins-eyebrow">Cashless &amp; PMJAY</div>
+      <h2 style="font-size:26px;" data-i18n="ins-h2">One less thing to worry about before treatment.</h2>
+      <p data-i18n="ins-p">Health1 is empanelled with virtually every major insurer and TPA in India, along with government and corporate health schemes.</p>
+      <div class="scheme-pills">
+        <span class="pill">PMJAY</span><span class="pill">CGHS</span><span class="pill">ECHS</span>
+        <span class="pill">Railways</span><span class="pill">GEB</span><span class="pill">Akashwani</span>
+        <span class="pill">Doordarshan</span><span class="pill">ONGC</span><span class="pill">Astral</span>
+      </div>
+    </div>
+    <a href="#" class="btn btn-outline" style="padding:14px 26px;" data-i18n="ins-cta">Check Your Coverage</a>
+  </div>
+</section>
+
+<section class="estimator" id="cost-estimator">
+  <div class="container">
+    <div class="section-head reveal" style="margin:0 auto 32px; text-align:center; max-width:560px;">
+      <div class="eyebrow" style="justify-content:center;">Know Before You Go</div>
+      <h2>Estimate Your Cost</h2>
+      <p>A ballpark figure before you visit — like knowing the fare before you book a cab.</p>
+    </div>
+    <div class="estimator-box reveal">
+      <div class="estimator-row">
+        <select id="estProcedure">
+          <option value="">Select a procedure</option>
+          <option value="knee" data-cash="180000-220000" data-insured="0-15000">Robotic Knee Replacement (per knee)</option>
+          <option value="angiography" data-cash="18000-25000" data-insured="0-3000">Coronary Angiography</option>
+          <option value="normal-delivery" data-cash="45000-65000" data-insured="0-5000">Normal Delivery</option>
+          <option value="dialysis" data-cash="1500-2500" data-insured="0-500">Dialysis (per session)</option>
+          <option value="checkup" data-cash="1500-4000" data-insured="0-1000">General Health Checkup Package</option>
+        </select>
+        <select id="estPayment">
+          <option value="cash">Paying myself (cash)</option>
+          <option value="insured">Insurance / PMJAY / Cashless</option>
+        </select>
+      </div>
+      <div id="estimateOutput"></div>
+    </div>
+  </div>
+</section>
+
+<section class="second-opinion">
+  <div class="container so-inner reveal">
+    <div>
+      <div class="eyebrow" style="color:#FFD666;">Not sure about a diagnosis?</div>
+      <h2>Get a Second Opinion</h2>
+      <p>For complex or life-changing decisions — transplant, cancer, major surgery — talk to a senior Health1 specialist before committing to a treatment plan.</p>
+    </div>
+    <a href="./health1-second-opinion.html" class="btn btn-amber" style="padding:14px 26px;">Request Second Opinion</a>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container" style="max-width:760px;">
+    <div class="section-head reveal" style="max-width:none;">
+      <div class="eyebrow">Common Questions</div>
+      <h2>Before You Ask</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item">
+        <summary>Is PMJAY accepted, and at which branches?</summary>
+        <p>Yes — PMJAY is accepted across Health1 branches. Coverage for specific procedures can vary by location, so confirm with your nearest branch before admission.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Which insurance companies does Health1 work with for cashless treatment?</summary>
+        <p>Health1 is empanelled with virtually every major insurer and TPA in India, along with government schemes like CGHS, ECHS, and corporate tie-ups including GEB, ONGC, and Railways.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What happens in a medical emergency?</summary>
+        <p>Every Health1 branch runs a 24×7 emergency department with an on-call intensive care team. Call the branch emergency number directly — it's faster than any online form.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How is robotic knee replacement different from conventional surgery?</summary>
+        <p>The Cuvis robotic system places implants with sub-millimeter precision. Most patients begin walking with support the same day, versus several days for conventional surgery.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I get a second opinion before committing to surgery?</summary>
+        <p>Yes — for complex or life-changing decisions like transplant or major surgery, you can request a second opinion from a senior Health1 specialist before proceeding.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What's the process for international or NRI patients?</summary>
+        <p>Health1 assists with advance cost estimates and visa-related documentation for international patients. Contact the corporate office to start the process before you travel.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer id="about">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="https://health1.co.in/wp-content/uploads/2025/08/Health1logo.webp" alt="Health1" style="height:36px; width:auto; background:white; padding:6px 10px; border-radius:8px;"></div>
+        <p style="color:rgba(255,255,255,0.6); font-size:13.5px; max-width:280px; margin-bottom:20px;" data-i18n="foot-tagline">Six NABH-accredited hospitals across Gujarat &amp; Rajasthan. Since 2017.</p>
+        <div class="social-row">
+          <a href="https://www.youtube.com/@health1hospitals" target="_blank" rel="noopener" aria-label="YouTube" class="social-icon">▶</a>
+          <a href="https://www.facebook.com/Health1-Super-Speciality-Hospitals-103879985400603/" target="_blank" rel="noopener" aria-label="Facebook" class="social-icon">f</a>
+          <a href="https://www.instagram.com/health1hospitalsofficial/" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon">◎</a>
+        </div>
+        <div class="newsletter">
+          <div style="font-size:13px; font-weight:600; color:white; margin-bottom:10px;" data-i18n="foot-newsletter">Get health updates</div>
+          <div class="newsletter-form">
+            <input type="email" data-i18n-placeholder="foot-email" placeholder="Your email" aria-label="Email for newsletter">
+            <button class="btn btn-amber" style="padding:9px 16px; font-size:13px;" data-i18n="foot-join">Join</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 data-i18n="foot-h-patients">Patients</h4>
+        <a href="#find-doctor" data-i18n="foot-finddoc">Find a Doctor</a>
+        <a href="#find-doctor" data-i18n="btn-book">Book Appointment</a>
+        <a href="#gallery" data-i18n="nav-gal">Photo Gallery</a>
+        <a href="#" data-i18n="foot-patientstories">Patient Stories (Reviews)</a>
+        <a href="#" data-i18n="foot-successstories">Success Stories</a>
+        <a href="./health1-opd-ipd.html" data-i18n="foot-opdipd">OPD / IPD Info</a>
+        <a href="#" data-i18n="foot-resources">Patient Resources</a>
+        <a href="./health1-health-blog.html" data-i18n="foot-blog">Health Blog</a>
+        <a href="./health1-health-tools.html">Health Tools &amp; Calculators</a>
+        <a href="./health1-health-packages.html" data-i18n="foot-packages">Health Packages</a>
+      </div>
+      <div>
+        <h4 data-i18n="foot-h-doctors">Doctors</h4>
+        <a href="./health1-careers.html" data-i18n="foot-careers">Careers</a>
+        <a href="./health1-careers.html#openings" data-i18n="foot-openpos">Open Positions</a>
+        <a href="./health1-careers.html#openings" data-i18n="foot-referral">Referral Program</a>
+        <a href="#" data-i18n="foot-academic">Academic &amp; Research</a>
+      </div>
+      <div>
+        <h4 data-i18n="foot-h-company">Company</h4>
+        <a href="#" data-i18n="foot-story">Our Story</a>
+        <a href="#" data-i18n="foot-accred">Accreditations</a>
+        <a href="#" data-i18n="foot-gov">Governance</a>
+        <a href="#" data-i18n="foot-tieups">Corporate Tie-Ups</a>
+        <a href="./health1-insurance-pmjay.html" data-i18n="ins-eyebrow">Insurance &amp; PMJAY</a>
+        <a href="#" data-i18n="foot-press">Press</a>
+        <a href="./health1-contact.html" data-i18n="foot-contact">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="foot-copyright">© 2026 Health1 Super Speciality Hospitals. Prototype build — v6.</span>
+      &nbsp;·&nbsp; <a href="./health1-privacy-policy.html" style="color:rgba(255,255,255,0.6);">Privacy Policy</a>
+      &nbsp;·&nbsp; <a href="./health1-terms-of-service.html" style="color:rgba(255,255,255,0.6);">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-bar">
+  <div class="mobile-bar-inner">
+    <a href="#" class="btn btn-red" data-i18n="btn-emergency">📞 Emergency</a>
+    <a href="#" class="btn btn-amber" data-i18n="btn-book">Book Appointment</a>
+  </div>
+</div>
+
+<!-- Chatbot -->
+<button class="chat-launcher" id="chatLauncher" aria-label="Chat with Health1">💬</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div><div class="chat-title" data-i18n="chat-title">Health1 Assistant</div><div class="chat-sub" data-i18n="chat-sub">Usually replies instantly</div></div>
+    <button class="chat-close" id="chatClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-msg bot" data-i18n="chat-greeting">Hi 👋 I'm here to help. What do you need?</div>
+    <div class="chat-chips" id="chatChips">
+      <button class="chip" onclick="chatReply('book')" data-i18n="chat-chip-book">Book an appointment</button>
+      <button class="chip" onclick="chatReply('insurance')" data-i18n="chat-chip-insurance">Check insurance / PMJAY</button>
+      <button class="chip" onclick="chatReply('branch')" data-i18n="chat-chip-branch">Find nearest hospital</button>
+      <button class="chip" onclick="chatReply('emergency')" data-i18n="chat-chip-emergency">Emergency — need help now</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ============================================================
+     BACKEND CONFIG — fill these in with your real Supabase project
+     details (Project Settings → API), then every form on this site
+     goes live immediately. Until filled in, forms show a clear
+     fallback message rather than silently failing.
+     ============================================================ */
+  const SUPABASE_CONFIG = {
+    url: 'YOUR_SUPABASE_PROJECT_URL',       // e.g. https://xxxxx.supabase.co
+    anonKey: 'YOUR_SUPABASE_ANON_KEY'       // Project Settings → API → anon public key
+  };
+  const backendReady = SUPABASE_CONFIG.url !== 'YOUR_SUPABASE_PROJECT_URL' && SUPABASE_CONFIG.anonKey !== 'YOUR_SUPABASE_ANON_KEY';
+  const supabaseClient = backendReady
+    ? window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey)
+    : null;
+
+  const revealEls = document.querySelectorAll('.reveal, .robotic');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); }
+    });
+  }, {threshold:0.2});
+  revealEls.forEach(el=>io.observe(el));
+
+  // Mobile hamburger / bottom sheet
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileSheet = document.getElementById('mobileSheet');
+  const sheetBackdrop = document.getElementById('sheetBackdrop');
+  function toggleSheet(open){
+    hamburgerBtn.classList.toggle('open', open);
+    mobileSheet.classList.toggle('show', open);
+    sheetBackdrop.classList.toggle('show', open);
+  }
+  hamburgerBtn.addEventListener('click', ()=> toggleSheet(!mobileSheet.classList.contains('show')));
+  sheetBackdrop.addEventListener('click', ()=> toggleSheet(false));
+  document.querySelectorAll('.sheet-link:not(.lang-toggle-mobile)').forEach(a=> a.addEventListener('click', ()=> toggleSheet(false)));
+
+  /* ============ GUJARATI TRANSLATIONS ============ */
+  const gu = {
+    'nav-spec':'વિશેષતાઓ', 'nav-robo':'રોબોટિક સર્જરી', 'nav-hosp':'અમારી હોસ્પિટલો',
+    'nav-gal':'ગેલેરી', 'nav-about':'અમારા વિશે',
+    'btn-emergency':'📞 ઈમરજન્સી', 'btn-book':'એપોઈન્ટમેન્ટ બુક કરો',
+
+    'hero-eyebrow':'હેલ્થ1 સુપર સ્પેશિયાલિટી હોસ્પિટલ્સ',
+    'hero-h1':'અમદાવાદનું રોબોટિક સર્જરી નેટવર્ક, કિડની અને લિવર ટ્રાન્સપ્લાન્ટ કેર સાથે — 6 હોસ્પિટલ, એક જ ધોરણની સંભાળ.',
+    'hero-sub':'2017થી NABH માન્યતા પ્રાપ્ત. 950+ બેડ. કેશલેસ અને PMJAY સ્વીકાર્ય.',
+    'hero-placeholder':'તમને શું તકલીફ છે? દા.ત. ઘૂંટણનો દુખાવો, છાતીમાં દુખાવો, કિડની...',
+    'hero-findcare':'સંભાળ શોધો',
+    'hero-emergency247':'24×7 ઈમરજન્સી',
+    'trust-1':'★ 5.0 (3,949 ગૂગલ સમીક્ષાઓ)', 'trust-2':'NABH માન્યતા પ્રાપ્ત',
+    'trust-3':'2017થી', 'trust-4':'950+ બેડ',
+
+    'router-eyebrow':'શરૂ કરો',
+    'router-h2':'આજે અમે તમારી કેવી રીતે મદદ કરી શકીએ?',
+    'router-1-h3':'મારે સારવાર જોઈએ છે',
+    'router-1-p':'ડોક્ટર શોધો, એપોઈન્ટમેન્ટ બુક કરો, અથવા ઈન્શ્યોરન્સ અને PMJAY કવરેજ ચકાસો.',
+    'router-1-arrow':'દર્દી સંભાળ જુઓ →',
+    'router-2-h3':'હું ડોક્ટર છું',
+    'router-2-p':'ખાલી જગ્યાઓ, રેફરલ પ્રોગ્રામ અને ગ્રુપની આગળની દિશા જુઓ.',
+    'router-2-arrow':'કારકિર્દી જુઓ →',
+    'router-3-h3':'Health1 વિશે',
+    'router-3-p':'અમારી વાર્તા, માન્યતાઓ, ગવર્નન્સ અને પ્રેસ.',
+    'router-3-arrow':'વધુ જાણો →',
+
+    'robo-eyebrow':'મુખ્ય ક્ષમતા',
+    'robo-h2':'બે રોબોટિક સિસ્ટમ. એક જ ધ્યેય: ઝડપી રિકવરી.',
+    'robo-p':'એવી ચોકસાઈ જે અમદાવાદની બીજી કોઈ હોસ્પિટલ માટે મેચ કરવી ખરેખર અઘરી છે.',
+    'robo-1-h3':'રોબોટિક ઘૂંટણ અને હિપ રિપ્લેસમેન્ટ',
+    'robo-1-p':'આર્થ્રોપ્લાસ્ટીમાં સબ-મિલિમીટર ચોકસાઈ. મોટાભાગના દર્દીઓ સર્જરીના એ જ દિવસે ચાલવાનું શરૂ કરે છે.',
+    'robo-2-h3':'રોબોટિક મિનિમલ-એક્સેસ સર્જરી',
+    'robo-2-p':'કાર્ડિયાક, યુરોલોજિકલ, ઓન્કોલોજિકલ અને જનરલ સર્જરીમાં ઉપયોગ — નાના ચીરા, ઝડપી ડિસ્ચાર્જ.',
+
+    'spec-eyebrow':'અમારી વિશેષતાઓ',
+    'spec-h2':'તમારી સાથે શું થાય છે તેની આસપાસ ગોઠવાયેલી સંભાળ',
+    'spec-p':'32 વિભાગો, છ ક્લિનિકલ સ્તંભોમાં વહેંચાયેલા — સ્ક્રોલ કરવા માટેની સપાટ યાદી નહીં.',
+    'spec-1-h3':'ન્યુરોસાયન્સ અને ઈન્ટરવેન્શનલ ન્યુરોલોજી', 'spec-1-p':'સ્ટ્રોક કેર, કરોડરજ્જુ અને ન્યુરોલોજિકલ સમસ્યાઓ.',
+    'spec-1-link':'અહીં ઉપલબ્ધ: <a href="#hospitals">શિલજ</a> · <a href="#hospitals">વસ્ત્રાલ</a> · <a href="#hospitals">ગાંધીનગર</a>',
+    'spec-2-h3':'કાર્ડિયાક અને વેસ્ક્યુલર સાયન્સ', 'spec-2-p':'કેથ લેબ, કાર્ડિયાક સર્જરી, વેસ્ક્યુલર ઈન્ટરવેન્શન.',
+    'spec-2-link':'અહીં ઉપલબ્ધ: <a href="#hospitals">શિલજ</a> · <a href="#hospitals">ગાંધીનગર</a>',
+    'spec-3-h3':'ઓર્થોપેડિક્સ અને રોબોટિક જોઈન્ટ રિપ્લેસમેન્ટ', 'spec-3-p':'Cuvis-સહાયિત ઘૂંટણ અને હિપ રિપ્લેસમેન્ટ.',
+    'spec-3-link':'અહીં ઉપલબ્ધ: <a href="#hospitals">શિલજ</a> · <a href="#robotic">રોબોટિક સર્જરી →</a>',
+    'spec-4-h3':'ઓન્કોલોજી અને ઓર્ગન ટ્રાન્સપ્લાન્ટ કેર', 'spec-4-p':'કિડની, લિવર, પેન્ક્રિયાસ અને બોન મેરો ટ્રાન્સપ્લાન્ટ.',
+    'spec-4-link':'અહીં ઉપલબ્ધ: <a href="#hospitals">શિલજ</a> · <a href="#hospitals">ઉદયપુર</a>',
+    'spec-5-h3':'મહિલા, બાળ અને જનરલ મેડિસિન', 'spec-5-p':'પ્રસૂતિ, બાળરોગ અને રોજિંદી સંભાળ.',
+    'spec-5-link':'અહીં ઉપલબ્ધ: તમામ 6 શાખાઓમાં',
+    'spec-6-h3':'ઈમરજન્સી અને ક્રિટિકલ કેર', 'spec-6-p':'તમામ શાખાઓમાં 24×7 ઈમરજન્સી વિભાગ.',
+    'spec-6-link':'અહીં ઉપલબ્ધ: તમામ 6 શાખાઓમાં',
+
+    'proof-meta':'3,949 ગૂગલ સમીક્ષાઓ · RepOcean દ્વારા ચકાસાયેલ', 'proof-seeall':'બધી સમીક્ષાઓ જુઓ →',
+
+    'hosp-eyebrow':'અમારી હોસ્પિટલો', 'hosp-h2':'ગુજરાત અને રાજસ્થાનમાં છ સ્થળો',
+    'hosp-1-beds':'330 બેડ · મુખ્ય શાખા', 'hosp-2-beds':'111 બેડ', 'hosp-3-beds':'200 બેડ',
+    'hosp-4-beds':'100 બેડ', 'hosp-5-beds':'51 બેડ', 'hosp-6-beds':'51 બેડ',
+    'hosp-6-photo':'ફોટો ટૂંક સમયમાં',
+    'hosp-1-link':'વિશેષતાઓ: <a href="#specialities">ન્યુરો</a> · <a href="#specialities">કાર્ડિયાક</a> · <a href="#robotic">રોબોટિક ઓર્થો</a> · <a href="#specialities">ટ્રાન્સપ્લાન્ટ</a>',
+    'hosp-2-link':'વિશેષતાઓ: <a href="#specialities">ન્યુરો</a> · <a href="#specialities">જનરલ મેડિસિન</a>',
+    'hosp-3-link':'વિશેષતાઓ: <a href="#specialities">કાર્ડિયાક</a> · <a href="#specialities">ન્યુરો</a>',
+    'hosp-4-link':'વિશેષતાઓ: <a href="#specialities">જનરલ મેડિસિન</a> · <a href="#specialities">ઈમરજન્સી</a>',
+    'hosp-5-link':'વિશેષતાઓ: <a href="#specialities">જનરલ મેડિસિન</a> · <a href="#specialities">ઈમરજન્સી</a>',
+    'hosp-6-link':'વિશેષતાઓ: <a href="#specialities">ટ્રાન્સપ્લાન્ટ</a> · <a href="#specialities">જનરલ મેડિસિન</a>',
+
+    'gal-eyebrow':'જાતે જુઓ', 'gal-h2':'ફોટો ગેલેરી',
+    'gal-p':'અમારી હોસ્પિટલોની અંદરની ઝલક — ઓપરેશન થિયેટર, ICU અને દર્દી સંભાળ વિસ્તારો.',
+    'gal-viewall':'સંપૂર્ણ ગેલેરી જુઓ →',
+
+    'stat-1':'OPD દર્દીઓની સારવાર', 'stat-2':'IPD દર્દીઓની સારવાર', 'stat-3':'કરવામાં આવેલી સર્જરીઓ',
+    'stat-4':'કેથલેબ પ્રોસિજર', 'stat-5':'બેડ',
+
+    'ins-eyebrow':'કેશલેસ અને PMJAY', 'ins-h2':'સારવાર પહેલાં ચિંતા કરવા જેવી એક ઓછી બાબત.',
+    'ins-p':'Health1 ભારતની લગભગ તમામ મુખ્ય ઈન્શ્યોરન્સ કંપનીઓ અને TPA સાથે, તેમજ સરકારી અને કોર્પોરેટ આરોગ્ય યોજનાઓ સાથે જોડાયેલ છે.',
+    'ins-cta':'તમારું કવરેજ ચકાસો',
+
+    'foot-tagline':'ગુજરાત અને રાજસ્થાનમાં છ NABH માન્યતા પ્રાપ્ત હોસ્પિટલો. 2017થી.',
+    'foot-newsletter':'આરોગ્ય અપડેટ્સ મેળવો', 'foot-email':'તમારો ઈમેલ', 'foot-join':'જોડાઓ',
+    'foot-h-patients':'દર્દીઓ', 'foot-finddoc':'ડોક્ટર શોધો',
+    'foot-patientstories':'દર્દીની વાતો (સમીક્ષાઓ)', 'foot-successstories':'સફળતાની વાતો',
+    'foot-opdipd':'OPD / IPD માહિતી', 'foot-resources':'દર્દી માટે સંસાધનો',
+    'foot-blog':'આરોગ્ય બ્લોગ', 'foot-packages':'હેલ્થ પેકેજ',
+    'foot-h-doctors':'ડોક્ટરો', 'foot-careers':'કારકિર્દી', 'foot-openpos':'ખાલી જગ્યાઓ',
+    'foot-referral':'રેફરલ પ્રોગ્રામ', 'foot-academic':'શૈક્ષણિક અને સંશોધન',
+    'foot-h-company':'કંપની', 'foot-story':'અમારી વાર્તા', 'foot-accred':'માન્યતાઓ',
+    'foot-gov':'ગવર્નન્સ', 'foot-tieups':'કોર્પોરેટ ટાઈ-અપ્સ', 'foot-press':'પ્રેસ', 'foot-contact':'સંપર્ક',
+    'foot-copyright':'© 2026 Health1 સુપર સ્પેશિયાલિટી હોસ્પિટલ્સ. પ્રોટોટાઈપ બિલ્ડ — v5.',
+
+    'chat-title':'Health1 સહાયક', 'chat-sub':'સામાન્ય રીતે તરત જવાબ આપે છે',
+    'chat-greeting':'નમસ્તે 👋 હું મદદ કરવા માટે અહીં છું. તમારે શું જોઈએ છે?',
+    'chat-chip-book':'એપોઈન્ટમેન્ટ બુક કરો', 'chat-chip-insurance':'ઈન્શ્યોરન્સ / PMJAY ચકાસો',
+    'chat-chip-branch':'નજીકની હોસ્પિટલ શોધો', 'chat-chip-emergency':'ઈમરજન્સી — હમણાં મદદ જોઈએ',
+  };
+
+  let currentLang = 'en';
+  const i18nEls = document.querySelectorAll('[data-i18n]');
+  const placeholderEls = document.querySelectorAll('[data-i18n-placeholder]');
+  // cache original English content once
+  i18nEls.forEach(el => el.dataset.enHtml = el.innerHTML);
+  placeholderEls.forEach(el => el.dataset.enPlaceholder = el.placeholder);
+
+  function setLang(lang){
+    currentLang = lang;
+    i18nEls.forEach(el=>{
+      const key = el.dataset.i18n;
+      el.innerHTML = (lang==='gu' && gu[key]) ? gu[key] : el.dataset.enHtml;
+    });
+    placeholderEls.forEach(el=>{
+      const key = el.dataset.i18nPlaceholder;
+      el.placeholder = (lang==='gu' && gu[key]) ? gu[key] : el.dataset.enPlaceholder;
+    });
+    document.getElementById('langToggle').textContent = lang==='gu' ? 'EN' : 'ગુ';
+    document.getElementById('langToggle').setAttribute('aria-label', lang==='gu' ? 'Switch language to English' : 'Switch language to Gujarati');
+    document.getElementById('langToggle').classList.toggle('active', lang==='gu');
+    document.documentElement.lang = lang==='gu' ? 'gu' : 'en';
+    // reset any live symptom result / chat state text to match new language
+    document.getElementById('symptomResult').innerHTML = '';
+  }
+  document.getElementById('langToggle').addEventListener('click', ()=> setLang(currentLang==='gu' ? 'en' : 'gu'));
+  document.getElementById('langToggleMobile').addEventListener('click', ()=>{ setLang(currentLang==='gu' ? 'en' : 'gu'); toggleSheet(false); });
+
+  // Symptom-to-care matcher (client-side demo — real build would call a backend triage service)
+  const symptomMapEn = [
+    {keys:['chest pain','breathless','heart attack','collapse'], urgent:true, title:'This sounds urgent', meta:'Please call Emergency now or go to your nearest Health1 branch immediately.', cond:null},
+    {keys:['knee','hip','joint','fracture','bone'], title:'Orthopaedics & Robotic Joint Replacement', meta:'Matched to: Shilaj branch · Cuvis robotic surgery available', cond:'orthopaedics'},
+    {keys:['kidney','dialysis','transplant','liver'], title:'Nephrology & Organ Transplant Care', meta:'Matched to: Shilaj, Udaipur branches', cond:'transplant'},
+    {keys:['heart','cardiac','bp','blood pressure','palpitation'], title:'Cardiac & Vascular Sciences', meta:'Matched to: Shilaj, Gandhinagar branches', cond:'cardiac'},
+    {keys:['child','baby','pediatric','fever in child'], title:"Women's, Children's & General Medicine", meta:'Matched to: all 6 branches', cond:'general'},
+    {keys:['brain','stroke','headache','seizure','neuro'], title:'Neurosciences & Interventional Neurology', meta:'Matched to: Shilaj, Vastral, Gandhinagar branches', cond:'neuro'},
+  ];
+  // Gujarati symptom keywords map to the SAME entries by index, so people can type in Gujarati too
+  const symptomMapGu = [
+    {keys:['છાતીમાં દુખાવો','શ્વાસ','હાર્ટ એટેક'], title:'આ તાત્કાલિક લાગે છે', meta:'કૃપા કરી હમણાં જ ઈમરજન્સી પર કૉલ કરો અથવા તાત્કાલિક તમારી નજીકની Health1 શાખાએ જાઓ.'},
+    {title:'ઓર્થોપેડિક્સ અને રોબોટિક જોઈન્ટ રિપ્લેસમેન્ટ', meta:'મેચ થયું: શિલજ શાખા · Cuvis રોબોટિક સર્જરી ઉપલબ્ધ'},
+    {title:'નેફ્રોલોજી અને ઓર્ગન ટ્રાન્સપ્લાન્ટ કેર', meta:'મેચ થયું: શિલજ, ઉદયપુર શાખાઓ'},
+    {title:'કાર્ડિયાક અને વેસ્ક્યુલર સાયન્સ', meta:'મેચ થયું: શિલજ, ગાંધીનગર શાખાઓ'},
+    {title:'મહિલા, બાળ અને જનરલ મેડિસિન', meta:'મેચ થયું: તમામ 6 શાખાઓ'},
+    {title:'ન્યુરોસાયન્સ અને ઈન્ટરવેન્શનલ ન્યુરોલોજી', meta:'મેચ થયું: શિલજ, વસ્ત્રાલ, ગાંધીનગર શાખાઓ'},
+  ];
+  const symptomStrings = {
+    en:{genHead:'General Medicine', genTitle:"We'll match you with the right department", genMeta:"Book a general consultation and we'll route you to the right specialist on arrival.", book:'Book Appointment', urgentLabel:'⚠ Urgent', callNow:'📞 Call Emergency Now', matchedLabel:'Matched Speciality', seeSpec:'See Speciality'},
+    gu:{genHead:'જનરલ મેડિસિન', genTitle:'અમે તમને યોગ્ય વિભાગ સાથે મેચ કરીશું', genMeta:'જનરલ કન્સલ્ટેશન બુક કરો અને અમે તમને આવ્યા પછી યોગ્ય નિષ્ણાત પાસે મોકલીશું.', book:'એપોઈન્ટમેન્ટ બુક કરો', urgentLabel:'⚠ તાત્કાલિક', callNow:'📞 હમણાં ઈમરજન્સી કૉલ કરો', matchedLabel:'મેચ થયેલ વિશેષતા', seeSpec:'વિશેષતા જુઓ'}
+  };
+  const conditionInfo = {
+    en:{
+      orthopaedics:"Robotic knee/hip replacement uses a surgical robot for sub-millimeter implant placement. Most patients begin walking with support the same day and are discharged in 3–5 days, versus 5–7 for conventional surgery.",
+      transplant:"A kidney or liver transplant replaces a failing organ with a healthy one from a living or deceased donor. Health1's transplant team manages matching, surgery, and lifelong post-transplant care under one roof.",
+      cardiac:"Cath lab procedures (angiography, angioplasty) diagnose and treat blocked arteries through a small wrist or groin incision — no open-heart surgery needed for most blockages.",
+      general:"Pediatric and general medicine covers everyday illness, vaccination, and check-ups — the right first stop when you're not sure which specialist you need.",
+      neuro:"Interventional neurology treats stroke and brain/spine conditions using minimally invasive, catheter-based techniques rather than open surgery where possible.",
+    },
+    gu:{
+      orthopaedics:"રોબોટિક ઘૂંટણ/હિપ રિપ્લેસમેન્ટમાં ઈમ્પ્લાન્ટની સબ-મિલિમીટર ચોકસાઈ માટે સર્જિકલ રોબોટનો ઉપયોગ થાય છે. મોટાભાગના દર્દીઓ એ જ દિવસે સહારા સાથે ચાલવાનું શરૂ કરે છે અને 3-5 દિવસમાં ડિસ્ચાર્જ થાય છે.",
+      transplant:"કિડની અથવા લિવર ટ્રાન્સપ્લાન્ટમાં નિષ્ફળ અંગને જીવંત અથવા મૃત દાતાના સ્વસ્થ અંગથી બદલવામાં આવે છે. Health1ની ટ્રાન્સપ્લાન્ટ ટીમ મેચિંગ, સર્જરી અને આજીવન સંભાળ એક જ જગ્યાએ સંભાળે છે.",
+      cardiac:"કેથ લેબ પ્રોસિજર (એન્જિયોગ્રાફી, એન્જિયોપ્લાસ્ટી) નાના ચીરા દ્વારા બ્લોક થયેલી ધમનીઓનું નિદાન અને સારવાર કરે છે — મોટાભાગના બ્લોકેજ માટે ઓપન-હાર્ટ સર્જરીની જરૂર નથી.",
+      general:"બાળરોગ અને જનરલ મેડિસિન રોજિંદી બીમારી, રસીકરણ અને ચેકઅપને આવરી લે છે — જ્યારે તમને ખાતરી ન હોય કે કયા નિષ્ણાતની જરૂર છે ત્યારે યોગ્ય પ્રથમ પગલું.",
+      neuro:"ઈન્ટરવેન્શનલ ન્યુરોલોજી સ્ટ્રોક અને મગજ/કરોડરજ્જુની સ્થિતિઓની સારવાર ઓપન સર્જરીને બદલે ન્યૂનતમ આક્રમક, કેથેટર-આધારિત તકનીકોથી કરે છે.",
+    }
+  };
+  function matchSymptom(){
+    const val = document.getElementById('symptomInput').value.toLowerCase().trim();
+    const box = document.getElementById('symptomResult');
+    if(!val){ box.innerHTML=''; return; }
+    const S = symptomStrings[currentLang];
+    let idx = symptomMapEn.findIndex(m => m.keys.some(k => val.includes(k)));
+    if(idx===-1) idx = symptomMapGu.findIndex(m => m.keys && m.keys.some(k => val.includes(k)));
+    if(idx===-1){
+      box.innerHTML = `<div class="symptom-card"><div class="sr-label">${S.genHead}</div>
+        <div class="sr-title">${S.genTitle}</div>
+        <div class="sr-meta">${S.genMeta}</div>
+        <div class="sr-actions"><a href="#" class="btn btn-amber">${S.book}</a></div></div>`;
+      return;
+    }
+    const en = symptomMapEn[idx], guM = symptomMapGu[idx];
+    const title = currentLang==='gu' ? guM.title : en.title;
+    const meta = currentLang==='gu' ? guM.meta : en.meta;
+    if(en.urgent){
+      box.innerHTML = `<div class="symptom-card urgent"><div class="sr-label">${S.urgentLabel}</div>
+        <div class="sr-title">${title}</div>
+        <div class="sr-meta">${meta}</div>
+        <div class="sr-actions"><a href="#" class="btn btn-red">${S.callNow}</a></div></div>`;
+    } else {
+      const learnLabel = currentLang==='gu' ? 'આ સારવાર વિશે જાણો' : 'Learn about this treatment';
+      const info = en.cond ? conditionInfo[currentLang][en.cond] : '';
+      box.innerHTML = `<div class="symptom-card"><div class="sr-label">${S.matchedLabel}</div>
+        <div class="sr-title">${title}</div>
+        <div class="sr-meta">${meta}</div>
+        ${info ? `<details class="learn-more"><summary>${learnLabel}</summary><p>${info}</p></details>` : ''}
+        <div class="sr-actions"><a href="#specialities" class="btn btn-outline">${S.seeSpec}</a><a href="#" class="btn btn-amber">${S.book}</a></div></div>`;
+    }
+  }
+
+  // Doctor Finder — REAL doctors pulled from health1.co.in/doctors/ (July 2026).
+  // Note: Udaipur roster wasn't visible in the fetched archive pages — flagged as a gap, not omitted on purpose.
+  const doctors = [
+    {name:'Dr. Keyur Patel', spec:'Neuro', branch:'Shilaj', lang:['Gujarati','Hindi','English'], exp:'Interventional Neurology (USA) · Stroke & Neuro Interventions'},
+    {name:'Dr. Akshay Patel', spec:'Neuro', branch:'Shilaj', lang:['Gujarati','English'], exp:'Interventional Radiology · Stroke, Aneurysm & Onco Interventions'},
+    {name:'Dr. Milind Akhani', spec:'Transplant', branch:'Shilaj', lang:['Gujarati','Hindi','English'], exp:'Surgical Gastroenterology · Liver Transplantation, Robotic GI Surgery'},
+    {name:'Dr. Vivek Kothari', spec:'Urology', branch:'Shilaj', lang:['Gujarati','English'], exp:'Urology · Kidney Transplant, Endourology'},
+    {name:'Dr. Krunal Patel', spec:'Urology', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Urology · Renal Transplant, Uro-Oncology, PCNL/TURP'},
+    {name:'Dr. Sunil Gurmukhani', spec:'Cardiac', branch:'Shilaj', lang:['Gujarati','English'], exp:'Interventional Cardiology · Complex Coronary Interventions'},
+    {name:'Dr. Kiran Prajapati', spec:'Cardiac', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Interventional Cardiology · Angiography, Angioplasty, Pacemaker'},
+    {name:'Dr. Subhash Chaudhary', spec:'Cardiac', branch:'Gandhinagar', lang:['Gujarati','Hindi','English'], exp:'Cardiology · Structural Interventions, Device Closure'},
+    {name:'Dr. Ravi Prajapati', spec:'Orthopaedics', branch:'Shilaj', lang:['Gujarati','English'], exp:'Robotic Joint Replacement · Oxford-Certified Microplasty Surgeon'},
+    {name:'Dr. Kalpesh C Patel', spec:'Orthopaedics', branch:'Himmatnagar', lang:['Gujarati','Hindi'], exp:'Robotic Joint Replacement · Primary & Revision Arthroplasty'},
+    {name:'Dr. Nevil Gajera', spec:'Orthopaedics', branch:'Himmatnagar', lang:['Gujarati','English'], exp:'Robotic Joint Replacement · Hip, Knee & Shoulder Arthroplasty'},
+    {name:'Dr. Sanjay Rajput', spec:'General', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Gastroenterology · Upper GI Scopy, Colonoscopy'},
+    {name:'Dr. Nirav Patel', spec:'General', branch:'Shilaj', lang:['Gujarati','English'], exp:'Obstetrics & Gynaecology · High-Risk Obstetrics, Laparoscopy'},
+    {name:'Dr. Ritesh Patel', spec:'General', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Critical Care · ICU, Polytrauma, ECMO'},
+    {name:'Dr. Renuka Vasava', spec:'General', branch:'Modasa', lang:['Gujarati','Hindi'], exp:'Internal Medicine · Hypertension, Diabetes, Cardiac Disorders'},
+    {name:'Dr. Ravi Khetan', spec:'Neurosurgery', branch:'Shilaj', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery'},
+    {name:'Dr. Nilay Adhvaryu', spec:'Neurosurgery', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Neurosurgery · Brain & Spine Surgery'},
+    {name:'Dr. Sandip Patel', spec:'Neurosurgery', branch:'Gandhinagar', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery'},
+    {name:'Dr. Bhavin Patel', spec:'Neurosurgery', branch:'Modasa', lang:['Gujarati','Hindi'], exp:'Neurosurgery · Brain & Spine Surgery'},
+    {name:'Dr. Pradip Solanki', spec:'Neurosurgery', branch:'Vastral', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery'},
+    {name:'Dr. Munjal Shah', spec:'Spine', branch:'Shilaj', lang:['Gujarati','English'], exp:'Spine Surgery · Minimally Invasive & Endoscopic'},
+    {name:'Dr. Satish Kriplani', spec:'Spine', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Spine Surgery · Minimally Invasive & Endoscopic'},
+  ];
+  function initials(n){ return n.replace('Dr. ','').split(' ').map(w=>w[0]).slice(0,2).join(''); }
+  function renderDoctors(){
+    const spec = document.getElementById('filterSpec').value;
+    const branch = document.getElementById('filterBranch').value;
+    const lang = document.getElementById('filterLang').value;
+    const filtered = doctors.filter(d =>
+      (!spec || d.spec===spec) && (!branch || d.branch===branch) && (!lang || d.lang.includes(lang))
+    );
+    const grid = document.getElementById('doctorGrid');
+    if(filtered.length===0){
+      grid.innerHTML = `<div class="no-results">No exact match — try widening your filters, or use the chatbot to ask directly.</div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(d => {
+      const hasProfile = d.name === 'Dr. Keyur Patel' && d.spec === 'Neuro';
+      const profileLink = hasProfile ? './health1-doctor-keyur-patel.html' : null;
+      const cardInner = `
+        <div class="doctor-avatar">${initials(d.name)}</div>
+        <h4>${d.name}</h4>
+        <div class="spec">${d.spec}</div>
+        <div class="meta">${d.exp}<br>${d.branch} · ${d.lang.join(', ')}</div>
+        ${hasProfile ? '<div style="margin-top:8px; font-size:12px; font-weight:600; color:var(--teal);">View Profile →</div>' : ''}`;
+      return hasProfile
+        ? `<a href="${profileLink}" class="doctor-card" style="text-decoration:none; display:block;">${cardInner}</a>`
+        : `<div class="doctor-card">${cardInner}</div>`;
+    }).join('');
+  }
+  ['filterSpec','filterBranch','filterLang'].forEach(id=>
+    document.getElementById(id).addEventListener('change', renderDoctors)
+  );
+  renderDoctors();
+
+  // ---------- Appointment Booking Form ----------
+  const aptForm = document.getElementById('appointmentForm');
+  const aptStatus = document.getElementById('apt-form-status');
+  const aptSubmitBtn = document.getElementById('apt-submit-btn');
+
+  function showAptStatus(message, type){
+    aptStatus.textContent = message;
+    aptStatus.className = 'form-status show ' + type;
+  }
+
+  aptForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    // Real client-side validation before anything hits the network
+    const name = document.getElementById('apt-name').value.trim();
+    const phone = document.getElementById('apt-phone').value.trim();
+    const branch = document.getElementById('apt-branch').value;
+    const dept = document.getElementById('apt-dept').value;
+    const date = document.getElementById('apt-date').value;
+    const time = document.getElementById('apt-time').value;
+    const notes = document.getElementById('apt-notes').value.trim();
+    const existing = document.getElementById('apt-existing').checked;
+
+    if(!name){ showAptStatus('Please enter your name.', 'error'); document.getElementById('apt-name').focus(); return; }
+    const phoneDigits = phone.replace(/[^0-9]/g, '');
+    if(phoneDigits.length < 10){ showAptStatus('Please enter a valid phone number (at least 10 digits).', 'error'); document.getElementById('apt-phone').focus(); return; }
+    if(!branch){ showAptStatus('Please select a branch.', 'error'); document.getElementById('apt-branch').focus(); return; }
+    if(!dept){ showAptStatus('Please select a department.', 'error'); document.getElementById('apt-dept').focus(); return; }
+
+    if(!backendReady){
+      // Honest fallback — never pretend a submission worked when there's nowhere for it to go.
+      showAptStatus('Online booking isn\'t connected yet — please call ' + '079 6999 6999 to book directly. (Developer: add Supabase credentials in SUPABASE_CONFIG to activate this form.)', 'error');
+      console.warn('Health1 booking form: SUPABASE_CONFIG is not filled in. See top of <script> block.');
+      return;
+    }
+
+    aptSubmitBtn.disabled = true;
+    aptSubmitBtn.innerHTML = '<span class="spinner"></span>Submitting...';
+    aptStatus.className = 'form-status';
+
+    try {
+      const { error } = await supabaseClient.from('appointments').insert({
+        patient_name: name,
+        phone: phone,
+        branch: branch,
+        department: dept,
+        preferred_date: date || null,
+        preferred_time: time || null,
+        is_existing_patient: existing,
+        notes: notes || null,
+        source: 'website'
+      });
+
+      if(error) throw error;
+
+      showAptStatus('Request received — our team will call you shortly to confirm your slot.', 'success');
+      aptForm.reset();
+    } catch(err){
+      console.error('Appointment booking error:', err);
+      showAptStatus('Something went wrong submitting this — please call 079 6999 6999 to book directly instead.', 'error');
+    } finally {
+      aptSubmitBtn.disabled = false;
+      aptSubmitBtn.textContent = 'Request Appointment';
+    }
+  });
+
+  // ---------- Newsletter Signup ----------
+  const newsletterForm = document.querySelector('.newsletter-form');
+  if(newsletterForm){
+    const newsletterBtn = newsletterForm.querySelector('button');
+    const newsletterInput = newsletterForm.querySelector('input[type="email"]');
+    newsletterBtn.addEventListener('click', async ()=>{
+      const email = newsletterInput.value.trim();
+      if(!email || !email.includes('@')){
+        newsletterInput.style.borderColor = 'var(--red)';
+        return;
+      }
+      if(!backendReady){
+        console.warn('Health1 newsletter form: SUPABASE_CONFIG is not filled in.');
+        newsletterBtn.textContent = 'Not connected yet';
+        setTimeout(()=>{ newsletterBtn.textContent = 'Join'; }, 2000);
+        return;
+      }
+      newsletterBtn.disabled = true;
+      try {
+        const { error } = await supabaseClient.from('newsletter_subscribers').insert({ email, source: 'website' });
+        if(error && error.code !== '23505') throw error; // 23505 = duplicate email, treat as success
+        newsletterBtn.textContent = 'Joined ✓';
+        newsletterInput.value = '';
+      } catch(err){
+        console.error('Newsletter signup error:', err);
+        newsletterBtn.textContent = 'Try again';
+      } finally {
+        newsletterBtn.disabled = false;
+      }
+    });
+  }
+
+  // Cost Estimator (illustrative ranges — real build pulls from the DPR / billing system)
+  function updateEstimate(){
+    const sel = document.getElementById('estProcedure');
+    const opt = sel.options[sel.selectedIndex];
+    const payment = document.getElementById('estPayment').value;
+    const out = document.getElementById('estimateOutput');
+    if(!opt.value){ out.innerHTML=''; return; }
+    const range = payment==='cash' ? opt.dataset.cash : opt.dataset.insured;
+    const [lo,hi] = range.split('-').map(n=>parseInt(n).toLocaleString('en-IN'));
+    out.innerHTML = `<div class="estimate-result">
+        <div class="range">₹${lo} – ₹${hi}</div>
+        <div style="font-size:13px; color:var(--muted); margin-top:4px;">Estimated ${payment==='cash' ? 'self-pay' : 'out-of-pocket after insurance/PMJAY'} cost for ${opt.textContent}</div>
+        <div class="disclaimer">This is an illustrative estimate only, not a quote. Final cost depends on your specific case, room category, and length of stay — confirm with our billing desk before admission.</div>
+      </div>`;
+  }
+  document.getElementById('estProcedure').addEventListener('change', updateEstimate);
+  document.getElementById('estPayment').addEventListener('change', updateEstimate);
+
+  // Chatbot (scripted demo — production version would call a real backend/LLM, same pattern as the AiSensy wireframe)
+  const chatLauncher = document.getElementById('chatLauncher');
+  const chatPanel = document.getElementById('chatPanel');
+  const chatBody = document.getElementById('chatBody');
+  chatLauncher.addEventListener('click', ()=> chatPanel.classList.toggle('show'));
+  document.getElementById('chatClose').addEventListener('click', ()=> chatPanel.classList.remove('show'));
+
+  const chatScripts = {
+    en:{
+      book: {user:'Book an appointment', bot:"Great — tell me the department and preferred branch, or tap below to go straight to the booking form.", chips:['Open Booking Form']},
+      insurance: {user:'Check insurance / PMJAY', bot:"Health1 accepts PMJAY, CGHS, ECHS, and all major insurers/TPAs for cashless treatment. Want the full list or to check a specific insurer?", chips:['See full coverage page']},
+      branch: {user:'Find nearest hospital', bot:"We have 6 branches — Shilaj, Vastral, Modasa, Gandhinagar, Himmatnagar, and Udaipur. Share your area and I'll suggest the closest one.", chips:['View all branches']},
+      emergency: {user:'Emergency — need help now', bot:"For a medical emergency, please call immediately rather than waiting on chat:", chips:['📞 Call Shilaj Emergency: +91 90 33 11 44 44']}
+    },
+    gu:{
+      book: {user:'એપોઈન્ટમેન્ટ બુક કરો', bot:'સરસ — મને વિભાગ અને પસંદગીની શાખા જણાવો, અથવા સીધા બુકિંગ ફોર્મ પર જવા માટે નીચે ટેપ કરો.', chips:['બુકિંગ ફોર્મ ખોલો']},
+      insurance: {user:'ઈન્શ્યોરન્સ / PMJAY ચકાસો', bot:'Health1 કેશલેસ સારવાર માટે PMJAY, CGHS, ECHS અને તમામ મુખ્ય ઈન્શ્યોરન્સ/TPA સ્વીકારે છે. શું તમારે સંપૂર્ણ યાદી જોઈએ છે કે કોઈ ચોક્કસ ઈન્શ્યોરન્સ ચકાસવું છે?', chips:['સંપૂર્ણ કવરેજ પેજ જુઓ']},
+      branch: {user:'નજીકની હોસ્પિટલ શોધો', bot:'અમારી 6 શાખાઓ છે — શિલજ, વસ્ત્રાલ, મોડાસા, ગાંધીનગર, હિંમતનગર અને ઉદયપુર. તમારો વિસ્તાર જણાવો, હું નજીકની શાખા સૂચવીશ.', chips:['બધી શાખાઓ જુઓ']},
+      emergency: {user:'ઈમરજન્સી — હમણાં મદદ જોઈએ', bot:'મેડિકલ ઈમરજન્સી માટે, ચેટ પર રાહ જોવાને બદલે તરત જ કૉલ કરો:', chips:['📞 શિલજ ઈમરજન્સી કૉલ કરો: +91 90 33 11 44 44']}
+    }
+  };
+  function chatReply(key){
+    const s = chatScripts[currentLang][key];
+    const chipsEl = document.getElementById('chatChips');
+    if(chipsEl) chipsEl.remove();
+
+    // Silent lead capture — doesn't block or slow the chat UI, fails quietly if backend isn't wired
+    if(backendReady){
+      supabaseClient.from('chatbot_leads').insert({
+        intent: key, message: s.user, page_url: window.location.href
+      }).then(({error})=>{ if(error) console.error('Chatbot lead capture error:', error); });
+    }
+
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-msg user';
+    userMsg.textContent = s.user;
+    chatBody.appendChild(userMsg);
+    setTimeout(()=>{
+      const botMsg = document.createElement('div');
+      botMsg.className = 'chat-msg bot';
+      botMsg.textContent = s.bot;
+      chatBody.appendChild(botMsg);
+      const chipWrap = document.createElement('div');
+      chipWrap.className = 'chat-chips';
+      s.chips.forEach(label=>{
+        const b = document.createElement('button');
+        b.className='chip'; b.textContent=label;
+        chipWrap.appendChild(b);
+      });
+      chatBody.appendChild(chipWrap);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }, 500);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
