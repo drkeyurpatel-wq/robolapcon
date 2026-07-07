@@ -1395,28 +1395,28 @@
   // Doctor Finder — REAL doctors pulled from health1.co.in/doctors/ (July 2026).
   // Note: Udaipur roster wasn't visible in the fetched archive pages — flagged as a gap, not omitted on purpose.
   const doctors = [
-    {name:'Dr. Keyur Patel', spec:'Neuro', branch:'Shilaj', lang:['Gujarati','Hindi','English'], exp:'Interventional Neurology (USA) · Stroke & Neuro Interventions'},
-    {name:'Dr. Akshay Patel', spec:'Neuro', branch:'Shilaj', lang:['Gujarati','English'], exp:'Interventional Radiology · Stroke, Aneurysm & Onco Interventions'},
-    {name:'Dr. Milind Akhani', spec:'Transplant', branch:'Shilaj', lang:['Gujarati','Hindi','English'], exp:'Surgical Gastroenterology · Liver Transplantation, Robotic GI Surgery'},
-    {name:'Dr. Vivek Kothari', spec:'Urology', branch:'Shilaj', lang:['Gujarati','English'], exp:'Urology · Kidney Transplant, Endourology'},
-    {name:'Dr. Krunal Patel', spec:'Urology', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Urology · Renal Transplant, Uro-Oncology, PCNL/TURP'},
-    {name:'Dr. Sunil Gurmukhani', spec:'Cardiac', branch:'Shilaj', lang:['Gujarati','English'], exp:'Interventional Cardiology · Complex Coronary Interventions'},
-    {name:'Dr. Kiran Prajapati', spec:'Cardiac', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Interventional Cardiology · Angiography, Angioplasty, Pacemaker'},
-    {name:'Dr. Subhash Chaudhary', spec:'Cardiac', branch:'Gandhinagar', lang:['Gujarati','Hindi','English'], exp:'Cardiology · Structural Interventions, Device Closure'},
-    {name:'Dr. Ravi Prajapati', spec:'Orthopaedics', branch:'Shilaj', lang:['Gujarati','English'], exp:'Robotic Joint Replacement · Oxford-Certified Microplasty Surgeon'},
-    {name:'Dr. Kalpesh C Patel', spec:'Orthopaedics', branch:'Himmatnagar', lang:['Gujarati','Hindi'], exp:'Robotic Joint Replacement · Primary & Revision Arthroplasty'},
-    {name:'Dr. Nevil Gajera', spec:'Orthopaedics', branch:'Himmatnagar', lang:['Gujarati','English'], exp:'Robotic Joint Replacement · Hip, Knee & Shoulder Arthroplasty'},
-    {name:'Dr. Sanjay Rajput', spec:'General', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Gastroenterology · Upper GI Scopy, Colonoscopy'},
-    {name:'Dr. Nirav Patel', spec:'General', branch:'Shilaj', lang:['Gujarati','English'], exp:'Obstetrics & Gynaecology · High-Risk Obstetrics, Laparoscopy'},
-    {name:'Dr. Ritesh Patel', spec:'General', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Critical Care · ICU, Polytrauma, ECMO'},
-    {name:'Dr. Renuka Vasava', spec:'General', branch:'Modasa', lang:['Gujarati','Hindi'], exp:'Internal Medicine · Hypertension, Diabetes, Cardiac Disorders'},
-    {name:'Dr. Ravi Khetan', spec:'Neurosurgery', branch:'Shilaj', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery'},
-    {name:'Dr. Nilay Adhvaryu', spec:'Neurosurgery', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Neurosurgery · Brain & Spine Surgery'},
-    {name:'Dr. Sandip Patel', spec:'Neurosurgery', branch:'Gandhinagar', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery'},
-    {name:'Dr. Bhavin Patel', spec:'Neurosurgery', branch:'Modasa', lang:['Gujarati','Hindi'], exp:'Neurosurgery · Brain & Spine Surgery'},
-    {name:'Dr. Pradip Solanki', spec:'Neurosurgery', branch:'Vastral', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery'},
-    {name:'Dr. Munjal Shah', spec:'Spine', branch:'Shilaj', lang:['Gujarati','English'], exp:'Spine Surgery · Minimally Invasive & Endoscopic'},
-    {name:'Dr. Satish Kriplani', spec:'Spine', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Spine Surgery · Minimally Invasive & Endoscopic'},
+    {name:'Dr. Keyur Patel', spec:'Neuro', branch:'Shilaj', lang:['Gujarati','Hindi','English'], exp:'Interventional Neurology (USA) · Stroke & Neuro Interventions', slug:'keyur-patel'},
+    {name:'Dr. Akshay Patel', spec:'Neuro', branch:'Shilaj', lang:['Gujarati','English'], exp:'Interventional Radiology · Stroke, Aneurysm & Onco Interventions', slug:'akshay-patel'},
+    {name:'Dr. Milind Akhani', spec:'Transplant', branch:'Shilaj', lang:['Gujarati','Hindi','English'], exp:'Surgical Gastroenterology · Liver Transplantation, Robotic GI Surgery', slug:'milind-akhani'},
+    {name:'Dr. Vivek Kothari', spec:'Urology', branch:'Shilaj', lang:['Gujarati','English'], exp:'Urology · Kidney Transplant, Endourology', slug:'vivek-kothari'},
+    {name:'Dr. Krunal Patel', spec:'Urology', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Urology · Renal Transplant, Uro-Oncology, PCNL/TURP', slug:'krunal-patel'},
+    {name:'Dr. Sunil Gurmukhani', spec:'Cardiac', branch:'Shilaj', lang:['Gujarati','English'], exp:'Interventional Cardiology · Complex Coronary Interventions', slug:'sunil-gurmukhani'},
+    {name:'Dr. Kiran Prajapati', spec:'Cardiac', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Interventional Cardiology · Angiography, Angioplasty, Pacemaker', slug:'kiran-prajapati'},
+    {name:'Dr. Subhash Chaudhary', spec:'Cardiac', branch:'Gandhinagar', lang:['Gujarati','Hindi','English'], exp:'Cardiology · Structural Interventions, Device Closure', slug:'subhash-chaudhary'},
+    {name:'Dr. Ravi Prajapati', spec:'Orthopaedics', branch:'Shilaj', lang:['Gujarati','English'], exp:'Robotic Joint Replacement · Oxford-Certified Microplasty Surgeon', slug:'ravi-prajapati'},
+    {name:'Dr. Kalpesh C Patel', spec:'Orthopaedics', branch:'Himmatnagar', lang:['Gujarati','Hindi'], exp:'Robotic Joint Replacement · Primary & Revision Arthroplasty', slug:'kalpesh-c-patel'},
+    {name:'Dr. Nevil Gajera', spec:'Orthopaedics', branch:'Himmatnagar', lang:['Gujarati','English'], exp:'Robotic Joint Replacement · Hip, Knee & Shoulder Arthroplasty', slug:'nevil-gajera'},
+    {name:'Dr. Sanjay Rajput', spec:'General', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Gastroenterology · Upper GI Scopy, Colonoscopy', slug:'sanjay-rajput'},
+    {name:'Dr. Nirav Patel', spec:'General', branch:'Shilaj', lang:['Gujarati','English'], exp:'Obstetrics & Gynaecology · High-Risk Obstetrics, Laparoscopy', slug:'nirav-patel'},
+    {name:'Dr. Ritesh Patel', spec:'General', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Critical Care · ICU, Polytrauma, ECMO', slug:'ritesh-patel'},
+    {name:'Dr. Renuka Vasava', spec:'General', branch:'Modasa', lang:['Gujarati','Hindi'], exp:'Internal Medicine · Hypertension, Diabetes, Cardiac Disorders', slug:'renuka-vasava'},
+    {name:'Dr. Ravi Khetan', spec:'Neurosurgery', branch:'Shilaj', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery', slug:'ravi-khetan'},
+    {name:'Dr. Nilay Adhvaryu', spec:'Neurosurgery', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Neurosurgery · Brain & Spine Surgery', slug:'nilay-adhvaryu'},
+    {name:'Dr. Sandip Patel', spec:'Neurosurgery', branch:'Gandhinagar', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery', slug:'sandip-patel'},
+    {name:'Dr. Bhavin Patel', spec:'Neurosurgery', branch:'Modasa', lang:['Gujarati','Hindi'], exp:'Neurosurgery · Brain & Spine Surgery', slug:'bhavin-patel'},
+    {name:'Dr. Pradip Solanki', spec:'Neurosurgery', branch:'Vastral', lang:['Gujarati','English'], exp:'Neurosurgery · Brain & Spine Surgery', slug:'pradip-solanki'},
+    {name:'Dr. Munjal Shah', spec:'Spine', branch:'Shilaj', lang:['Gujarati','English'], exp:'Spine Surgery · Minimally Invasive & Endoscopic', slug:'munjal-shah'},
+    {name:'Dr. Satish Kriplani', spec:'Spine', branch:'Shilaj', lang:['Gujarati','Hindi'], exp:'Spine Surgery · Minimally Invasive & Endoscopic', slug:'satish-kriplani'},
   ];
   function initials(n){ return n.replace('Dr. ','').split(' ').map(w=>w[0]).slice(0,2).join(''); }
   function renderDoctors(){
@@ -1432,8 +1432,8 @@
       return;
     }
     grid.innerHTML = filtered.map(d => {
-      const hasProfile = d.name === 'Dr. Keyur Patel' && d.spec === 'Neuro';
-      const profileLink = hasProfile ? './health1-doctor-keyur-patel.html' : null;
+      const hasProfile = !!d.slug;
+      const profileLink = hasProfile ? `./health1-doctor-${d.slug}.html` : null;
       const cardInner = `
         <div class="doctor-avatar">${initials(d.name)}</div>
         <h4>${d.name}</h4>
