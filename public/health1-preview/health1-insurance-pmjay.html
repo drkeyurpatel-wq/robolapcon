@@ -51,9 +51,10 @@
   .step h3{font-size:15.5px; margin-bottom:4px;}
   .step p{font-size:14px; color:var(--muted); margin:0;}
   .branch-note{background:#FDF8EC; border:1px solid #F0DFB0; border-left:3px solid var(--gold); border-radius:8px; padding:14px 20px; font-size:13.5px; color:var(--muted); margin-top:20px;}
-  .logo-grid-placeholder{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:20px;}
+  .logo-grid-placeholder{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px;}
   @media(max-width:700px){.logo-grid-placeholder{grid-template-columns:repeat(2,1fr);}}
-  .logo-slot{background:white; border:1px dashed var(--line); border-radius:10px; height:60px; display:flex; align-items:center; justify-content:center; font-size:11.5px; color:var(--muted);}
+  .logo-slot{background:white; border:1px solid var(--line); border-radius:10px; height:64px; display:flex; align-items:center; justify-content:center; padding:12px; font-size:11.5px; color:var(--muted);}
+  .logo-slot img{max-width:100%; max-height:100%; object-fit:contain;}
   .faq-item{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 20px; margin-bottom:10px;}
   .faq-item summary{cursor:pointer; font-weight:600; font-size:14.5px;}
   .faq-item p{margin:10px 0 0; color:var(--muted); font-size:13.5px;}
@@ -108,14 +109,18 @@
 <section>
   <div class="container">
     <h2>Private Insurers &amp; TPAs</h2>
-    <p>Health1 is empanelled with all major private insurance companies and TPAs for cashless treatment.</p>
+    <p>Health1 is empanelled with all major private insurance companies and TPAs for cashless treatment, including:</p>
     <div class="logo-grid-placeholder">
-      <div class="logo-slot">Insurer logo</div>
-      <div class="logo-slot">Insurer logo</div>
-      <div class="logo-slot">Insurer logo</div>
-      <div class="logo-slot">Insurer logo</div>
+      <div class="logo-slot"><img src="https://d28c6jni2fmamz.cloudfront.net/star_health_new_logo_Blue_6a4457e498.svg" alt="Star Health Insurance" loading="lazy"></div>
+      <div class="logo-slot"><img src="https://www.nivabupa.com/content/dam/nivabupa/Image/logos/NivaLogo324x180.png" alt="Niva Bupa Health Insurance" loading="lazy"></div>
+      <div class="logo-slot"><img src="https://www.tataaig.com/logo.png" alt="Tata AIG General Insurance" loading="lazy"></div>
+      <div class="logo-slot"><img src="https://www.sbigeneral.in/home_new/assets-revamp/images/logo.webp" alt="SBI General Insurance" loading="lazy"></div>
+      <div class="logo-slot"><img src="https://oicl-cms-media.s3.ap-south-1.amazonaws.com/oicl_logo_f696d7368c.png" alt="Oriental Insurance Company" loading="lazy"></div>
+      <div class="logo-slot"><img src="https://www.universalsompo.com/assets/images/usgi-logo.svg" alt="Universal Sompo General Insurance" loading="lazy"></div>
+      <div class="logo-slot"><img src="https://www.iffcotokio.co.in/content/dam/iffcotokio/iffco-images/iffco-tokio-logo-english.svg" alt="IFFCO Tokio General Insurance" loading="lazy"></div>
+      <div class="logo-slot"><img src="https://mediassisttpa.in/assets/medi-assist-logo.svg" alt="Medi Assist TPA" loading="lazy"></div>
     </div>
-    <div class="branch-note"><strong>Placeholder:</strong> This grid is ready for real insurer/TPA logos — send the actual logo files whenever convenient and they'll replace these slots. Logos convert better than a text list.</div>
+    <div class="branch-note"><strong>Note:</strong> These 8 logos are sourced directly from each insurer's own official website. Health1 works with more insurers/TPAs than shown here — send additional official logo files whenever convenient and they'll be added to this grid.</div>
   </div>
 </section>
 
